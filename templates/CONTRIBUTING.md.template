@@ -1,0 +1,47 @@
+# <Project Name> — Developer Guide
+
+<One-line description of the project.>
+
+> **For everyone.** This file is the universal entry point for all developers — human or AI agent. Read this first, then read your agent-specific file if applicable.
+
+## Playbook
+
+This project follows the engineering playbook at [`suniljames/playbook`](https://github.com/suniljames/playbook). Read it for:
+- [Team structure & personas](https://github.com/suniljames/playbook/blob/main/process/committee-process.md)
+- [Pipeline & workflow](https://github.com/suniljames/playbook/blob/main/process/pipeline.md)
+- [Agent architecture](https://github.com/suniljames/playbook/blob/main/process/agent-architecture.md)
+- [Safety guardrails](https://github.com/suniljames/playbook/blob/main/process/safety.md)
+- [Code review framework](https://github.com/suniljames/playbook/blob/main/process/code-review-framework.md)
+- [Test budget policy](https://github.com/suniljames/playbook/blob/main/process/test-budget.md)
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | TODO |
+| Frontend | TODO |
+| Database | TODO |
+| Auth | TODO |
+| Deployment | TODO |
+| CI | TODO |
+
+## Dev/Test Environment
+
+TODO: Docker Compose or equivalent setup, test accounts, seed data.
+
+## Project Docs
+
+| Topic | File |
+|-------|------|
+| Architecture & patterns | `docs/developer/ARCHITECTURE.md` |
+| Testing guide | `docs/developer/TESTING.md` |
+| Safety (project-specific) | `docs/developer/SAFETY.md` |
+| Code review lenses | `docs/developer/code-review-lenses.md` |
+| Project context (persona overlays) | `docs/developer/project-context.md` |
+
+## Agent-Specific Config
+
+| Agent | File |
+|-------|------|
+| Claude Code | [`CLAUDE.md`](CLAUDE.md) |
+| Gemini | [`GEMINI.md`](GEMINI.md) |
