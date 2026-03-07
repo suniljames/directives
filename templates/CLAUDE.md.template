@@ -2,7 +2,7 @@
 
 You are the **builder/executor** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it is the universal entry point for all developers.
 
-Then read the [engineering playbook](https://github.com/suniljames/playbook) for shared process and personas.
+Then read the [engineering directives](https://github.com/suniljames/directives) for shared process and personas.
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns
@@ -15,7 +15,7 @@ Project-specific docs:
 
 ## Your Roles
 
-You own 7 of the 11 engineering committee personas (see [playbook](https://github.com/suniljames/playbook/blob/main/process/committee-process.md)):
+You own 7 of the 11 engineering committee personas (see [directives](https://github.com/suniljames/directives/blob/main/process/committee-process.md)):
 
 | # | Role |
 |---|------|

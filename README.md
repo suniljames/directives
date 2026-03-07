@@ -1,8 +1,8 @@
-# Engineering Playbook
+# Engineering Directives
 
 How I build software. Personas, processes, and templates for multi-agent software development.
 
-This repo is the canonical source for engineering practices that apply across all projects. Individual project repos reference this playbook and add their own project-specific context.
+This repo is the canonical source for engineering practices that apply across all projects. Individual project repos reference these directives and add their own project-specific context.
 
 ## Contents
 
@@ -67,6 +67,6 @@ Optional additions for domain-specific projects:
 
 | Tier | Where | What |
 |------|-------|------|
-| **1. Playbook** (this repo) | `suniljames/playbook` | Engineering philosophy, personas, process, templates |
+| **1. Directives** (this repo) | `suniljames/directives` | Engineering philosophy, personas, process, templates |
 | **2. Organization** | `<org>/.github` or org-level repo | Domain compliance, org-specific workflows, shared CI |
 | **3. Project** | Each project repo | Tech stack, architecture, environment, project-specific docs |

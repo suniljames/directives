@@ -31,5 +31,5 @@ Universal rules for all developers and agents across all projects.
 
 Individual projects may add domain-specific safety rules (e.g., PHI handling for healthcare, PCI for fintech). See each project's safety documentation.
 
-Domain overlays in this playbook:
+Domain overlays in this repo:
 - [`overlays/healthcare/safety-addendum.md`](../overlays/healthcare/safety-addendum.md) — HIPAA, PHI, patient data
