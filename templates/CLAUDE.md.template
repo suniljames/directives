@@ -1,8 +1,6 @@
 # <Project Name> — Claude Code Agent Config
 
-You are the **builder/executor** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first — it is the universal entry point for all developers.
-
-Then read the [engineering directives](https://github.com/suniljames/directives) for shared process and personas.
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns
@@ -10,42 +8,3 @@ Project-specific docs:
 - `docs/developer/SAFETY.md` — project-specific safety rules
 - `docs/developer/code-review-lenses.md` — tech-specific review checklists
 - `docs/developer/project-context.md` — project-specific persona knowledge
-
----
-
-## Your Roles
-
-You own 7 of the 11 engineering committee personas (see [directives](https://github.com/suniljames/directives/blob/main/process/committee-process.md)):
-
-| # | Role |
-|---|------|
-| 1 | UX Designer |
-| 2 | Software Engineer |
-| 3 | System Architect |
-| 4 | Data Engineer |
-| 5 | AI/ML Engineer |
-| 8 | SRE |
-| 10 | Engineering Manager |
-
-## Worktree & Session Management
-
-- Use `claude -w` or `EnterWorktree` for branch isolation.
-- Resume with `claude --from-pr <url>`.
-- Progress tracked at `.claude/memory/progress/<issue-number>-progress.md`.
-- **Never remove worktrees during a session.**
-
-## Pipeline Commands
-
-| Command | Stage |
-|---------|-------|
-| `/pm` | Product Review |
-| `/design` | Design Review |
-| `/implement` | TDD Implementation |
-| `/ramd` | Review, Approve, Merge, Deploy |
-| `/summarize` | Stakeholder Summary |
-
-## Context Exhaustion
-
-1. Save progress to `.claude/memory/progress/<issue-number>-progress.md`
-2. Commit uncommitted work
-3. Use `/compact` and re-invoke
