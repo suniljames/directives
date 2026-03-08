@@ -48,6 +48,10 @@ Shared culture: [`cross-cutting-traits.md`](teams/engineering/personas/cross-cut
 | [`test-budget.md`](teams/engineering/process/test-budget.md) | Test layer decision framework |
 | [`prd-template.md`](teams/engineering/process/prd-template.md) | Product requirements document format |
 
+## Adding a New Team
+
+Copy `teams/TEMPLATE/` to `teams/<your-team-name>/` and customize the manifest, personas, and cross-cutting traits. See the [template manifest](teams/TEMPLATE/manifest.yml) for field documentation.
+
 ## Global Process
 
 Applies across all teams.
@@ -55,6 +59,7 @@ Applies across all teams.
 | Doc | Description |
 |-----|-------------|
 | [`process/agent-architecture.md`](process/agent-architecture.md) | Agent types, provider assignments, single-provider fallback |
+| [`process/orchestration.md`](process/orchestration.md) | How orchestrators consume config files to route work |
 | [`process/reasoning-framework.md`](process/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
 | [`process/safety.md`](process/safety.md) | Universal safety guardrails |
 

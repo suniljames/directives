@@ -1,0 +1,104 @@
+# <Team Name> Manifest
+#
+# Copy this directory to teams/<your-team-name>/ and customize.
+#
+# Single source of truth for:
+#   - Role roster (who's on the team, which agent type, review order)
+#   - Pipeline stages (workflow, commands, labels)
+#   - Controlled vocabularies (severity levels, etc.)
+#
+# Agent type IDs (builder, validator, etc.) reference agents.yml.
+# Add new agent types to agents.yml if the defaults don't fit.
+
+team: <team-name>
+version: 1
+
+# --- Roles ---
+# Each role maps to an agent type from agents.yml.
+# Persona files are relative to this manifest's directory.
+#
+# Fields:
+#   id:            kebab-case identifier (used in cross-references)
+#   name:          display name
+#   agent:         agent type ID from agents.yml (e.g., builder, validator)
+#   persona:       path to persona markdown file (relative to this directory)
+#   reviews_code:  does this role participate in code review? (default: false)
+#   review_order:  numeric position in review sequence, or "last" for synthesizer
+#   synthesizes:   true if this role posts last and synthesizes all feedback
+#   pipeline_only: true if this role only participates in pipeline stages (not code review)
+
+roles:
+  - id: example-role
+    name: Example Role
+    agent: builder
+    persona: personas/example-role.md
+    reviews_code: true
+    review_order: 1
+
+  # Add more roles here. Tips:
+  # - Builder roles: implement, create, deploy
+  # - Validator roles: review, audit, specify
+  # - One role should have synthesizes: true and review_order: last
+  # - One role can have pipeline_only: true if it only feeds the pipeline (like PM)
+
+shared_traits: personas/cross-cutting-traits.md
+
+# --- Pipeline ---
+# Define the team's workflow stages.
+# Not every team needs the same stages as engineering.
+#
+# Fields:
+#   stage:    kebab-case identifier
+#   name:     display name
+#   command:  slash command that triggers this stage (e.g., /review)
+#   agent:    which agent type(s) handle this stage
+#             single value: "builder" or "validator"
+#             multiple: [builder, validator]
+#   label:    GitHub label applied when this stage completes
+#     name:   label text
+#     color:  hex color (without #)
+#   produces: what artifact this stage creates
+#   optional: true if this stage can be skipped
+
+pipeline:
+  - stage: example-stage
+    name: Example Stage
+    command: /example
+    agent: builder
+    label:
+      name: example-complete
+      color: "0e8a16"
+    produces: "Description of what this stage outputs"
+
+# --- Controlled Vocabularies ---
+# Define team-specific classification systems.
+# You can reuse engineering's vocabularies by referencing them,
+# or define your own.
+#
+# Common vocabularies to consider:
+# - severity_levels (for review findings)
+# - commit_prefixes (for commit message conventions)
+# - pipeline_modes (autonomous vs gated)
+# - task_modes (how agents approach work)
+# - Any domain-specific classifications
+
+vocabularies:
+  severity_levels:
+    - id: must-fix
+      name: MUST-FIX
+      blocks: merge
+      description: "Blocking issue"
+    - id: should-fix
+      name: SHOULD-FIX
+      blocks: current_round
+      description: "Important but not blocking"
+    - id: nit
+      name: NIT
+      blocks: nothing
+      description: "Optional improvement"
+
+# --- Settings ---
+# Team-specific numeric constants.
+
+settings:
+  max_review_rounds: 3
