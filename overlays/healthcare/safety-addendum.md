@@ -1,6 +1,6 @@
 # Healthcare Safety Addendum
 
-These rules extend [`process/safety.md`](../../process/safety.md) for HIPAA-regulated projects.
+These rules extend [`framework/safety.md`](../../framework/safety.md) for HIPAA-regulated projects.
 
 ## PHI Handling
 

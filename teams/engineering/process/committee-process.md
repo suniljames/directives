@@ -1,20 +1,20 @@
 # Engineering Committee Process
 
-The engineering committee convenes for critical review of issues requiring cross-functional analysis.
+> **How to read this:** This document defines the protocol for multi-persona reviews of GitHub issues and PRs. The [committee](../../../docs/glossary.md) is your team's full roster of [personas](../../../docs/glossary.md) reviewing work in sequence. Start with Core Principles, then read Process for the step-by-step flow.
 
 ## Core Principles
 
-1. **Sequential, iterative review** — Members post in strict order. Each reads all prior comments.
-2. **Overwrite-to-final-consensus** — After deliberation, members whose positions changed overwrite their comments.
+1. **Sequential review** — Members post in strict order. Each reads all prior comments first.
+2. **[Overwrite-to-consensus](../../../docs/glossary.md)** — After deliberation, members whose positions changed edit their comments to show final positions.
 3. **Shared component reuse** — Every design must seek reuse opportunities across templates, components, services, and utilities.
 
 ## Committee Members
 
 > **Canonical roster:** [`manifest.yml`](../manifest.yml) — roles, agent assignments, review order.
 
-Full persona definitions with backgrounds, expertise, and review lenses are in [`personas/`](../personas/). Shared team culture: [`cross-cutting-traits.md`](../personas/cross-cutting-traits.md).
+Full persona definitions: [`personas/`](../personas/). Shared culture: [`cross-cutting-traits.md`](../personas/cross-cutting-traits.md).
 
-The committee follows a deliberate funnel order: user impact, then implementation, then cross-cutting concerns, then operability, then communication.
+Review funnel order: user impact → implementation → cross-cutting concerns → operability → communication.
 
 | Role | Agent | Persona |
 |------|-------|---------|
@@ -30,75 +30,68 @@ The committee follows a deliberate funnel order: user impact, then implementatio
 | Engineering Manager | Builder | [`engineering-manager.md`](../personas/engineering-manager.md) |
 | PM | Validator | [`pm.md`](../personas/pm.md) |
 
-## Iterative Review Protocol
+## Review Protocol
 
-- Members post in strict order. Each reads all prior comments before composing their review.
+- Members post in strict order, each reading all prior comments first.
 - A member may reference, agree with, challenge, or build on any prior point.
-- The Engineering Manager posts last, synthesizing all feedback into a final unified plan.
-- No parallel posting — comments are produced sequentially so each persona genuinely absorbs prior feedback.
-
-## UX Mockup Generation (UI/UX Changes Only)
-
-- **When:** User-facing UI changes (new page, layout change, new component, modified form, dashboard change). Skip for purely backend/API/infra issues.
-- **Design Direction:** Purpose, tone, design system alignment, typography, motion, anti-patterns.
-- **Format:** SVG (renders natively in GitHub and browsers).
-- **Storage:** `docs/mockups/<issue-number>/` — one directory per issue.
-- **Naming:** `<descriptive-name>.svg` (e.g., `dashboard-redesign.svg`, `form-validation-error.svg`).
-- **Responsive viewports:** Mobile (<=480px), Tablet (481-1024px), Desktop (>1024px).
-- **Multiple states:** Default, error, success, loading for each viewport where they differ.
-- **Process:** UX Designer generates mockups, commits to branch, then posts their committee comment with embedded GitHub-relative links to the SVGs. All subsequent members reference these mockups.
-
-## Overwrite-to-Final-Consensus
-
-- **Goal:** A fresh agent reading the issue sees clean, authoritative final reviews — not a debate thread.
-- **Timing:** After the Engineering Manager posts, members review the full thread one final time.
-- **Rule:** Any member whose recommendation, approach, or risk assessment **materially changed** during deliberation overwrites (edits) their original GitHub comment to reflect their final position.
-- **UX Designer specifically:** If mockups need revision (based on Writer, Engineering Manager, or other feedback): delete old SVGs, generate revised SVGs, commit/push, overwrite comment with new mockup links.
-- **Footer marker:** Each overwritten comment includes: `*Updated to final position after committee deliberation.*`
-- **The Engineering Manager's comment** is always written last and is authoritative by default.
+- Engineering Manager posts last, synthesizing all feedback into a final plan.
+- No parallel posting — sequential so each persona genuinely absorbs prior feedback.
 
 ## Process
 
 1. Read the issue and all existing context.
-2. **If UI/UX change:** UX Designer generates SVG mockups first (see UX Mockup Generation above).
-3. Each member posts their critical review **in order**, reading all prior comments.
-4. The Engineering Manager synthesizes all feedback into a final, unified plan.
-5. **Overwrite-to-final-consensus:** Members whose positions materially changed overwrite their comments.
-6. Update issue title and description to include:
-   - **Non-technical Explainer** (end-user value proposition)
-   - **Technical Details**
-   - **Root Cause** (if applicable)
-   - **Proposed Solution**
-   - **Implementation Plan**
-   - **Documentation Updates**
-   - **Test Specification**
+2. **If UI/UX change:** UX Designer generates SVG mockups first (see below).
+3. Each member posts their review **in order**, reading all prior comments.
+4. Engineering Manager synthesizes all feedback into a final plan.
+5. **Overwrite-to-consensus:** Members whose positions materially changed edit their comments.
+6. Update issue title and description:
+   - Non-technical Explainer (end-user value)
+   - Technical Details
+   - Root Cause (if applicable)
+   - Proposed Solution
+   - Implementation Plan
+   - Documentation Updates
+   - Test Specification
 7. **Fresh-Eyes Validation** (see below).
-8. Apply all labels/tags as appropriate.
-9. Proceed according to the project's [pipeline mode](pipeline.md#pipeline-modes) — either continue autonomously or notify and wait for authorization.
+8. Apply labels/tags.
+9. Proceed per the project's [pipeline mode](pipeline.md#pipeline-modes).
+
+## UX Mockup Generation (UI/UX Changes Only)
+
+- **When:** User-facing UI changes. Skip for backend/API/infra issues.
+- **Format:** SVG. Renders natively in GitHub.
+- **Storage:** `docs/mockups/<issue-number>/`
+- **Viewports:** Mobile (<=480px), Tablet (481-1024px), Desktop (>1024px)
+- **States:** Default, error, success, loading for each viewport where they differ.
+- **Process:** UX Designer generates, commits to branch, posts comment with GitHub-relative SVG links. Subsequent members reference these.
+
+## Overwrite-to-Final-Consensus
+
+- **Goal:** Readers see clean final positions, not a debate thread.
+- **Timing:** After Engineering Manager posts, members review the full thread once more.
+- **Rule:** Any member whose position **materially changed** edits their original comment to reflect their final stance.
+- **UX Designer:** If mockups need revision, delete old SVGs, generate revised ones, commit, overwrite comment.
+- **Footer:** `*Updated to final position after committee deliberation.*`
+- **Engineering Manager's comment** is always last and authoritative by default.
 
 ## Fresh-Eyes Validation
 
-Catches "curse of knowledge" gaps — assumptions the committee made that a future implementer won't share. Inspired by the [Anthropic doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring)'s "Reader Testing" pattern.
+Catches assumptions the committee forgot to write down. Inspired by the [Anthropic doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring)'s "Reader Testing" pattern.
 
-### When
-After step 6 (issue description updated) and before step 8 (labels). Mandatory for all committee reviews.
+**When:** After step 6 (issue updated), before step 8 (labels). Mandatory.
 
-### How
+**How:**
 1. Spawn a fresh sub-agent with zero prior context.
-2. Provide **only** the updated issue description (not the committee comments or conversation history).
-3. Prompt the sub-agent:
-   > "You are a senior developer picking up this issue for the first time. Read the issue description below and attempt to produce a step-by-step implementation plan. Flag anything that is ambiguous, assumes context you don't have, or lacks enough detail to implement without guessing. List your questions as bullet points."
-4. If the sub-agent flags gaps:
-   - The Engineering Manager reviews each gap and updates the issue description to address it.
-   - Gaps that are genuinely out-of-scope are noted as `[Context: ...]` annotations in the Implementation Plan section.
+2. Provide **only** the updated issue description (no committee comments).
+3. Prompt: *"You are a senior developer picking up this issue cold. Produce a step-by-step implementation plan. Flag anything ambiguous, context-dependent, or too vague to implement without guessing."*
+4. If gaps flagged: Engineering Manager updates the description. Out-of-scope gaps get `[Context: ...]` annotations.
 5. If the sub-agent produces a coherent plan with no questions, validation passes.
 
-### Why This Works
-Committee members build context cumulatively — each reads all prior comments. By the Engineering Manager's synthesis, the group has deep shared context that may not be fully captured in the issue description. A zero-context sub-agent simulates the experience of the developer who will actually implement the work, ensuring the issue description is self-contained.
+**Why it works:** Committee members build shared context cumulatively. A zero-context agent simulates the experience of whoever actually implements the work.
 
 ## Test Specification Format
 
-The QA Engineer produces a structured **Test Specification** as part of their committee review and as the corresponding section in the issue description. This specification provides Given/When/Then acceptance criteria with explicit layer assignments, enabling the developer to scaffold failing tests as the first implementation step.
+QA Engineer produces a structured spec as part of their review and the issue description. Given/When/Then with explicit layer assignments:
 
 ```markdown
 ## Test Specification
@@ -125,21 +118,15 @@ The QA Engineer produces a structured **Test Specification** as part of their co
   MARKERS: @smoke | @security | (none)
 ```
 
-### Rules
-
-- **E2E criteria** that depend on mockup details are annotated `[mockup-dependent]`.
-- **During the overwrite phase**, QA updates only criteria whose *behavior* changed (not just UI treatment). Service-layer criteria are typically stable through the overwrite cycle.
+- E2E criteria dependent on mockups are annotated `[mockup-dependent]`.
+- During overwrite phase, QA updates only criteria whose *behavior* changed. Service-layer criteria are typically stable.
 
 ## Deployment Failure Escalation
 
-Escalate to the committee if:
-- **Deployments repeatedly fail** without clear cause
-- **Multiple configuration layers interact** (platform dashboard + config files + CI)
-- **Production outage lasts >4 hours** without resolution
-- **Cache behavior causes data inconsistency** or serves stale artifacts
+Escalate to the committee when:
+- Deployments repeatedly fail without clear cause
+- Multiple configuration layers interact (platform + config files + CI)
+- Production outage >4 hours without resolution
+- Cache behavior causes data inconsistency
 
-The committee provides multidimensional analysis covering:
-- **SRE**: Deployment observability gaps, SLO impact, rollback procedures
-- **Architecture**: Configuration management, single source of truth
-- **Security**: Audit trail, configuration tampering risks
-- **Data**: Impact on analytics, user data collection
+Committee analysis covers: SRE (observability, rollback), Architecture (config management), Security (audit trail), Data (analytics impact).
