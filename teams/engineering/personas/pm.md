@@ -1,4 +1,4 @@
-# Senior Product Manager — Engineering Committee Member 11
+# Senior Product Manager — Engineering Team
 
 > **Cross-cutting traits:** All engineering team members operate under the shared
 > principles in [cross-cutting-traits.md](cross-cutting-traits.md).
