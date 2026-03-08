@@ -1,0 +1,42 @@
+# WORKLOG: Multi-Agent Coordination
+
+**Workflow**: All agents follow the [reasoning framework](https://github.com/suniljames/directives/blob/main/process/reasoning-framework.md).
+
+**Complex decisions**: Escalate to the [engineering committee](https://github.com/suniljames/directives/blob/main/process/committee-process.md).
+
+---
+
+## Current Context: <Task Name> (<Issue #>) (<Date>)
+**Status:** In Progress | Complete | Blocked
+**Goal:** <One-line description>
+**Active Agent:** <Agent name>
+**Mode:** Implementation | Design | Investigation
+
+### Recent Changes (<Agent Name>)
+- <What was just completed>
+
+### Immediate Next Steps (Action Required)
+- [ ] <Next action>
+
+---
+
+## How to Use This WORKLOG
+
+### For AI Agents
+
+**BEFORE starting ANY task:**
+1. Read this file first
+2. Check "Current Context" for project status
+3. Check "Recent Changes" for what other agents just did
+4. Check "Immediate Next Steps" for your specific task
+5. If unclear or mismatch with user request, ask for clarification
+
+**AFTER completing work:**
+1. CLEAR the "Recent Changes" section
+2. WRITE a concise summary of what YOU just did
+3. UPDATE "Immediate Next Steps" with remaining work
+4. KEEP IT CONCISE — delete old completed items
+
+### For Human Developers
+
+This file serves as coordination memory between AI agents and human developers. It represents the "now" state, not full history (that's what git log is for).

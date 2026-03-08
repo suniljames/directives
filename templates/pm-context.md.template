@@ -1,0 +1,53 @@
+# PM Persona Context — <Project Name>
+
+## Domain
+
+<One-paragraph description of the product domain.>
+
+## Domain Vocabulary
+
+| Term | Definition |
+|------|-----------|
+| **Term 1** | Definition |
+| **Term 2** | Definition |
+
+## Stakeholders
+
+| Persona | Role | Key Needs |
+|---------|------|-----------|
+| Primary User | Description | Needs |
+| Secondary User | Description | Needs |
+
+## Privacy / Data Model
+
+<Describe the data visibility model — who can see what, default access levels, special rules.>
+
+## Compliance
+
+<List applicable regulatory frameworks: HIPAA, FERPA, COPPA, SOC 2, GDPR, etc.>
+
+**Hard rules:**
+- <Non-negotiable constraint 1>
+- <Non-negotiable constraint 2>
+
+## Decision Heuristics
+
+<Rules of thumb for product decisions — what to default to when uncertain.>
+
+- <Heuristic 1>
+- <Heuristic 2>
+
+## Anti-Patterns
+
+<Things this product should never do.>
+
+- <Anti-pattern 1>
+- <Anti-pattern 2>
+
+## Product Phase
+
+<Current phase — early prototype, beta, GA, mature. Calibrate scope expectations.>
+
+## Communication Channels
+
+<Primary channels (web, SMS, email, push) and any constraints (rate limits, character limits, PII rules).>

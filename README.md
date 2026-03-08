@@ -30,9 +30,10 @@ Shared culture: [`personas/cross-cutting-traits.md`](personas/cross-cutting-trai
 
 | Doc | Description |
 |-----|-------------|
+| [`process/reasoning-framework.md`](process/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
 | [`process/agent-architecture.md`](process/agent-architecture.md) | Builder/validator agent split — why and how |
-| [`process/pipeline.md`](process/pipeline.md) | 6-stage autonomous pipeline: PM -> design -> implement -> review -> deploy -> summarize |
-| [`process/committee-process.md`](process/committee-process.md) | Engineering committee review protocol |
+| [`process/pipeline.md`](process/pipeline.md) | 6-stage pipeline (autonomous or gated), ad-hoc work gate, label lifecycle |
+| [`process/committee-process.md`](process/committee-process.md) | Committee review protocol, fresh-eyes validation, UX mockups |
 | [`process/safety.md`](process/safety.md) | Universal safety guardrails |
 | [`process/test-budget.md`](process/test-budget.md) | Test layer decision framework |
 | [`process/code-review-framework.md`](process/code-review-framework.md) | Severity levels and review lens structure |
@@ -47,6 +48,8 @@ Starter files for new project repos:
 | [`templates/CONTRIBUTING.md.template`](templates/CONTRIBUTING.md.template) | Universal entry point for all developers |
 | [`templates/CLAUDE.md.template`](templates/CLAUDE.md.template) | Claude Code agent config |
 | [`templates/GEMINI.md.template`](templates/GEMINI.md.template) | Gemini agent config |
+| [`templates/worklog.md.template`](templates/worklog.md.template) | Multi-agent coordination log |
+| [`templates/pm-context.md.template`](templates/pm-context.md.template) | Domain context for PM persona |
 
 ### Domain Overlays
 

@@ -1,6 +1,23 @@
 # Pipeline & Workflow
 
-Fully autonomous lifecycle. No human review gates. Each stage produces artifacts the next stage consumes.
+End-to-end development lifecycle. Each stage produces artifacts the next stage consumes.
+
+## Pipeline Modes
+
+Projects choose one of two modes in their `CONTRIBUTING.md`:
+
+| Mode | Behavior | Best for |
+|------|----------|----------|
+| **Autonomous** | No human review gates. Pipeline runs end-to-end without stopping. | Solo AI agent, trusted automation |
+| **Gated** | Agents notify and wait for human authorization before creating PRs and merging. | Teams with human contributors, early-stage projects |
+
+Default: **autonomous**. To use gated mode, add to your project's `CONTRIBUTING.md`:
+
+```markdown
+pipeline-mode: gated
+```
+
+In gated mode, the committee process pauses after design review and after code review to wait for human authorization. See [`committee-process.md`](committee-process.md) step 9.
 
 ## Stages
 
@@ -9,7 +26,7 @@ Fully autonomous lifecycle. No human review gates. Each stage produces artifacts
 | **1. Product Review** | Evaluate the issue, write a PRD with acceptance criteria | PRD comment on the GitHub issue | `pm-reviewed` |
 | **2. Design Review** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
 | **3. Implementation** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
-| **4. Code Review & Merge** | CI gate -> autonomous eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
+| **4. Code Review & Merge** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
 | **5. Deploy & Verify** | Rebuild, health check, close issue | Running deployment | Issue closed |
 | **6. Summarize** (optional) | Plain-language stakeholder summary | Summary comment | `summarized` |
 
@@ -25,7 +42,25 @@ Code Review     -> checks CI + labels, after merge: adds `merged`, removes `impl
 Summarize       -> adds `summarized` (optional, after deploy)
 ```
 
-Each stage warns but does not block if the prior stage's label is missing.
+## Ad-hoc Work Gate
+
+When working on issues **without** using the full pipeline (e.g., quick fixes, ad-hoc tasks), check for lifecycle labels before creating a PR:
+
+- If `pm-reviewed` is missing: the PM hasn't reviewed the requirements
+- If `design-complete` is missing: the committee hasn't reviewed the design
+
+If either label is missing, warn:
+
+> **Lifecycle labels missing on #\<issue\>:**
+> - [ ] `pm-reviewed` (PM review)
+> - [ ] `design-complete` (committee review)
+>
+> Skipping stages may result in incomplete requirements or unreviewed designs. Proceed anyway? [Y/n]
+
+If confirmed, add a note to the PR description:
+> **Note:** This PR skipped the following lifecycle stages: ...
+
+This gate is advisory — it warns and asks for confirmation, but does not hard-block.
 
 ## Who Does What
 
@@ -43,6 +78,7 @@ Each stage warns but does not block if the prior stage's label is missing.
 - **The repo is the source of truth.** All handoffs happen through files, PR comments, and issue comments — never through inter-agent messages.
 - **Structured artifacts** follow defined formats (see [`committee-process.md`](committee-process.md) for test spec format, [`prd-template.md`](prd-template.md) for PRDs).
 - **Label-driven coordination.** Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
+- **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../templates/worklog.md.template) to track current context and handoff state.
 
 ## Implementation Workflow (Stage 3)
 
