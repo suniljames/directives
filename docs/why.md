@@ -1,109 +1,107 @@
 # Why This Architecture?
 
-The thinking behind the system. Read this if you want to understand *why* the pieces exist, not just *what* they do.
+The thinking behind the system. Read this to understand *why* the pieces exist, not just *what* they do.
 
 ---
 
-## The Problem: AI Agents Are Powerful but Unreliable Alone
+## The Problem: One Agent, Correlated Failures
 
-AI agents can create, review, and deliver work across many domains — software, proposals, campaigns, documentation. But when a single model does all of that, it creates **correlated failure modes**:
-
-```
-                Single AI Agent
-                      |
-          +-----------+-----------+
-          |           |           |
-       Creates     Reviews     Delivers
-       the work    the work    the work
-          |           |           |
-          +-----+-----+-----+----+
-                |           |
-         Same blind spots   Same assumptions
-         in ALL phases      in ALL phases
-```
-
-The model that wrote a SQL query won't notice it's injectable during review — it just wrote it that way on purpose. The model that drafted a sales proposal won't catch the pricing inconsistency during QA — it chose those numbers. This is the AI equivalent of grading your own homework.
-
----
-
-## Solution 1: Split the Builder and the Validator
-
-The first insight: **the model that builds should not be the model that validates.**
-
-```
-     Builder Agent                    Validator Agent
-     (Claude Code)                    (Gemini CLI)
-          |                                |
-    Implements code                  Reviews code
-    Runs tests                       Audits security
-    Deploys                          Writes specs
-          |                                |
-          +---------- Handoff via ----------+
-                    GitHub Issues,
-                    PRs, Labels
-```
-
-This isn't about which AI is "better." It's about **independence**. Two different models trained on different data, with different architectures and different biases, will catch different things. The overlap in what they miss is smaller than what either misses alone.
-
-### What if you only have one provider?
-
-The system handles this gracefully. When only one LLM provider is available, it runs both agent types in **isolated sessions** — separate conversations with no shared context. The validator session is explicitly primed: "You did NOT build this code. Review it independently."
-
-Is this as good as two different models? No. But it's significantly better than a single session that builds and reviews in the same conversation.
-
----
-
-## Solution 2: Personas Create Depth That Generic Prompting Can't
-
-The second insight: **telling an AI to "review this code" produces shallow feedback. Telling it to review as a specific persona produces deep, targeted feedback.**
-
-Compare:
-
-| Generic prompt | Persona-driven prompt |
-|---|---|
-| "Review this PR for issues" | The Security Engineer reviews through their lens: injection vectors, auth bypass, data exposure, CSRF, multi-tenant leakage |
-| Surface-level observations | Deep domain expertise applied systematically |
-| "Looks good, maybe add some tests" | "MUST-FIX: This endpoint accepts user input at line 47 without sanitization. An attacker could inject SQL via the `name` parameter." |
-
-Each persona has:
-
-- **A backstory** — Not for flavor, but to anchor the AI's decision-making. A Security Engineer "who spent 8 years doing red-team penetration testing at CrowdStrike" reviews differently than a generic "security reviewer."
-- **Core expertise** — What they're qualified to evaluate.
-- **A review lens** — The specific checklist of things they look for.
-- **An interaction style** — How they communicate findings (direct, diplomatic, etc.).
-
-### Why multiple personas?
-
-Because real work is genuinely multi-disciplinary. In engineering, a feature that's architecturally sound might be inaccessible. Code that passes all tests might have a SQL injection vulnerability. In sales, a proposal with great positioning might have incorrect pricing. In marketing, a campaign with strong copy might violate brand guidelines.
-
-```
-  Engineering:                          Sales:
-  A single PR                           A single proposal
-       |                                     |
-  UX / Code / Arch / Data /            Strategy / Pricing / Legal /
-  Security / QA / SRE / ...            Competitive / Brand / ...
-```
-
-The number and type of personas varies by team. Engineering has 11 because software is that multi-faceted. A sales team might need 5. A marketing team might need 7. The system doesn't prescribe — it provides the scaffolding.
-
-No single reviewer — human or AI — can hold all of these lenses simultaneously. The persona system makes them explicit and systematic.
-
----
-
-## Solution 3: A Pipeline Prevents Skipping Steps
-
-The third insight: **without a defined workflow, AI agents (like humans) will skip steps under pressure.**
-
-The pipeline enforces a sequence:
+AI agents can create, review, and deliver work across many domains. But when one model does all of that, its blind spots repeat in every phase.
 
 ```mermaid
 graph TD
-    A["GitHub Issue<br/>Created"] --> B{"PM Review<br/><code>/pm</code>"}
-    B -->|"PRD + acceptance<br/>criteria posted"| C{"Design Review<br/><code>/design</code>"}
-    C -->|"Committee reviews<br/>issue in order"| D{"Implementation<br/><code>/implement</code>"}
-    D -->|"TDD: failing tests<br/>first, then code"| E{"Code Review<br/><code>/ramd</code>"}
-    E -->|"Up to 3 rounds<br/>of review"| F{"Deploy & Verify"}
-    F -->|"Health check<br/>passes"| G["Issue Closed"]
+    A["Single AI Agent"] --> B["Creates the work"]
+    A --> C["Reviews the work"]
+    A --> D["Delivers the work"]
+    B --> E["Same blind spots<br/>in ALL phases"]
+    C --> E
+    D --> E
+
+    style A fill:#d73a49,color:#fff
+    style E fill:#d73a49,color:#fff
+```
+
+The model that wrote a SQL query won't notice it's injectable during review — it wrote it that way on purpose. The model that drafted a proposal won't catch the pricing error during QA — it chose those numbers.
+
+This is grading your own homework.
+
+**Non-technical example:** Imagine a marketing team where the same person writes the ad copy, reviews it for brand compliance, and approves the budget. They'll miss the same things at every step because they made the original decisions.
+
+---
+
+## Solution 1: Split Builder and Validator
+
+**Key insight: the model that builds should not validate.**
+
+```mermaid
+graph LR
+    subgraph "Builder Agent"
+        B1["Writes code"]
+        B2["Runs tests"]
+        B3["Deploys"]
+    end
+    subgraph "Validator Agent"
+        V1["Reviews code"]
+        V2["Audits security"]
+        V3["Writes specs"]
+    end
+    B1 -->|"PR + artifacts"| V1
+    V1 -->|"Findings"| B1
+
+    style B1 fill:#0075ca,color:#fff
+    style B2 fill:#0075ca,color:#fff
+    style B3 fill:#0075ca,color:#fff
+    style V1 fill:#6f42c1,color:#fff
+    style V2 fill:#6f42c1,color:#fff
+    style V3 fill:#6f42c1,color:#fff
+```
+
+Two different models with different training, architectures, and biases catch different things. The overlap in what they miss shrinks.
+
+### What if you only have one provider?
+
+The system runs both [agent types](glossary.md) in **isolated sessions** — separate conversations with no shared context. The validator is primed: *"You did NOT build this code. Review it independently."*
+
+Not as good as two different models. Significantly better than one session doing both.
+
+---
+
+## Solution 2: Personas Create Depth
+
+**Key insight: "review this code" produces shallow feedback. A specific [persona](glossary.md) produces targeted, deep feedback.**
+
+| Generic prompt | Persona-driven prompt |
+|---|---|
+| "Review this PR for issues" | Security Engineer reviews for: injection, auth bypass, data exposure, CSRF |
+| "Looks good, maybe add some tests" | "MUST-FIX: This endpoint accepts user input at line 47 without sanitization. SQL injection via `name` parameter." |
+
+Each persona has:
+
+- **A backstory** — anchors decision-making (not decoration)
+- **Core expertise** — what they evaluate
+- **A review lens** — specific checklist of things to find
+- **An interaction style** — how they communicate findings
+
+### Why multiple?
+
+Real work is multi-disciplinary. Architecturally sound code might be inaccessible. Code passing all tests might have a SQL injection. A sales proposal with great positioning might have wrong pricing.
+
+No single reviewer — human or AI — holds all lenses simultaneously. [Personas](glossary.md) make them explicit.
+
+---
+
+## Solution 3: Pipeline Prevents Skipping Steps
+
+**Key insight: without a defined workflow, agents (like humans) skip steps under pressure.**
+
+```mermaid
+graph TD
+    A["GitHub Issue"] --> B{"PM Review<br/><code>/pm</code>"}
+    B -->|"PRD posted"| C{"Design Review<br/><code>/design</code>"}
+    C -->|"Committee reviews"| D{"Implementation<br/><code>/implement</code>"}
+    D -->|"TDD: tests first"| E{"Code Review<br/><code>/ramd</code>"}
+    E -->|"Up to 3 rounds"| F{"Deploy & Verify"}
+    F -->|"Health check"| G["Issue Closed"]
 
     style A fill:#333,color:#fff
     style B fill:#6f42c1,color:#fff
@@ -114,116 +112,68 @@ graph TD
     style G fill:#333,color:#fff
 ```
 
-Each stage:
-- Has a **label** (`pm-reviewed`, `design-complete`, etc.) that tracks completion
-- **Checks** for the previous stage's label before proceeding
-- **Produces artifacts** the next stage consumes (PRD, test spec, code, review comments)
+Each stage has a **label** tracking completion, **checks** the previous label, and **produces artifacts** the next stage consumes.
 
-If you skip the PM review and jump to implementation, the system warns you. You can override it (it's advisory, not a hard block), but you have to make a conscious choice.
+Skip PM review and jump to implementation? The system warns you. You can override — it's advisory, not a hard block — but you make a conscious choice.
 
-### Why labels instead of a database?
+### Why labels, not a database?
 
-Because the source of truth should live where the work lives — GitHub. Labels are visible, inspectable, and don't require any additional infrastructure. An orchestrator can read them. A human can read them. Either can advance the pipeline.
+The source of truth lives where the work lives — GitHub. Labels are visible, inspectable, and need zero infrastructure.
 
 ---
 
-## Solution 4: Manifests Make the System Configurable
+## Solution 4: Manifests Make It Configurable
 
-The fourth insight: **hardcoding personas, pipeline stages, and review order in documentation creates maintenance debt that compounds across projects.**
+**Key insight: hardcoding personas, stages, and review order in docs creates maintenance debt.**
 
-Instead, three config files drive everything:
+Three config files drive everything:
 
-```
-  agents.yml                 manifest.yml               CONTRIBUTING.md
-  (global)                   (per-team)                 (per-project)
-  +------------------+      +------------------+       +------------------+
-  | Agent types      |      | Role roster      |       | Team reference   |
-  | LLM providers    | <--- | Pipeline stages  | <--- | Pipeline mode    |
-  | Assignments      |      | Vocabularies     |       | Provider overrides|
-  | Fallback chains  |      | Settings         |       |                  |
-  +------------------+      +------------------+       +------------------+
-```
+| File | Scope | Changes when... |
+|------|-------|----------------|
+| `agents.yml` | Global | You add an LLM provider (rare) |
+| `manifest.yml` | Per-team | You adjust the team or process (occasional) |
+| `CONTRIBUTING.md` | Per-project | A project needs a different mode (per-project) |
 
-Want to add a new persona? Add a role to the manifest. Change the review order? Edit one number. Swap the LLM provider? Update one line in `agents.yml`. Add a new pipeline stage? One block in the manifest. Add an entirely new team? Copy `teams/TEMPLATE/` and fill in your roles. All downstream consumers automatically pick up the change.
-
-### Why three files instead of one?
-
-Because the three files have different **scopes** and change at different **rates**:
-
-- `agents.yml` changes when you add a new LLM provider (rare)
-- `manifest.yml` changes when you adjust the team or process (occasional)
-- `CONTRIBUTING.md` changes when a specific project needs a different mode (per-project)
-
-Separating them means a project-specific override doesn't require editing global configuration.
+Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/TEMPLATE/` and fill in roles.
 
 ---
 
-## Solution 5: Fresh-Eyes Validation Catches What Committees Miss
+## Solution 5: Fresh-Eyes Validation
 
-The fifth insight: **committee members build shared context during review. This context doesn't always make it into the final issue description.**
+**Key insight: [committee](glossary.md) members build shared context during review. That context doesn't always make it into the final spec.**
 
-```
-  Committee reviews issue
-  (9 members + Engineering Manager)
-         |
-         v
-  Rich shared context built
-  through sequential discussion
-         |
-         v
-  Issue description updated
-  with final plan
-         |
-         v
-  But did ALL the context        <-- This is the gap
-  make it into the description?
-         |
-         v
-  Fresh-eyes sub-agent reads
-  ONLY the description
-  (zero prior context)
-         |
-         v
-  Flags gaps: "What does 'the
-  existing pattern' mean here?
-  I don't see it defined."
+```mermaid
+graph TD
+    A["Committee reviews"] --> B["Shared context built"]
+    B --> C["Issue description updated"]
+    C --> D{"Did ALL context<br/>make it in?"}
+    D -->|"Gap"| E["Fresh-eyes sub-agent<br/>reads ONLY the description"]
+    E --> F["Flags: 'What does<br/>existing pattern mean?'"]
+    D -->|"Complete"| G["Validation passes"]
+
+    style D fill:#d73a49,color:#fff
+    style E fill:#fbca04,color:#000
 ```
 
-This is inspired by Anthropic's [doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring) "Reader Testing" pattern. A zero-context agent simulates the experience of the person who will actually do the work, catching assumptions that feel obvious to the committee but aren't captured in the spec. This works for any deliverable — code specs, proposal briefs, campaign plans.
+A zero-context agent simulates the experience of whoever will actually do the work. Catches assumptions the committee forgot to write down.
 
 ---
 
 ## Design Principles
 
-These principles guided every architectural decision:
-
-### 1. Decouple roles from providers
-
-Personas are abstract. "Security Engineer" doesn't mean "Gemini." It means "the agent type that reviews for security." This lets you swap LLM providers without rewriting your process.
-
-### 2. The repo is the source of truth
-
-All coordination happens through files, PRs, issues, labels, and comments. No side channels, no databases, no shared state outside Git. Any orchestrator — or a human — can participate.
-
-### 3. Advisory gates, not hard blocks
-
-The pipeline warns you when you skip stages. It doesn't prevent you. This respects the reality that sometimes you need to ship a hotfix without a full committee review.
-
-### 4. Configuration over convention
-
-Don't make people read documentation to figure out the review order or pipeline stages. Put it in a machine-readable manifest that both humans and orchestrators can consume.
-
-### 5. Additive domain overlays
-
-Healthcare needs HIPAA. Fintech needs PCI. These are *additions* to the base process, not replacements. The overlay pattern keeps domain rules separate from team fundamentals.
-
-### 6. Team-agnostic scaffolding
-
-The architecture doesn't assume engineering. Agent types, manifests, pipelines, personas, and vocabularies are abstract structures that any team can fill with its own content. Engineering is the first fully-built team — not the only one the system supports.
+| Principle | What it means |
+|-----------|--------------|
+| **Decouple roles from providers** | "Security Engineer" means a review role, not "Gemini." Swap providers without rewriting process. |
+| **Repo is the source of truth** | All coordination through files, PRs, issues, labels. No side channels. |
+| **Advisory gates, not hard blocks** | Pipeline warns when you skip stages. Doesn't prevent you. Hotfixes happen. |
+| **Configuration over convention** | Machine-readable manifests, not documentation you have to interpret. |
+| **Additive domain overlays** | Healthcare needs HIPAA. Fintech needs PCI. Additions, not replacements. |
+| **Team-agnostic scaffolding** | The architecture doesn't assume engineering. Any team can fill it with their own content. |
 
 ---
 
 ## Next Steps
 
-- [Key Concepts](concepts.md) — Quick reference for all the terminology
+- [Key Concepts](concepts.md) — Quick reference for all terminology
 - [Getting Started](getting-started.md) — Set this up in your own project
+- [Glossary](glossary.md) — Definitions for every term
