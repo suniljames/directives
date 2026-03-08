@@ -34,7 +34,7 @@ The fastest way to get value. Use the persona definitions to improve your AI cod
 
 ### Step 1: Pick the personas you need
 
-Browse [`teams/engineering/personas/`](../../teams/engineering/personas/). You don't need all 11. Start with the ones that match your biggest gaps:
+Browse [`teams/engineering/personas/`](../teams/engineering/personas/). You don't need all 11. Start with the ones that match your biggest gaps:
 
 | If you're worried about... | Use this persona |
 |---|---|
@@ -105,7 +105,7 @@ Create `.claude/commands/` (or equivalent for your AI tool) with commands that m
   summarize.md  # /summarize — Stakeholder summary
 ```
 
-Each command file tells the AI what to do at that stage. See the [pipeline docs](../../teams/engineering/process/pipeline.md) for what each stage produces.
+Each command file tells the AI what to do at that stage. See the [pipeline docs](../teams/engineering/process/pipeline.md) for what each stage produces.
 
 ### Step 5: Set up labels
 
@@ -153,7 +153,7 @@ Split builder and validator across different LLM providers for genuinely indepen
 
 ### Step 1: Configure agents.yml
 
-If you're forking or referencing this repo, the default [`agents.yml`](../../agents.yml) maps Claude Code as builder and Gemini CLI as validator. Adjust for your providers:
+If you're forking or referencing this repo, the default [`agents.yml`](../agents.yml) maps Claude Code as builder and Gemini CLI as validator. Adjust for your providers:
 
 ```yaml
 assignments:
@@ -211,7 +211,7 @@ The key: **never share conversation history** between the two sessions.
 
 ### Adding a new persona
 
-1. Create a markdown file in `teams/engineering/personas/your-role.md` following the [template](../../teams/TEMPLATE/personas/example-role.md)
+1. Create a markdown file in `teams/engineering/personas/your-role.md` following the [template](../teams/TEMPLATE/personas/example-role.md)
 2. Add the role to `teams/engineering/manifest.yml`
 3. Persona files include: Identity, Background, Core Expertise, Review Focus, Interaction Style
 
@@ -221,7 +221,7 @@ Edit `review_order` in the manifest. The committee reviews in ascending order, w
 
 ### Creating a new team
 
-Copy `teams/TEMPLATE/` to `teams/your-team/` and customize. See the [template manifest](../../teams/TEMPLATE/manifest.yml) for field documentation.
+Copy `teams/TEMPLATE/` to `teams/your-team/` and customize. See the [template manifest](../teams/TEMPLATE/manifest.yml) for field documentation.
 
 ---
 
@@ -319,5 +319,5 @@ That's fine — see the single-provider fallback in Level 3. The persona-driven 
 
 - [Key Concepts](concepts.md) — Reference for all terminology
 - [Why This Architecture?](why.md) — The philosophy behind these decisions
-- [Pipeline details](../../teams/engineering/process/pipeline.md) — Deep dive into each stage
-- [Committee process](../../teams/engineering/process/committee-process.md) — How the review protocol works
+- [Pipeline details](../teams/engineering/process/pipeline.md) — Deep dive into each stage
+- [Committee process](../teams/engineering/process/committee-process.md) — How the review protocol works

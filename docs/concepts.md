@@ -51,7 +51,7 @@ An **agent type** is an abstract role — it describes *what kind of work* gets 
 
 ### Provider assignment
 
-Agent types are backed by **LLM providers** (Claude Code, Gemini CLI, etc.). The mapping is configured in [`agents.yml`](../../agents.yml):
+Agent types are backed by **LLM providers** (Claude Code, Gemini CLI, etc.). The mapping is configured in [`agents.yml`](../agents.yml):
 
 ```yaml
 # Default: Claude builds, Gemini validates
@@ -106,7 +106,7 @@ The same principle applies beyond engineering. A sales team might have personas 
 
 ### Cross-cutting traits
 
-Beyond individual expertise, all personas share a team culture defined in [`cross-cutting-traits.md`](../../teams/engineering/personas/cross-cutting-traits.md) — values like radical pragmatism, test-first thinking, and "you carry the pager" ops ownership.
+Beyond individual expertise, all personas share a team culture defined in [`cross-cutting-traits.md`](../teams/engineering/personas/cross-cutting-traits.md) — values like radical pragmatism, test-first thinking, and "you carry the pager" ops ownership.
 
 ---
 

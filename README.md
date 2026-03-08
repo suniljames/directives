@@ -86,9 +86,9 @@ New to this repo? Read these in order:
 
 | Doc | What you'll learn | Time |
 |-----|-------------------|------|
-| [**Key Concepts**](docs/guide/concepts.md) | Agent types, personas, pipeline, committee, manifests — all the terminology | 10 min |
-| [**Why This Architecture?**](docs/guide/why.md) | The problems this solves and the thinking behind each design decision | 10 min |
-| [**Getting Started**](docs/guide/getting-started.md) | Three levels of adoption: personas only, pipeline, or full multi-agent setup | 15 min |
+| [**Key Concepts**](docs/concepts.md) | Agent types, personas, pipeline, committee, manifests — all the terminology | 10 min |
+| [**Why This Architecture?**](docs/why.md) | The problems this solves and the thinking behind each design decision | 10 min |
+| [**Getting Started**](docs/getting-started.md) | Three levels of adoption: personas only, pipeline, or full multi-agent setup | 15 min |
 
 ---
 
@@ -157,16 +157,16 @@ Copy `teams/TEMPLATE/` to `teams/<your-team-name>/` and customize the manifest, 
 
 ---
 
-## Global Process
+## Global Framework
 
 Applies across all teams.
 
 | Doc | Description |
 |-----|-------------|
-| [`process/agent-architecture.md`](process/agent-architecture.md) | Agent types, provider assignments, single-provider fallback |
-| [`process/orchestration.md`](process/orchestration.md) | How orchestrators consume config files to route work |
-| [`process/reasoning-framework.md`](process/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
-| [`process/safety.md`](process/safety.md) | Universal safety guardrails |
+| [`framework/agent-architecture.md`](framework/agent-architecture.md) | Agent types, provider assignments, single-provider fallback |
+| [`framework/orchestration.md`](framework/orchestration.md) | How orchestrators consume config files to route work |
+| [`framework/reasoning-framework.md`](framework/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
+| [`framework/safety.md`](framework/safety.md) | Universal safety guardrails |
 
 ---
 
