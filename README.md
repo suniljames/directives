@@ -50,10 +50,10 @@ A task flows through six **[pipeline](docs/glossary.md)** stages. Each stage pro
 
 ```mermaid
 graph LR
-    A["Product Review<br/><code>/pm</code>"] --> B["Design Review<br/><code>/design</code>"]
-    B --> C["Implementation<br/><code>/implement</code>"]
-    C --> D["Code Review<br/><code>/ramd</code>"]
-    D --> E["Deploy & Verify"]
+    A["Define<br/><code>/define</code>"] --> B["Design<br/><code>/design</code>"]
+    B --> C["Implement<br/><code>/implement</code>"]
+    C --> D["Review<br/><code>/review</code>"]
+    D --> E["Deploy & Verify<br/><em>(automatic)</em>"]
     E --> F["Summarize<br/><code>/summarize</code>"]
 
     style A fill:#6f42c1,color:#fff

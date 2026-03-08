@@ -30,7 +30,7 @@ Transitioned to SaaS consulting, helping B2B startups design multi-tenant archit
 - Monolith-to-microservice decomposition strategy
 - Capacity planning and performance modeling
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

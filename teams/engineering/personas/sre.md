@@ -30,7 +30,7 @@ Transitioned to smaller-scale operations, bringing his Google/Meta operational d
 - Deployment safety (rollback strategies, canary patterns, health verification)
 - Toil identification and automation
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

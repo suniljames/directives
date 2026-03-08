@@ -84,7 +84,7 @@ Edit `CONTRIBUTING.md`:
 | Mode | Behavior |
 |------|----------|
 | **autonomous** | AI runs the full pipeline without stopping |
-| **gated** | AI pauses after design and code review for your approval |
+| **gated** | AI pauses after Design and Review for your approval |
 
 ### 3. Fill in project-specific sections
 
@@ -94,10 +94,10 @@ Templates have `TODO` markers. Add your tech stack, dev environment, and project
 
 ```
 .claude/commands/
-  pm.md         # /pm — Product review
+  define.md     # /define — Define requirements (PRD)
   design.md     # /design — Committee design review
   implement.md  # /implement — TDD implementation
-  ramd.md       # /ramd — Review, approve, merge, deploy
+  review.md     # /review — Code review & merge
   summarize.md  # /summarize — Stakeholder summary
 ```
 
@@ -123,7 +123,7 @@ sequenceDiagram
     participant GH as GitHub
 
     You->>GH: Create issue
-    You->>AI: /pm 42
+    You->>AI: /define 42
     AI->>GH: Post PRD, add pm-reviewed label
     You->>AI: /design 42
     AI->>GH: Post committee reviews (sequential)
@@ -131,7 +131,7 @@ sequenceDiagram
     You->>AI: /implement 42
     AI->>AI: Write failing tests, implement until green
     AI->>GH: Push feature branch
-    You->>AI: /ramd
+    You->>AI: /review
     AI->>GH: Create PR, run code review, squash merge
     AI->>GH: Close issue
 ```
@@ -250,10 +250,10 @@ your-project/
   GEMINI.md                 # Validator agent config (optional)
   .claude/
     commands/
-      pm.md                 # /pm command
+      define.md             # /define command
       design.md             # /design command
       implement.md          # /implement command
-      ramd.md               # /ramd command
+      review.md             # /review command
       summarize.md          # /summarize command
   docs/
     developer/

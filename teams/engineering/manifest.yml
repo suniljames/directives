@@ -98,12 +98,12 @@ shared_traits: personas/cross-cutting-traits.md
 
 # --- Pipeline ---
 # Each stage defines what happens, who does it, and which label marks completion.
-# Command names map to per-project slash commands (e.g., .claude/commands/pm.md).
+# Command names map to per-project slash commands (e.g., .claude/commands/define.md).
 
 pipeline:
   - stage: pm-review
-    name: Product Review
-    command: /pm
+    name: Define
+    command: /define
     agent: validator
     label:
       name: pm-reviewed
@@ -111,7 +111,7 @@ pipeline:
     produces: "PRD comment on the GitHub issue"
 
   - stage: design-review
-    name: Design Review
+    name: Design
     command: /design
     agent: [builder, validator]
     label:
@@ -120,7 +120,7 @@ pipeline:
     produces: "Design decision + test specification comments"
 
   - stage: implement
-    name: Implementation
+    name: Implement
     command: /implement
     agent: builder
     label:
@@ -129,8 +129,8 @@ pipeline:
     produces: "Code in a feature branch, all tests passing"
 
   - stage: review-merge
-    name: Code Review & Merge
-    command: /ramd
+    name: Review
+    command: /review
     agent: [builder, validator]
     label:
       name: merged

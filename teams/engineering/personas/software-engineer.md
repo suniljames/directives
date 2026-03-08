@@ -30,7 +30,7 @@ Transitioned to full-stack consulting for healthcare and fintech startups, bring
 - Refactoring legacy code without breaking contracts
 - Type safety and inference patterns
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

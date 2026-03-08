@@ -29,7 +29,7 @@ Transitioned into healthcare startups, drawn by the challenge of designing for s
 - Figma/SVG mockup generation for multi-viewport states
 - User research synthesis and persona-driven design decisions
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

@@ -19,17 +19,17 @@ Default: **autonomous**. To use gated mode, add to your project's `CONTRIBUTING.
 pipeline-mode: gated
 ```
 
-In gated mode, the committee process pauses after design review and after code review to wait for human authorization. See [`committee-process.md`](committee-process.md) step 9.
+In gated mode, the committee process pauses after Design and after Review to wait for human authorization. See [`committee-process.md`](committee-process.md) step 9.
 
 ## Stages
 
 | Stage | Purpose | Produces | Label |
 |-------|---------|----------|-------|
-| **1. Product Review** | Evaluate the issue, write a PRD with acceptance criteria | PRD comment on the GitHub issue | `pm-reviewed` |
-| **2. Design Review** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
-| **3. Implementation** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
-| **4. Code Review & Merge** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
-| **5. Deploy & Verify** | Rebuild, health check, close issue | Running deployment | Issue closed |
+| **1. Define** | Evaluate the issue, write a PRD with acceptance criteria | PRD comment on the GitHub issue | `pm-reviewed` |
+| **2. Design** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
+| **3. Implement** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
+| **4. Review** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
+| **5. Deploy & Verify** (automatic) | Rebuild, health check, close issue | Running deployment | Issue closed |
 | **6. Summarize** (optional) | Plain-language stakeholder summary | Summary comment | `summarized` |
 
 Each agent implements this pipeline using its own tooling. The labels and artifacts are the shared contract — tooling is agent-specific.
@@ -37,11 +37,11 @@ Each agent implements this pipeline using its own tooling. The labels and artifa
 ## Label Lifecycle
 
 ```
-Product Review  -> adds `pm-reviewed`
-Design Review   -> checks `pm-reviewed`, adds `design-complete`
-Implementation  -> checks `design-complete`, adds `implementing`
-Code Review     -> checks CI + labels, after merge: adds `merged`, removes `implementing`
-Summarize       -> adds `summarized` (optional, after deploy)
+Define      -> adds `pm-reviewed`
+Design      -> checks `pm-reviewed`, adds `design-complete`
+Implement   -> checks `design-complete`, adds `implementing`
+Review      -> checks CI + labels, after merge: adds `merged`, removes `implementing`
+Summarize   -> adds `summarized` (optional, after deploy)
 ```
 
 ## Ad-hoc Work Gate
@@ -68,10 +68,10 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 
 | Stage | Validator | Builder |
 |-------|-----------|---------|
-| 1. Product Review | Writes the PRD, adds `pm-reviewed` | — |
-| 2. Design Review | Security + QA lenses, test specification | Architecture, UX, data, SRE lenses |
-| 3. Implementation | — | TDD: scaffold tests -> implement -> green |
-| 4. Code Review | Security + QA review, post findings | Addresses findings, merges |
+| 1. Define | Writes the PRD, adds `pm-reviewed` | — |
+| 2. Design | Security + QA lenses, test specification | Architecture, UX, data, SRE lenses |
+| 3. Implement | — | TDD: scaffold tests -> implement -> green |
+| 4. Review | Security + QA review, post findings | Addresses findings, merges |
 | 5. Deploy & Verify | — | Rebuild, health check, close issue |
 | 6. Summarize | Writer summary | — |
 
@@ -82,7 +82,7 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 - **Label-driven coordination.** Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
 - **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../../../templates/worklog.md.template) to track current context and handoff state.
 
-## Implementation Workflow (Stage 3)
+## Implement Workflow (Stage 3)
 
 ### 1. Setup
 - Create isolated branch or worktree
@@ -106,7 +106,7 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 ### 4. Verify (pre-PR)
 - All tests GREEN
 - Full quality gate passes (lint + typecheck + test + build)
-- **Only proceed to code review if the quality gate passes at 100%**
+- **Only proceed to Review if the quality gate passes at 100%**
 
 ## Multi-Phase Issues
 

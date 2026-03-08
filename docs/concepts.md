@@ -107,10 +107,10 @@ A **[pipeline](glossary.md)** takes a task from start to finish. Each stage prod
 
 ```mermaid
 graph LR
-    A["Product Review<br/><code>/pm</code>"] --> B["Design Review<br/><code>/design</code>"]
-    B --> C["Implementation<br/><code>/implement</code>"]
-    C --> D["Code Review<br/><code>/ramd</code>"]
-    D --> E["Deploy & Verify"]
+    A["Define<br/><code>/define</code>"] --> B["Design<br/><code>/design</code>"]
+    B --> C["Implement<br/><code>/implement</code>"]
+    C --> D["Review<br/><code>/review</code>"]
+    D --> E["Deploy & Verify<br/><em>(automatic)</em>"]
     E --> F["Summarize<br/><code>/summarize</code>"]
 
     style A fill:#6f42c1,color:#fff
@@ -123,11 +123,11 @@ graph LR
 
 | Stage | What happens | Who | Label |
 |---|---|---|---|
-| Product Review | PM writes a PRD with acceptance criteria | Validator | `pm-reviewed` |
-| Design Review | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
-| Implementation | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
-| Code Review & Merge | Up to 3 rounds of review, then squash merge | Both | `merged` |
-| Deploy & Verify | Rebuild, health check, close issue | Builder | Issue closed |
+| Define | PM writes a PRD with acceptance criteria | Validator | `pm-reviewed` |
+| Design | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
+| Implement | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
+| Review | Up to 3 rounds of review, then squash merge | Both | `merged` |
+| Deploy & Verify | Rebuild, health check, close issue (automatic) | Builder | Issue closed |
 | Summarize | Stakeholder summary | Validator | `summarized` |
 
 ### Pipeline modes
@@ -137,7 +137,7 @@ Projects declare a mode in their `CONTRIBUTING.md`:
 | Mode | Behavior |
 |---|---|
 | **Autonomous** | Runs end-to-end without human gates |
-| **Gated** | Pauses after design review and code review for human approval |
+| **Gated** | Pauses after Design and Review for human approval |
 
 ---
 
@@ -190,7 +190,7 @@ roles:
 
 pipeline:
   - stage: pm-review
-    command: /pm
+    command: /define
     agent: validator
     label:
       name: pm-reviewed

@@ -96,11 +96,11 @@ No single reviewer — human or AI — holds all lenses simultaneously. [Persona
 
 ```mermaid
 graph TD
-    A["GitHub Issue"] --> B{"PM Review<br/><code>/pm</code>"}
-    B -->|"PRD posted"| C{"Design Review<br/><code>/design</code>"}
-    C -->|"Committee reviews"| D{"Implementation<br/><code>/implement</code>"}
-    D -->|"TDD: tests first"| E{"Code Review<br/><code>/ramd</code>"}
-    E -->|"Up to 3 rounds"| F{"Deploy & Verify"}
+    A["GitHub Issue"] --> B{"Define<br/><code>/define</code>"}
+    B -->|"PRD posted"| C{"Design<br/><code>/design</code>"}
+    C -->|"Committee reviews"| D{"Implement<br/><code>/implement</code>"}
+    D -->|"TDD: tests first"| E{"Review<br/><code>/review</code>"}
+    E -->|"Up to 3 rounds"| F{"Deploy & Verify<br/><em>(automatic)</em>"}
     F -->|"Health check"| G["Issue Closed"]
 
     style A fill:#333,color:#fff
@@ -114,7 +114,7 @@ graph TD
 
 Each stage has a **label** tracking completion, **checks** the previous label, and **produces artifacts** the next stage consumes.
 
-Skip PM review and jump to implementation? The system warns you. You can override — it's advisory, not a hard block — but you make a conscious choice.
+Skip Define and jump to Implement? The system warns you. You can override — it's advisory, not a hard block — but you make a conscious choice.
 
 ### Why labels, not a database?
 
