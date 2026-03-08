@@ -6,14 +6,14 @@ A plain-language guide to the ideas behind this system. Read this first if you'r
 
 ## The Core Idea
 
-Most AI coding setups use a single model for everything: writing code, reviewing it, testing it, deploying it. This is like having the same person build a bridge and inspect it — they'll miss the same things both times.
+Most AI agent setups use a single model for everything: creating work, reviewing it, and shipping it. This is like having the same person build a bridge and inspect it — they'll miss the same things both times.
 
-This system fixes that by splitting the work across **agent types**, giving each agent **personas** that shape how it thinks, and connecting everything through a **pipeline** that ensures nothing gets skipped.
+This system fixes that by splitting the work across **agent types**, giving each agent **personas** that shape how it thinks, and connecting everything through a **pipeline** that ensures nothing gets skipped. The pattern works for any team — engineering, sales, marketing, operations — not just software development.
 
 ```
-  You open a         AI agents review,       Code is built        Independent agents      Deployed and
-  GitHub issue  -->  plan, and design   -->  test-first      -->  review the code    -->  verified
-                     the solution            in isolation          for blind spots
+  A task arrives      AI agents review,       Work is produced     Independent agents      Delivered and
+  (issue, ticket, --> plan, and design   -->  following the   -->  review the work    -->  verified
+   brief, etc.)       the approach            team's process       for blind spots
 ```
 
 ---
@@ -82,7 +82,7 @@ A **persona** is a detailed character profile that shapes how an AI agent approa
       +---+   +---+   +---+   +----+   +---+   +---+   +---+
 ```
 
-There are 11 personas on the engineering team, each seeing problems through a different lens:
+Each team defines its own personas. The engineering team has 11, each seeing problems through a different lens:
 
 | Persona | What they care about |
 |---|---|
@@ -102,6 +102,8 @@ There are 11 personas on the engineering team, each seeing problems through a di
 
 Without personas, an AI review comment is generic: "Consider adding error handling." With a persona, the **Security Engineer** says: "This endpoint accepts user input without validation — an attacker could inject SQL via the `name` parameter. MUST-FIX." The persona brings *depth* and *specificity* that generic prompting can't match.
 
+The same principle applies beyond engineering. A sales team might have personas like Deal Strategist, Pricing Analyst, Legal Reviewer, and VP of Sales. A marketing team might have Brand Strategist, SEO Specialist, Copy Editor, and Campaign Manager. The structure is identical — only the expertise changes.
+
 ### Cross-cutting traits
 
 Beyond individual expertise, all personas share a team culture defined in [`cross-cutting-traits.md`](../../teams/engineering/personas/cross-cutting-traits.md) — values like radical pragmatism, test-first thinking, and "you carry the pager" ops ownership.
@@ -110,7 +112,9 @@ Beyond individual expertise, all personas share a team culture defined in [`cros
 
 ## The Pipeline
 
-The **pipeline** is a six-stage workflow that takes a GitHub issue from idea to production. Each stage produces artifacts the next stage consumes, and GitHub labels track progress.
+A **pipeline** is a multi-stage workflow that takes a task from start to finish. Each stage produces artifacts the next stage consumes, and GitHub labels track progress. Every team defines its own pipeline stages in its manifest.
+
+The engineering team's pipeline takes a GitHub issue from idea to production:
 
 ```mermaid
 graph LR
@@ -150,7 +154,9 @@ Projects declare a pipeline mode in their `CONTRIBUTING.md`:
 
 ## The Committee
 
-The **engineering committee** is the full team of personas convening to review an issue or a PR. It's not a meeting — it's a structured, sequential review protocol.
+A **committee** is the full team of personas convening to review a piece of work. It's not a meeting — it's a structured, sequential review protocol. Each team defines its own committee composition and review order in its manifest.
+
+The engineering committee reviews issues and PRs:
 
 ```
   Issue arrives
@@ -230,6 +236,8 @@ vocabularies:
 
 When you change the manifest, the change cascades everywhere — add a new persona, reorder the review sequence, add a pipeline stage, or adjust severity levels in one place.
 
+Every team gets its own manifest. A sales team's manifest would define roles like Account Executive and Deal Desk Analyst, pipeline stages like Qualification and Proposal Review, and vocabularies like deal sizes and win/loss categories. The structure is identical to engineering — only the content differs.
+
 ---
 
 ## Severity Levels
@@ -251,8 +259,8 @@ Configuration lives at three levels. Each tier adds specificity without duplicat
 ```
 +--------------------------------------------------+
 |  Tier 1: Directives (this repo)                  |
-|  Engineering philosophy, personas, process,       |
-|  templates. Applies to ALL projects.              |
+|  Team scaffolding, personas, process, templates.  |
+|  Applies to ALL projects and teams.               |
 +--------------------------------------------------+
           |
           v

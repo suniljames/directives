@@ -1,10 +1,12 @@
-# Engineering Directives
+# Directives
 
-A manifest-driven system for multi-agent software development. Personas give AI agents depth. Pipelines give them structure. Splitting builder and validator agents gives them independence.
+A manifest-driven system for orchestrating AI agents across teams. Personas give agents depth. Pipelines give them structure. Splitting builder and validator agents gives them independence.
+
+While engineering is the first fully-built team, the architecture is designed for any team that uses AI agents — sales, marketing, operations, support, and beyond. Each team gets its own manifest, personas, pipeline, and vocabulary. The scaffolding is team-agnostic; the content is team-specific.
 
 ## The Problem
 
-AI coding assistants are powerful — but when one model builds, reviews, and deploys its own code, it creates correlated failures. The model that wrote a SQL query won't notice it's injectable during review. The model that chose an architecture won't question it during code review. Same blind spots in every phase.
+AI agents are powerful — but when one model both creates and reviews its own work, it creates correlated failures. In engineering, the model that wrote a SQL query won't notice it's injectable during review. In sales, the model that drafted a proposal won't catch the pricing error during QA. Same blind spots in every phase.
 
 ## The Solution
 
@@ -33,7 +35,7 @@ graph LR
     style V3 fill:#6f42c1,color:#fff
 ```
 
-Split the work across two independent AI agent types. Give each agent **personas** — detailed character profiles that shape how it thinks about UX, security, architecture, testing, and more. Connect everything through a **pipeline** that ensures nothing gets skipped.
+Split the work across two independent AI agent types. Give each agent **personas** — detailed character profiles that shape how it thinks. Connect everything through a **pipeline** that ensures nothing gets skipped. The pattern works for any domain: engineering personas review code, but the same structure supports sales personas reviewing proposals or marketing personas reviewing campaigns.
 
 **New here? Start with the [guide](#guide).**
 
@@ -59,7 +61,7 @@ graph LR
     style F fill:#d4c5f9,color:#000
 ```
 
-At each review stage, the full engineering committee — 11 personas, each with a distinct professional background and review lens — evaluates the work sequentially, building on each other's feedback:
+The engineering team's committee — 11 personas, each with a distinct professional background and review lens — evaluates work sequentially, building on each other's feedback. Other teams define their own personas and review sequences:
 
 ```
   UX Designer ──> Software Eng ──> Architect ──> Data Eng ──> AI/ML Eng
@@ -114,6 +116,8 @@ Three config files drive the entire system:
 ---
 
 ## Teams
+
+The system supports multiple teams, each with its own manifest, personas, pipeline, and vocabulary. Engineering is fully built out below. To add a new team (sales, marketing, etc.), copy `teams/TEMPLATE/` and customize — see [Adding a New Team](#adding-a-new-team).
 
 ### Engineering
 
@@ -195,8 +199,8 @@ Optional additions for domain-specific projects:
 ```
 +--------------------------------------------------+
 |  Tier 1: Directives (this repo)                  |
-|  Engineering philosophy, personas, process,       |
-|  templates. Shared across ALL projects.           |
+|  Team-agnostic scaffolding, personas, process,    |
+|  templates. Shared across ALL projects and teams. |
 +--------------------------------------------------+
           |
           v
@@ -216,6 +220,6 @@ Optional additions for domain-specific projects:
 
 | Tier | Where | What |
 |------|-------|------|
-| **1. Directives** (this repo) | `suniljames/directives` | Engineering philosophy, personas, process, templates |
+| **1. Directives** (this repo) | `suniljames/directives` | Team scaffolding, personas, process, templates |
 | **2. Organization** | `<org>/.github` or org-level repo | Domain compliance, org-specific workflows, shared CI |
 | **3. Project** | Each project repo | Tech stack, architecture, environment, project-specific docs |
