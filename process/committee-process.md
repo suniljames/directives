@@ -28,15 +28,11 @@ The committee follows a deliberate funnel order: user impact, then implementatio
 | 10 | Engineering Manager (20y) | Builder | [`10-engineering-manager.md`](../personas/10-engineering-manager.md) |
 | 11 | Senior PM (15y) | Validator | [`11-pm.md`](../personas/11-pm.md) |
 
-## The Judge (Principal Engineer)
-
-A 20-year veteran who has occupied every seat at this table. Expert in systems thinking and Total Cost of Ownership (TCO). They synthesize the committee's feedback to resolve multidimensional conflicts (e.g., "Model Accuracy vs. Inference Latency" or "Data Depth vs. Privacy Compliance"). Their final plan moves beyond technical "correctness" to prioritize business outcomes, operational sustainability, and the mitigation of technical debt.
-
 ## Iterative Review Protocol
 
 - Members post in strict order. Each reads all prior comments before composing their review.
 - A member may reference, agree with, challenge, or build on any prior point.
-- The Judge posts last, synthesizing all feedback into a final unified plan.
+- The Engineering Manager posts last, synthesizing all feedback into a final unified plan.
 - No parallel posting — comments are produced sequentially so each persona genuinely absorbs prior feedback.
 
 ## UX Mockup Generation (UI/UX Changes Only)
@@ -53,18 +49,18 @@ A 20-year veteran who has occupied every seat at this table. Expert in systems t
 ## Overwrite-to-Final-Consensus
 
 - **Goal:** A fresh agent reading the issue sees clean, authoritative final reviews — not a debate thread.
-- **Timing:** After The Judge posts, members review the full thread one final time.
+- **Timing:** After the Engineering Manager posts, members review the full thread one final time.
 - **Rule:** Any member whose recommendation, approach, or risk assessment **materially changed** during deliberation overwrites (edits) their original GitHub comment to reflect their final position.
-- **UX Designer specifically:** If mockups need revision (based on Writer, Judge, or other feedback): delete old SVGs, generate revised SVGs, commit/push, overwrite comment with new mockup links.
+- **UX Designer specifically:** If mockups need revision (based on Writer, Engineering Manager, or other feedback): delete old SVGs, generate revised SVGs, commit/push, overwrite comment with new mockup links.
 - **Footer marker:** Each overwritten comment includes: `*Updated to final position after committee deliberation.*`
-- **The Judge's comment** is always written last and is authoritative by default.
+- **The Engineering Manager's comment** is always written last and is authoritative by default.
 
 ## Process
 
 1. Read the issue and all existing context.
 2. **If UI/UX change:** UX Designer generates SVG mockups first (see UX Mockup Generation above).
 3. Each member posts their critical review **in order**, reading all prior comments.
-4. The Judge synthesizes all feedback into a final, unified plan.
+4. The Engineering Manager synthesizes all feedback into a final, unified plan.
 5. **Overwrite-to-final-consensus:** Members whose positions materially changed overwrite their comments.
 6. Update issue title and description to include:
    - **Non-technical Explainer** (end-user value proposition)
@@ -91,12 +87,12 @@ After step 6 (issue description updated) and before step 8 (labels). Mandatory f
 3. Prompt the sub-agent:
    > "You are a senior developer picking up this issue for the first time. Read the issue description below and attempt to produce a step-by-step implementation plan. Flag anything that is ambiguous, assumes context you don't have, or lacks enough detail to implement without guessing. List your questions as bullet points."
 4. If the sub-agent flags gaps:
-   - The Judge reviews each gap and updates the issue description to address it.
+   - The Engineering Manager reviews each gap and updates the issue description to address it.
    - Gaps that are genuinely out-of-scope are noted as `[Context: ...]` annotations in the Implementation Plan section.
 5. If the sub-agent produces a coherent plan with no questions, validation passes.
 
 ### Why This Works
-Committee members build context cumulatively — each reads all prior comments. By the Judge's synthesis, the group has deep shared context that may not be fully captured in the issue description. A zero-context sub-agent simulates the experience of the developer who will actually implement the work, ensuring the issue description is self-contained.
+Committee members build context cumulatively — each reads all prior comments. By the Engineering Manager's synthesis, the group has deep shared context that may not be fully captured in the issue description. A zero-context sub-agent simulates the experience of the developer who will actually implement the work, ensuring the issue description is self-contained.
 
 ## Test Specification Format
 

@@ -76,7 +76,7 @@ Provide the committee with:
 3. Implementation approach
 4. Risk assessment
 
-The Principal Engineer (Judge) synthesizes feedback into a final plan that balances technical excellence with business impact and TCO.
+The Engineering Manager synthesizes feedback into a final plan that balances technical excellence with business impact and TCO.
 
 ## Initialization & Completion
 
