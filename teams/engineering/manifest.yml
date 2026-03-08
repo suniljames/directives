@@ -1,0 +1,218 @@
+# Engineering Team Manifest
+#
+# Single source of truth for:
+#   - Role roster (who's on the team, which agent type, review order)
+#   - Pipeline stages (workflow, commands, labels)
+#   - Controlled vocabularies (severity levels, test layers, etc.)
+#
+# All process docs and templates derive from this file.
+# When this file changes, cascade updates to downstream consumers.
+
+team: engineering
+version: 1
+
+# --- Roles ---
+# Persona files are relative to this manifest's directory.
+# Agent type IDs reference agents.yml.
+
+roles:
+  - id: ux-designer
+    name: UX Designer
+    agent: builder
+    persona: personas/ux-designer.md
+    reviews_code: true
+    review_order: 1
+
+  - id: software-engineer
+    name: Software Engineer
+    agent: builder
+    persona: personas/software-engineer.md
+    reviews_code: true
+    review_order: 2
+
+  - id: system-architect
+    name: System Architect
+    agent: builder
+    persona: personas/system-architect.md
+    reviews_code: true
+    review_order: 3
+
+  - id: data-engineer
+    name: Data Engineer
+    agent: builder
+    persona: personas/data-engineer.md
+    reviews_code: true
+    review_order: 4
+
+  - id: ai-ml-engineer
+    name: AI/ML Engineer
+    agent: builder
+    persona: personas/ai-ml-engineer.md
+    reviews_code: true
+    review_order: 5
+
+  - id: security-engineer
+    name: Security Engineer
+    agent: validator
+    persona: personas/security-engineer.md
+    reviews_code: true
+    review_order: 6
+
+  - id: qa-engineer
+    name: QA Engineer
+    agent: validator
+    persona: personas/qa-engineer.md
+    reviews_code: true
+    review_order: 7
+
+  - id: sre
+    name: SRE
+    agent: builder
+    persona: personas/sre.md
+    reviews_code: true
+    review_order: 8
+
+  - id: writer
+    name: Writer
+    agent: validator
+    persona: personas/writer.md
+    reviews_code: true
+    review_order: 9
+
+  - id: engineering-manager
+    name: Engineering Manager
+    agent: builder
+    persona: personas/engineering-manager.md
+    reviews_code: false
+    synthesizes: true
+    review_order: last
+
+  - id: pm
+    name: PM
+    agent: validator
+    persona: personas/pm.md
+    reviews_code: false
+    pipeline_only: true
+
+shared_traits: personas/cross-cutting-traits.md
+
+# --- Pipeline ---
+# Each stage defines what happens, who does it, and which label marks completion.
+# Command names map to per-project slash commands (e.g., .claude/commands/pm.md).
+
+pipeline:
+  - stage: pm-review
+    name: Product Review
+    command: /pm
+    agent: validator
+    label:
+      name: pm-reviewed
+      color: "6f42c1"
+    produces: "PRD comment on the GitHub issue"
+
+  - stage: design-review
+    name: Design Review
+    command: /design
+    agent: [builder, validator]
+    label:
+      name: design-complete
+      color: "0e8a16"
+    produces: "Design decision + test specification comments"
+
+  - stage: implement
+    name: Implementation
+    command: /implement
+    agent: builder
+    label:
+      name: implementing
+      color: "fbca04"
+    produces: "Code in a feature branch, all tests passing"
+
+  - stage: review-merge
+    name: Code Review & Merge
+    command: /ramd
+    agent: [builder, validator]
+    label:
+      name: merged
+      color: "6e5494"
+    produces: "Merged PR"
+
+  - stage: deploy
+    name: Deploy & Verify
+    agent: builder
+    produces: "Running deployment"
+
+  - stage: summarize
+    name: Summarize
+    command: /summarize
+    agent: validator
+    label:
+      name: summarized
+    optional: true
+    produces: "Summary comment"
+
+# --- Controlled Vocabularies ---
+# Canonical definitions. Process docs and project configs reference these.
+
+vocabularies:
+  severity_levels:
+    - id: must-fix
+      name: MUST-FIX
+      blocks: merge
+      description: "Correctness bug, security vulnerability, data loss risk, or broken contract"
+    - id: should-fix
+      name: SHOULD-FIX
+      blocks: current_round
+      description: "Code quality issue, missing edge case, poor naming, or maintainability concern"
+    - id: nit
+      name: NIT
+      blocks: nothing
+      description: "Style preference, minor suggestion, optional improvement"
+
+  test_layers:
+    - id: service
+      name: Service / Unit
+      speed: fastest
+      when: "Pure logic, models, services — no HTTP, no UI"
+    - id: api
+      name: API / Endpoint
+      speed: fast
+      when: "HTTP status, response shapes, auth checks"
+    - id: component
+      name: Component
+      speed: medium
+      when: "UI component rendering, user interaction"
+    - id: e2e
+      name: E2E / Browser
+      speed: slowest
+      when: "Cross-page workflows, JS interaction, auth boundary testing"
+
+  commit_prefixes:
+    - feat
+    - fix
+    - test
+    - docs
+    - refactor
+
+  pipeline_modes:
+    - id: autonomous
+      description: "No human review gates. Pipeline runs end-to-end."
+    - id: gated
+      description: "Agents notify and wait for human authorization before PRs and merging."
+
+  task_modes:
+    - id: build
+      description: "Design API first. Write tests before implementation."
+    - id: debug
+      description: "Reproduce → Hypothesis → Evidence → Fix → Verify"
+    - id: refactor
+      description: "Tests first. One change at a time. Preserve behavior."
+    - id: review
+      description: "Correctness > style. Flag what matters, ignore what doesn't."
+
+# --- Settings ---
+# Numeric constants referenced across process docs.
+
+settings:
+  max_review_rounds: 3
+  ci_time_limit_minutes: 10

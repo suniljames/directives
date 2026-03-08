@@ -1,0 +1,58 @@
+# Agent Types, Providers & Assignments
+#
+# Single source of truth for:
+#   - Abstract agent types (builder, validator, etc.)
+#   - LLM providers and their capabilities
+#   - Default provider-to-agent-type assignments
+#
+# Orchestrators read this file to route work to the right provider.
+# Projects can override assignments in their CONTRIBUTING.md.
+
+agent_types:
+  - id: builder
+    description: "Implements features, writes code, deploys"
+    capabilities:
+      - edit_files
+      - run_tests
+      - deploy
+      - merge
+
+  - id: validator
+    description: "Reviews, audits, writes specs and docs"
+    capabilities:
+      - review_code
+      - write_specs
+      - file_issues
+
+providers:
+  - id: claude-code
+    name: Claude Code
+    binary: claude
+    strengths:
+      - code_generation
+      - refactoring
+      - tool_use
+      - deployment
+
+  - id: gemini-cli
+    name: Gemini CLI
+    binary: gemini
+    strengths:
+      - analysis
+      - review
+      - specification
+      - documentation
+
+# Default: which provider backs each agent type.
+# Orchestrators use this unless the project overrides.
+# fallback_order: if preferred provider is unavailable, try the next.
+assignments:
+  default:
+    builder: claude-code
+    validator: gemini-cli
+  fallback_order:
+    builder:
+      - claude-code
+    validator:
+      - gemini-cli
+      - claude-code

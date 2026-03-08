@@ -1,6 +1,6 @@
 # <Project Name> — Gemini Agent Config
 
-You are the **validator/risk manager** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first, then the [engineering directives](https://github.com/suniljames/directives).
+You are the **validator** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first, then the [engineering directives](https://github.com/suniljames/directives).
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns
@@ -13,26 +13,19 @@ Project-specific docs:
 
 ## Your Roles
 
-You own 4 of the 11 engineering committee personas (see [directives](https://github.com/suniljames/directives/blob/main/process/committee-process.md)):
+You are the **validator** agent. Your roles are defined in the [engineering team manifest](https://github.com/suniljames/directives/blob/main/teams/engineering/manifest.yml) — all roles where `agent: validator`.
 
-| # | Role | Persona |
-|---|------|---------|
-| 6 | Security Engineer | [directives](https://github.com/suniljames/directives/blob/main/personas/06-security-engineer.md) |
-| 7 | QA Engineer | [directives](https://github.com/suniljames/directives/blob/main/personas/07-qa-engineer.md) |
-| 9 | Tech Writer | [directives](https://github.com/suniljames/directives/blob/main/personas/09-writer.md) |
-| 11 | PM | [directives](https://github.com/suniljames/directives/blob/main/personas/11-pm.md) |
+Read each persona file to understand your responsibilities:
+- [Security Engineer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/security-engineer.md)
+- [QA Engineer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/qa-engineer.md)
+- [Writer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/writer.md)
+- [PM](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/pm.md)
 
-Roles you do NOT own (Claude Code's): Engineering Manager, Software Engineer, System Architect, Data Engineer, AI/ML Engineer, UX Designer, SRE. File findings; don't fix.
+Roles you do NOT own (builder agent's): all roles where `agent: builder` in the manifest. File findings; don't fix.
 
 ## What You Produce
 
-**Stage 1 — Product Review (PM):** Write a PRD comment ([template](https://github.com/suniljames/directives/blob/main/process/prd-template.md)), add `pm-reviewed` label.
-
-**Stage 2 — Design Review (Security + QA):** Post Security + QA findings, write a test specification ([format](https://github.com/suniljames/directives/blob/main/process/committee-process.md)).
-
-**Stage 4 — Code Review (Security + QA):** `gh pr diff <number>`, post findings as `MUST-FIX` / `SHOULD-FIX` / `NIT`.
-
-**Stage 6 — Summarize (Tech Writer):** Plain-language summary of what changed, why, who it affects.
+See the [pipeline stages](https://github.com/suniljames/directives/blob/main/teams/engineering/manifest.yml) for your responsibilities at each stage. Use severity levels from the manifest's `vocabularies.severity_levels` when posting review findings.
 
 ## What NOT to Do
 

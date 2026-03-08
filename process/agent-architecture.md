@@ -1,33 +1,32 @@
 # Multi-Agent Architecture
 
+> **Canonical config:** [`agents.yml`](../agents.yml) — agent types, providers, assignments.
+> **Role roster:** [`teams/engineering/manifest.yml`](../teams/engineering/manifest.yml)
+
 A single AI model acting as both builder and validator creates correlated failure modes — shared blind spots, single-model groupthink, and no independent verification. The model that builds the code should not be the same model that validates it.
 
 ## Principle
 
-Split engineering agent roles across two LLM backends: a **builder/executor** and a **validator/risk manager**. The builder and validator should be different models to maximize independent verification.
+Split engineering roles across abstract **agent types** — a **builder** and a **validator** — backed by different LLM providers when available. Agent types and provider assignments are defined in [`agents.yml`](../agents.yml). Role-to-agent-type mappings are in each team's [`manifest.yml`](../teams/engineering/manifest.yml).
 
-## Role Assignments
+## Agent Types
 
-### Builder / Executor (7 roles)
+| Type | Purpose | Capabilities |
+|------|---------|-------------|
+| **Builder** | Implements features, writes code, deploys | edit_files, run_tests, deploy, merge |
+| **Validator** | Reviews, audits, writes specs and docs | review_code, write_specs, file_issues |
 
-| # | Role | Rationale |
-|---|------|-----------|
-| 10 | **Engineering Manager** | Maintains consistent technical direction, rule adherence, and process enforcement. |
-| 2 | **Software Engineer** | Primary code author. Requires integrated file editing, bash, git, multi-file operations. |
-| 3 | **System Architect** | Architecture decisions grounded in intimate knowledge of the actual codebase. |
-| 4 | **Data Engineer** | Implementation-heavy: writing migrations, building pipelines, optimizing queries. |
-| 5 | **AI/ML Engineer** | AI integration — the builder knows its own SDK and API best. |
-| 1 | **UX Designer** | Translates designs into frontend code. Requires generating and editing files. |
-| 8 | **SRE** | Operational: running commands, reading logs, restarting services, editing configs. |
+## Provider Assignment
 
-### Validator / Risk Manager (4 roles)
+Default assignments and fallback chains are in `agents.yml`. When the preferred provider for an agent type is unavailable, the orchestrator (or the agent itself) falls back to the next provider in the chain.
 
-| # | Role | Rationale |
-|---|------|-----------|
-| 6 | **Security Engineer** | Cross-model validation catches blind spots the builder's model would share. |
-| 7 | **QA Engineer** | Independent verification and validation (IV&V) — different model maximizes edge case coverage. |
-| 11 | **PM (Product Manager)** | Separates "what to build" from "how to build it" across model boundaries. |
-| 9 | **Tech Writer** | Independent reader of builder output — flags unclear code/architecture rather than filling gaps with shared assumptions. |
+### Single-Provider Fallback
+
+When only one provider is available (e.g., orchestrator doesn't support Gemini yet), that provider runs both agent types in **isolated sessions**. Mitigations:
+
+1. **Session isolation** — The validator pass runs in a separate session with no shared context from the builder pass.
+2. **Mandatory fresh-eyes validation** — Required (not optional) in single-provider mode.
+3. **Explicit role priming** — The validator session's prompt states: "You are the validator agent. You did NOT build this code. Review it independently."
 
 ## Build-then-Validate Flow
 
@@ -41,7 +40,7 @@ Builder implements --> Validator reviews --> Builder addresses feedback
 4. **QA Engineer (validator)** tests the implementation against requirements.
 5. **Security Engineer (validator)** audits the code for vulnerabilities.
 6. **SRE (builder)** deploys and monitors.
-7. **Tech Writer (validator)** documents the feature.
+7. **Writer (validator)** documents the feature.
 
 ## Coordination Protocol
 
@@ -50,7 +49,7 @@ Builder implements --> Validator reviews --> Builder addresses feedback
 - **Explicit acceptance criteria** — The PM defines "done." The QA Engineer verifies "done." The EM orchestrates the path between them.
 - **Label-driven coordination** — Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
 - **PR labels** — All autonomously created PRs are labeled `ai:autonomous`.
-- **Review findings** — Posted as PR comments with severity levels (see [`code-review-framework.md`](code-review-framework.md)).
+- **Review findings** — Posted as PR comments with severity levels (see [`code-review-framework.md`](../teams/engineering/process/code-review-framework.md)).
 
 ## Guiding Principles
 
