@@ -89,6 +89,8 @@ New to this repo? Read these in order:
 | [**Key Concepts**](docs/concepts.md) | Agent types, personas, pipeline, committee, manifests — all the terminology | 10 min |
 | [**Why This Architecture?**](docs/why.md) | The problems this solves and the thinking behind each design decision | 10 min |
 | [**Getting Started**](docs/getting-started.md) | Three levels of adoption: personas only, pipeline, or full multi-agent setup | 15 min |
+| [**Glossary**](docs/glossary.md) | One-line definitions for every term in this repo | 3 min |
+| [**FAQ**](docs/faq.md) | Quick answers to "Do I need all of this?", "Engineering only?", and more | 3 min |
 
 ---
 
