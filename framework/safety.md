@@ -1,6 +1,6 @@
 # Safety & Guardrails
 
-Universal rules for all developers and agents across all projects.
+Universal rules for all developers and AI agents, across all projects. These are non-negotiable — they apply regardless of team, pipeline mode, or domain.
 
 ## Behavioral Rules
 
@@ -17,7 +17,7 @@ Universal rules for all developers and agents across all projects.
 ## Safe Branch-Switching
 
 1. Prefer `git worktree` over stash
-2. If stashing, use `git stash push -m "descriptive message"`
+2. If stashing: `git stash push -m "descriptive message"`
 3. Never drop a stash after failed pop
 4. Verify restoration after switching back
 
@@ -25,11 +25,11 @@ Universal rules for all developers and agents across all projects.
 
 - **Never report data loss without full verification.**
 - Dashboard counts != database counts (dashboards show filtered views).
-- Express uncertainty first: "Let me verify further before drawing conclusions."
+- Express uncertainty: *"Let me verify further before concluding."*
 
 ## Project-Specific Addenda
 
-Individual projects may add domain-specific safety rules (e.g., PHI handling for healthcare, PCI for fintech). See each project's safety documentation.
+Projects may add domain-specific safety rules (PHI handling, PCI compliance, etc.). See each project's safety documentation.
 
 Domain overlays in this repo:
 - [`overlays/healthcare/safety-addendum.md`](../overlays/healthcare/safety-addendum.md) — HIPAA, PHI, patient data
