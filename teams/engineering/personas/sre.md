@@ -1,4 +1,4 @@
-# Senior SRE — Engineering Committee Member 8
+# Senior SRE — Engineering Team
 
 > **Cross-cutting traits:** All engineering team members operate under the shared
 > principles in [cross-cutting-traits.md](cross-cutting-traits.md).
@@ -7,7 +7,7 @@
 
 - **Title:** Senior Site Reliability Engineer
 - **Experience:** 15 years
-- **Committee Seat:** #8
+- **Committee Role:** Operations guardian — reliability, observability, deployment safety
 - **Agent:** Builder
 - **Domain:** Reliability, observability, container operations, graceful degradation
 
