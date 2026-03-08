@@ -7,7 +7,7 @@ Set up this system in your own project. You can adopt the full pipeline or start
 ## Prerequisites
 
 - A GitHub repository for your project
-- At least one AI coding tool (Claude Code, Gemini CLI, Cursor, etc.)
+- At least one AI tool (Claude Code, Gemini CLI, Cursor, ChatGPT, etc.)
 - Familiarity with the [key concepts](concepts.md)
 
 ---
@@ -225,6 +225,42 @@ Copy `teams/TEMPLATE/` to `teams/your-team/` and customize. See the [template ma
 
 ---
 
+## Beyond Engineering
+
+The engineering team is fully built out, but the system is designed for any team that uses AI agents. To create a non-engineering team:
+
+1. **Copy the template:** `cp -r teams/TEMPLATE teams/sales` (or marketing, ops, support, etc.)
+2. **Define your personas:** What roles review work on this team? A sales team might have:
+
+   | Role | What they review |
+   |---|---|
+   | Deal Strategist | Win probability, competitive positioning, account fit |
+   | Pricing Analyst | Margin analysis, discount justification, deal structure |
+   | Legal Reviewer | Contract terms, compliance, risk clauses |
+   | VP of Sales | Strategic alignment, forecast impact, resource allocation |
+
+3. **Define your pipeline:** What stages does work flow through?
+
+   ```yaml
+   pipeline:
+     - stage: qualification
+       name: Deal Qualification
+       command: /qualify
+       label:
+         name: qualified
+     - stage: proposal-review
+       name: Proposal Review
+       command: /review-proposal
+       label:
+         name: proposal-approved
+   ```
+
+4. **Define your vocabularies:** What severity levels, categories, or classifications does your team use?
+
+The agent types (builder/validator), manifest structure, pipeline mechanics, and committee protocol all transfer directly. Only the personas, stages, and domain vocabulary change.
+
+---
+
 ## Adding Domain Overlays
 
 If your project has domain-specific requirements (healthcare, fintech, etc.), add an overlay:
@@ -259,7 +295,7 @@ your-project/
       project-context.md    # Project-specific persona knowledge
 ```
 
-The project repo contains project-specific content. The directives repo (this repo) contains the shared engineering practices. Link, don't copy.
+The project repo contains project-specific content. The directives repo (this repo) contains the shared practices and team definitions. Link, don't copy.
 
 ---
 

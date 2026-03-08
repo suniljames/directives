@@ -6,15 +6,15 @@ The thinking behind the system. Read this if you want to understand *why* the pi
 
 ## The Problem: AI Agents Are Powerful but Unreliable Alone
 
-AI coding assistants can write, test, deploy, and document software. But when a single model does all of that, it creates **correlated failure modes**:
+AI agents can create, review, and deliver work across many domains — software, proposals, campaigns, documentation. But when a single model does all of that, it creates **correlated failure modes**:
 
 ```
                 Single AI Agent
                       |
           +-----------+-----------+
           |           |           |
-       Builds      Reviews     Deploys
-       the code    the code    the code
+       Creates     Reviews     Delivers
+       the work    the work    the work
           |           |           |
           +-----+-----+-----+----+
                 |           |
@@ -22,7 +22,7 @@ AI coding assistants can write, test, deploy, and document software. But when a 
          in ALL phases      in ALL phases
 ```
 
-The model that wrote a SQL query won't notice it's injectable during review — it just wrote it that way on purpose. The model that chose an architecture won't question it during code review — it already decided this was the right approach. This is the AI equivalent of grading your own homework.
+The model that wrote a SQL query won't notice it's injectable during review — it just wrote it that way on purpose. The model that drafted a sales proposal won't catch the pricing inconsistency during QA — it chose those numbers. This is the AI equivalent of grading your own homework.
 
 ---
 
@@ -72,20 +72,19 @@ Each persona has:
 - **A review lens** — The specific checklist of things they look for.
 - **An interaction style** — How they communicate findings (direct, diplomatic, etc.).
 
-### Why 11 personas?
+### Why multiple personas?
 
-Because software engineering is genuinely multi-disciplinary. A feature that's architecturally sound might be inaccessible. Code that passes all tests might have a SQL injection vulnerability. A deployment that works might have no health checks.
+Because real work is genuinely multi-disciplinary. In engineering, a feature that's architecturally sound might be inaccessible. Code that passes all tests might have a SQL injection vulnerability. In sales, a proposal with great positioning might have incorrect pricing. In marketing, a campaign with strong copy might violate brand guidelines.
 
 ```
-                        A single PR
-                             |
-     +-------+-------+------+------+-------+-------+
-     |       |       |      |      |       |       |
-    UX    Code    Arch    Data   Security  QA    SRE   ...
-   a11y  quality  coupling perf  vulns    tests  ops
-   design patterns  scale  index  auth   edges  logs
-   motion  DRY    tenant  migrate CSRF  mocks  health
+  Engineering:                          Sales:
+  A single PR                           A single proposal
+       |                                     |
+  UX / Code / Arch / Data /            Strategy / Pricing / Legal /
+  Security / QA / SRE / ...            Competitive / Brand / ...
 ```
+
+The number and type of personas varies by team. Engineering has 11 because software is that multi-faceted. A sales team might need 5. A marketing team might need 7. The system doesn't prescribe — it provides the scaffolding.
 
 No single reviewer — human or AI — can hold all of these lenses simultaneously. The persona system makes them explicit and systematic.
 
@@ -145,7 +144,7 @@ Instead, three config files drive everything:
   +------------------+      +------------------+       +------------------+
 ```
 
-Want to add a new persona? Add a role to the manifest. Change the review order? Edit one number. Swap the LLM provider? Update one line in `agents.yml`. Add a new pipeline stage? One block in the manifest. All downstream consumers automatically pick up the change.
+Want to add a new persona? Add a role to the manifest. Change the review order? Edit one number. Swap the LLM provider? Update one line in `agents.yml`. Add a new pipeline stage? One block in the manifest. Add an entirely new team? Copy `teams/TEMPLATE/` and fill in your roles. All downstream consumers automatically pick up the change.
 
 ### Why three files instead of one?
 
@@ -190,7 +189,7 @@ The fifth insight: **committee members build shared context during review. This 
   I don't see it defined."
 ```
 
-This is inspired by Anthropic's [doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring) "Reader Testing" pattern. A zero-context agent simulates the experience of the developer who will actually implement the work, catching assumptions that feel obvious to the committee but aren't captured in the spec.
+This is inspired by Anthropic's [doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring) "Reader Testing" pattern. A zero-context agent simulates the experience of the person who will actually do the work, catching assumptions that feel obvious to the committee but aren't captured in the spec. This works for any deliverable — code specs, proposal briefs, campaign plans.
 
 ---
 
@@ -216,7 +215,11 @@ Don't make people read documentation to figure out the review order or pipeline 
 
 ### 5. Additive domain overlays
 
-Healthcare needs HIPAA. Fintech needs PCI. These are *additions* to the base process, not replacements. The overlay pattern keeps domain rules separate from engineering fundamentals.
+Healthcare needs HIPAA. Fintech needs PCI. These are *additions* to the base process, not replacements. The overlay pattern keeps domain rules separate from team fundamentals.
+
+### 6. Team-agnostic scaffolding
+
+The architecture doesn't assume engineering. Agent types, manifests, pipelines, personas, and vocabularies are abstract structures that any team can fill with its own content. Engineering is the first fully-built team — not the only one the system supports.
 
 ---
 
