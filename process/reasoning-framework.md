@@ -61,7 +61,7 @@ Before finishing, ask:
 
 ## Escalation to Committee
 
-When any of these apply, escalate to the [engineering committee](committee-process.md):
+When any of these apply, escalate to the [engineering committee](../teams/engineering/process/committee-process.md):
 - **Architectural changes** that affect multiple systems or long-term design
 - **Breaking API changes** that impact other developers or services
 - **Security implications** requiring threat modeling review

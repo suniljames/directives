@@ -4,54 +4,73 @@ How I build software. Personas, processes, and templates for multi-agent softwar
 
 This repo is the canonical source for engineering practices that apply across all projects. Individual project repos reference these directives and add their own project-specific context.
 
-## Contents
+## Architecture
 
-### Personas
+Three config files drive the entire system:
 
-The engineering committee: 11 domain experts who review designs and code.
+| File | Scope | What it controls |
+|------|-------|-----------------|
+| [`agents.yml`](agents.yml) | Global | Agent types, LLM providers, default assignments, fallback chains |
+| [`teams/engineering/manifest.yml`](teams/engineering/manifest.yml) | Per-team | Role roster, pipeline stages, labels, controlled vocabularies |
+| Per-project `CONTRIBUTING.md` | Per-project | Team reference, pipeline mode, provider overrides |
 
-| # | Role | File |
-|---|------|------|
-| 1 | UX Designer | [`personas/01-ux-designer.md`](personas/01-ux-designer.md) |
-| 2 | Software Engineer | [`personas/02-software-engineer.md`](personas/02-software-engineer.md) |
-| 3 | System Architect | [`personas/03-system-architect.md`](personas/03-system-architect.md) |
-| 4 | Data Engineer | [`personas/04-data-engineer.md`](personas/04-data-engineer.md) |
-| 5 | AI/ML Engineer | [`personas/05-ai-ml-engineer.md`](personas/05-ai-ml-engineer.md) |
-| 6 | Security Engineer | [`personas/06-security-engineer.md`](personas/06-security-engineer.md) |
-| 7 | QA Engineer | [`personas/07-qa-engineer.md`](personas/07-qa-engineer.md) |
-| 8 | SRE | [`personas/08-sre.md`](personas/08-sre.md) |
-| 9 | Writer | [`personas/09-writer.md`](personas/09-writer.md) |
-| 10 | Engineering Manager | [`personas/10-engineering-manager.md`](personas/10-engineering-manager.md) |
-| 11 | PM | [`personas/11-pm.md`](personas/11-pm.md) |
+## Teams
 
-Shared culture: [`personas/cross-cutting-traits.md`](personas/cross-cutting-traits.md)
+### Engineering
 
-### Process
+> **Manifest:** [`teams/engineering/manifest.yml`](teams/engineering/manifest.yml)
+
+**Personas** — [`teams/engineering/personas/`](teams/engineering/personas/)
+
+| Role | Agent | Persona |
+|------|-------|---------|
+| UX Designer | Builder | [`ux-designer.md`](teams/engineering/personas/ux-designer.md) |
+| Software Engineer | Builder | [`software-engineer.md`](teams/engineering/personas/software-engineer.md) |
+| System Architect | Builder | [`system-architect.md`](teams/engineering/personas/system-architect.md) |
+| Data Engineer | Builder | [`data-engineer.md`](teams/engineering/personas/data-engineer.md) |
+| AI/ML Engineer | Builder | [`ai-ml-engineer.md`](teams/engineering/personas/ai-ml-engineer.md) |
+| Security Engineer | Validator | [`security-engineer.md`](teams/engineering/personas/security-engineer.md) |
+| QA Engineer | Validator | [`qa-engineer.md`](teams/engineering/personas/qa-engineer.md) |
+| SRE | Builder | [`sre.md`](teams/engineering/personas/sre.md) |
+| Writer | Validator | [`writer.md`](teams/engineering/personas/writer.md) |
+| Engineering Manager | Builder | [`engineering-manager.md`](teams/engineering/personas/engineering-manager.md) |
+| PM | Validator | [`pm.md`](teams/engineering/personas/pm.md) |
+
+Shared culture: [`cross-cutting-traits.md`](teams/engineering/personas/cross-cutting-traits.md)
+
+**Process** — [`teams/engineering/process/`](teams/engineering/process/)
 
 | Doc | Description |
 |-----|-------------|
-| [`process/reasoning-framework.md`](process/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
-| [`process/agent-architecture.md`](process/agent-architecture.md) | Builder/validator agent split — why and how |
-| [`process/pipeline.md`](process/pipeline.md) | 6-stage pipeline (autonomous or gated), ad-hoc work gate, label lifecycle |
-| [`process/committee-process.md`](process/committee-process.md) | Committee review protocol, fresh-eyes validation, UX mockups |
-| [`process/safety.md`](process/safety.md) | Universal safety guardrails |
-| [`process/test-budget.md`](process/test-budget.md) | Test layer decision framework |
-| [`process/code-review-framework.md`](process/code-review-framework.md) | Severity levels and review lens structure |
-| [`process/prd-template.md`](process/prd-template.md) | Product requirements document format |
+| [`pipeline.md`](teams/engineering/process/pipeline.md) | 6-stage pipeline, ad-hoc work gate, label lifecycle |
+| [`committee-process.md`](teams/engineering/process/committee-process.md) | Committee review protocol, fresh-eyes validation, UX mockups |
+| [`code-review-framework.md`](teams/engineering/process/code-review-framework.md) | Severity levels and review lens structure |
+| [`test-budget.md`](teams/engineering/process/test-budget.md) | Test layer decision framework |
+| [`prd-template.md`](teams/engineering/process/prd-template.md) | Product requirements document format |
 
-### Templates
+## Global Process
+
+Applies across all teams.
+
+| Doc | Description |
+|-----|-------------|
+| [`process/agent-architecture.md`](process/agent-architecture.md) | Agent types, provider assignments, single-provider fallback |
+| [`process/reasoning-framework.md`](process/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers, review checklist |
+| [`process/safety.md`](process/safety.md) | Universal safety guardrails |
+
+## Templates
 
 Starter files for new project repos:
 
 | Template | Description |
 |----------|-------------|
-| [`templates/CONTRIBUTING.md.template`](templates/CONTRIBUTING.md.template) | Universal entry point for all developers |
-| [`templates/CLAUDE.md.template`](templates/CLAUDE.md.template) | Claude Code agent config |
-| [`templates/GEMINI.md.template`](templates/GEMINI.md.template) | Gemini agent config |
-| [`templates/worklog.md.template`](templates/worklog.md.template) | Multi-agent coordination log |
-| [`templates/pm-context.md.template`](templates/pm-context.md.template) | Domain context for PM persona |
+| [`CONTRIBUTING.md.template`](templates/CONTRIBUTING.md.template) | Universal entry point for all developers |
+| [`CLAUDE.md.template`](templates/CLAUDE.md.template) | Claude Code agent config |
+| [`GEMINI.md.template`](templates/GEMINI.md.template) | Gemini/validator agent config |
+| [`worklog.md.template`](templates/worklog.md.template) | Multi-agent coordination log |
+| [`pm-context.md.template`](templates/pm-context.md.template) | Domain context for PM persona |
 
-### Domain Overlays
+## Domain Overlays
 
 Optional additions for domain-specific projects:
 

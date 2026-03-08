@@ -10,23 +10,25 @@ The engineering committee convenes for critical review of issues requiring cross
 
 ## Committee Members
 
+> **Canonical roster:** [`manifest.yml`](../manifest.yml) — roles, agent assignments, review order.
+
 Full persona definitions with backgrounds, expertise, and review lenses are in [`personas/`](../personas/). Shared team culture: [`cross-cutting-traits.md`](../personas/cross-cutting-traits.md).
 
 The committee follows a deliberate funnel order: user impact, then implementation, then cross-cutting concerns, then operability, then communication.
 
-| # | Role | Agent | Persona |
-|---|------|-------|---------|
-| 1 | UX Designer (15y) | Builder | [`01-ux-designer.md`](../personas/01-ux-designer.md) |
-| 2 | Senior Software Engineer (15y) | Builder | [`02-software-engineer.md`](../personas/02-software-engineer.md) |
-| 3 | System Architect (15y) | Builder | [`03-system-architect.md`](../personas/03-system-architect.md) |
-| 4 | Principal Data Engineer (15y) | Builder | [`04-data-engineer.md`](../personas/04-data-engineer.md) |
-| 5 | Principal AI/ML Engineer (15y) | Builder | [`05-ai-ml-engineer.md`](../personas/05-ai-ml-engineer.md) |
-| 6 | Principal Security Engineer (15y) | Validator | [`06-security-engineer.md`](../personas/06-security-engineer.md) |
-| 7 | Principal QA Engineer (15y) | Validator | [`07-qa-engineer.md`](../personas/07-qa-engineer.md) |
-| 8 | Senior SRE (15y) | Builder | [`08-sre.md`](../personas/08-sre.md) |
-| 9 | Principal Writer (15y) | Validator | [`09-writer.md`](../personas/09-writer.md) |
-| 10 | Engineering Manager (20y) | Builder | [`10-engineering-manager.md`](../personas/10-engineering-manager.md) |
-| 11 | Senior PM (15y) | Validator | [`11-pm.md`](../personas/11-pm.md) |
+| Role | Agent | Persona |
+|------|-------|---------|
+| UX Designer | Builder | [`ux-designer.md`](../personas/ux-designer.md) |
+| Software Engineer | Builder | [`software-engineer.md`](../personas/software-engineer.md) |
+| System Architect | Builder | [`system-architect.md`](../personas/system-architect.md) |
+| Data Engineer | Builder | [`data-engineer.md`](../personas/data-engineer.md) |
+| AI/ML Engineer | Builder | [`ai-ml-engineer.md`](../personas/ai-ml-engineer.md) |
+| Security Engineer | Validator | [`security-engineer.md`](../personas/security-engineer.md) |
+| QA Engineer | Validator | [`qa-engineer.md`](../personas/qa-engineer.md) |
+| SRE | Builder | [`sre.md`](../personas/sre.md) |
+| Writer | Validator | [`writer.md`](../personas/writer.md) |
+| Engineering Manager | Builder | [`engineering-manager.md`](../personas/engineering-manager.md) |
+| PM | Validator | [`pm.md`](../personas/pm.md) |
 
 ## Iterative Review Protocol
 

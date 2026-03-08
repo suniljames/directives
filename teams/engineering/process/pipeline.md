@@ -2,6 +2,8 @@
 
 End-to-end development lifecycle. Each stage produces artifacts the next stage consumes.
 
+> **Canonical stage definitions:** [`manifest.yml`](../manifest.yml) — stages, labels, agent assignments.
+
 ## Pipeline Modes
 
 Projects choose one of two modes in their `CONTRIBUTING.md`:
@@ -71,14 +73,14 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 | 3. Implementation | — | TDD: scaffold tests -> implement -> green |
 | 4. Code Review | Security + QA review, post findings | Addresses findings, merges |
 | 5. Deploy & Verify | — | Rebuild, health check, close issue |
-| 6. Summarize | Tech Writer summary | — |
+| 6. Summarize | Writer summary | — |
 
 ## Handoff Protocol
 
 - **The repo is the source of truth.** All handoffs happen through files, PR comments, and issue comments — never through inter-agent messages.
 - **Structured artifacts** follow defined formats (see [`committee-process.md`](committee-process.md) for test spec format, [`prd-template.md`](prd-template.md) for PRDs).
 - **Label-driven coordination.** Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
-- **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../templates/worklog.md.template) to track current context and handoff state.
+- **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../../../templates/worklog.md.template) to track current context and handoff state.
 
 ## Implementation Workflow (Stage 3)
 

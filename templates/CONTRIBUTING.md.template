@@ -4,6 +4,7 @@
 
 This project follows the [engineering directives](https://github.com/suniljames/directives).
 
+<!-- team: engineering -->
 <!-- pipeline-mode: autonomous -->
 <!-- Options: autonomous (default) | gated (human authorization gates) -->
 

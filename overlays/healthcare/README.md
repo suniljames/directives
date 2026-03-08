@@ -7,4 +7,4 @@ Apply these on top of the base directives:
 | File | Adds to |
 |------|---------|
 | [`safety-addendum.md`](safety-addendum.md) | [`process/safety.md`](../../process/safety.md) |
-| [`prd-addendum.md`](prd-addendum.md) | [`process/prd-template.md`](../../process/prd-template.md) |
+| [`prd-addendum.md`](prd-addendum.md) | [`teams/engineering/process/prd-template.md`](../../teams/engineering/process/prd-template.md) |

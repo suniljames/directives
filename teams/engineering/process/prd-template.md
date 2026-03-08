@@ -2,7 +2,7 @@
 
 Use this template when composing a Product Requirements Document. Every section is **required** — use "N/A" with a brief rationale if a section does not apply.
 
-For domain-specific addenda (e.g., HIPAA for healthcare), see the relevant overlay in [`overlays/`](../overlays/).
+For domain-specific addenda (e.g., HIPAA for healthcare), see the relevant overlay in [`overlays/`](../../../overlays/).
 
 ---
 
