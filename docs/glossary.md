@@ -6,7 +6,7 @@ Quick reference for every term used in this repo.
 |------|-----------|----------------|
 | **Agent type** | An abstract role describing *what kind* of work gets done — not which AI model does it. Currently two: builder and validator. | Lets you swap AI providers without rewriting your process. |
 | **Builder** | The agent type that creates work: writes code, runs tests, deploys. | Keeps creation and review separate. |
-| **Committee** | All of a team's [personas](#persona) reviewing work in sequence, each reading prior feedback first. | Produces multi-perspective review that no single reviewer can match. |
+| **Committee** | All of a team's **personas** reviewing work in sequence, each reading prior feedback first. | Produces multi-perspective review that no single reviewer can match. |
 | **Fresh-eyes validation** | A zero-context sub-agent reads only the final spec and flags gaps. Catches assumptions the committee forgot to write down. | Ensures specs are self-contained for whoever implements them. |
 | **Manifest** | A YAML file (`manifest.yml`) that defines a team's roles, pipeline stages, and vocabularies. Single source of truth. | Change one file, update everywhere. No drift between docs and config. |
 | **Overlay** | Optional domain-specific rules (e.g., healthcare, fintech) layered on top of the base process. Additive, never replacing. | Keeps domain compliance separate from team fundamentals. |

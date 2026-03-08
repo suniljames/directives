@@ -30,8 +30,6 @@ graph LR
 
 ## Agent Types
 
-*One person builds. A different person inspects.*
-
 An **[agent type](glossary.md)** describes *what kind of work* gets done — not *which AI model* does it. Two types:
 
 | Type | What it does |
