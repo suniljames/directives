@@ -18,7 +18,7 @@ No. The architecture is team-agnostic. Engineering is the first fully-built team
 
 **Need multiple AI tools?**
 
-No. One AI tool works fine. The system includes a [single-provider fallback](getting-started.md#step-4-single-provider-fallback) that runs builder and validator in separate sessions on the same tool.
+No. One AI tool works fine. The system includes a [single-provider fallback](getting-started.md#4-single-provider-fallback) that runs builder and validator in separate sessions on the same tool.
 
 ---
 
