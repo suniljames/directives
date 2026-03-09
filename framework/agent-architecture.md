@@ -7,7 +7,7 @@ One AI model acting as both [builder and validator](../docs/glossary.md) creates
 
 ## Principle
 
-Split roles across abstract **agent types** — a **builder** and a **validator** — backed by different LLM providers when available. Types and assignments: [`agents.yml`](../agents.yml). Role mappings: [`manifest.yml`](../teams/engineering/manifest.yml).
+Split roles across abstract **agent types** — a **builder** and a **validator** — backed by different LLM providers when available. Different models with different training and biases catch different things; the overlap in what they miss shrinks significantly. Types and assignments: [`agents.yml`](../agents.yml). Role mappings: [`manifest.yml`](../teams/engineering/manifest.yml).
 
 ## Agent Types
 
@@ -28,7 +28,7 @@ When only one provider is available, it runs both agent types in **isolated sess
 2. **Mandatory fresh-eyes validation** — Required (not optional) in single-provider mode.
 3. **Explicit role priming** — Validator prompt: *"You are the validator agent. You did NOT build this code. Review it independently."*
 
-This is less effective than two different models but significantly better than one session doing both.
+This is less effective than two different models but significantly better than one session doing both. The key is that the validator has no memory of the builder's reasoning — it can't inherit assumptions it never saw.
 
 ## Build-then-Validate Flow
 

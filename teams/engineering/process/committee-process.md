@@ -4,8 +4,8 @@
 
 ## Core Principles
 
-1. **Sequential review** — Members post in strict order. Each reads all prior comments first.
-2. **[Overwrite-to-consensus](../../../docs/glossary.md)** — After deliberation, members whose positions changed edit their comments to show final positions.
+1. **Sequential review** — Members post in strict order. Each reads all prior comments first. This builds cumulative insight — later reviewers can build on, challenge, or extend earlier observations rather than duplicating them.
+2. **[Overwrite-to-consensus](../../../docs/glossary.md)** — After deliberation, members whose positions changed edit their comments to show final positions. Readers see clean conclusions, not a debate thread they need to interpret.
 3. **Shared component reuse** — Every design must seek reuse opportunities across templates, components, services, and utilities.
 
 ## Committee Members
@@ -14,7 +14,7 @@
 
 Full persona definitions: [`personas/`](../personas/). Shared culture: [`cross-cutting-traits.md`](../personas/cross-cutting-traits.md).
 
-Review funnel order: user impact → implementation → cross-cutting concerns → operability → communication.
+The review order follows a deliberate funnel: user impact → implementation → cross-cutting concerns → operability → communication. This ensures foundational questions (does it solve the right problem?) are settled before detailed ones (is the error message clear?).
 
 | Role | Agent | Persona |
 |------|-------|---------|

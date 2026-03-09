@@ -6,11 +6,11 @@ Plain-language guide to every idea in this system. Read this first if you're new
 
 ## The Core Idea
 
-*One person builds. A different person inspects.*
+*Define how work gets done. Make it repeatable. Let the structure scale with you.*
 
-Most AI setups use a single model for everything: creating work, reviewing it, shipping it. Same blind spots in every phase. This system fixes that by splitting work across **[agent types](glossary.md)**, giving each agent **[personas](glossary.md)** that shape how it thinks, and connecting everything through a **[pipeline](glossary.md)** that prevents skipping steps.
+Most AI setups are ad-hoc: you prompt a model, get output, and hope for the best. This system replaces that with a defined process — **[agent types](glossary.md)** that separate creation from review, **[personas](glossary.md)** that shape how each agent thinks, and a **[pipeline](glossary.md)** that prevents skipping steps. Everything is configured through **[manifests](glossary.md)** (YAML files), so changes happen in one place and cascade everywhere.
 
-The pattern works for any team — engineering, sales, marketing, operations — not just software.
+The pattern works for any team — engineering, sales, marketing, operations — not just software. You define the roles, the stages, and the vocabulary. The system provides the scaffolding.
 
 ```mermaid
 graph LR
@@ -30,14 +30,14 @@ graph LR
 
 ## Agent Types
 
-An **[agent type](glossary.md)** describes *what kind of work* gets done — not *which AI model* does it. Two types:
+An **[agent type](glossary.md)** describes *what kind of work* gets done — not *which AI model* does it. There are two types:
 
 | Type | What it does |
 |------|-------------|
 | **Builder** | Writes code, runs tests, deploys, merges PRs |
 | **Validator** | Reviews code, audits security, writes specs, files issues |
 
-**Key insight:** the model that *builds* should not be the same model that *validates*.
+**Key insight:** the model that *builds* should not be the same model that *validates*. When one agent does both, its blind spots repeat in every phase — it reviews work it created and misses the same things twice.
 
 | Single agent | Two agent types |
 |---|---|
@@ -47,7 +47,7 @@ An **[agent type](glossary.md)** describes *what kind of work* gets done — not
 
 ### Provider assignment
 
-Agent types are backed by **LLM providers** (Claude Code, Gemini CLI, etc.). The mapping lives in [`agents.yml`](../agents.yml):
+Agent types are backed by **LLM providers** (the AI tools that do the work — Claude Code, Gemini CLI, etc.). The mapping lives in [`agents.yml`](../agents.yml):
 
 ```yaml
 # Default: Claude builds, Gemini validates
@@ -57,7 +57,7 @@ assignments:
     validator: gemini-cli
 ```
 
-If a provider isn't available, the system falls back — even running both types on the same provider in **isolated sessions** so they can't share context.
+If a provider isn't available, the system falls back — even running both types on the same provider in **isolated sessions** so they can't share context. Not as good as two different models, but significantly better than one session doing both.
 
 ---
 
@@ -65,7 +65,7 @@ If a provider isn't available, the system falls back — even running both types
 
 *A panel of specialists, each with their own lens.*
 
-A **[persona](glossary.md)** is a character profile that shapes how an AI agent approaches work. Each has a title, backstory, expertise, and review focus.
+A **[persona](glossary.md)** is a character profile that shapes how an AI agent approaches work. Each persona has a title, backstory, expertise, and review focus. The backstory isn't decoration — it anchors the agent's decision-making by giving it a professional context to reason from.
 
 The engineering team has 11 personas. Each sees problems differently:
 
@@ -89,13 +89,13 @@ Without a persona, AI feedback is generic: *"Consider adding error handling."*
 
 With the **Security Engineer** persona: *"MUST-FIX: This endpoint accepts user input without validation — an attacker could inject SQL via the `name` parameter."*
 
-Personas bring depth that generic prompting can't match.
+The difference is depth. A persona doesn't just tell the agent *what* to look for — it gives the agent a professional identity that shapes *how* it thinks about the problem.
 
 **Beyond engineering:** A sales team might use Deal Strategist, Pricing Analyst, Legal Reviewer, and VP of Sales. A marketing team might use Brand Strategist, SEO Specialist, and Copy Editor. The structure is identical — only the expertise changes.
 
 ### Cross-cutting traits
 
-All personas share a team culture defined in [`cross-cutting-traits.md`](../teams/engineering/personas/cross-cutting-traits.md) — values like radical pragmatism, test-first thinking, and ops ownership.
+All personas on a team share a common culture defined in [`cross-cutting-traits.md`](../teams/engineering/personas/cross-cutting-traits.md). For the engineering team, these include values like radical pragmatism, test-first thinking, and ops ownership. This ensures consistency across personas while allowing each to bring their specialized lens.
 
 ---
 
@@ -103,7 +103,7 @@ All personas share a team culture defined in [`cross-cutting-traits.md`](../team
 
 *An assembly line. Each station checks the last.*
 
-A **[pipeline](glossary.md)** takes a task from start to finish. Each stage produces artifacts the next consumes. GitHub labels track progress.
+A **[pipeline](glossary.md)** takes a task from start to finish through a defined sequence of stages. Each stage produces artifacts the next one consumes, and GitHub labels track which stages are complete.
 
 ```mermaid
 graph LR
@@ -126,13 +126,15 @@ graph LR
 | Define | PM writes a PRD with acceptance criteria | Validator | `pm-reviewed` |
 | Design | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
 | Implement | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
-| Review | Up to 3 rounds of review, then squash merge | Both | `merged` |
+| Review | Up to 3 rounds of committee code review, then squash merge | Both | `merged` |
 | Deploy & Verify | Rebuild, health check, close issue (automatic) | Builder | Issue closed |
-| Summarize | Stakeholder summary | Validator | `summarized` |
+| Summarize | Stakeholder summary of what shipped and why | Validator | `summarized` |
+
+The pipeline is advisory, not a hard block. If you skip a stage, the system warns you and asks for confirmation — but it won't prevent you. Hotfixes happen, and the process should support them rather than getting in the way.
 
 ### Pipeline modes
 
-Projects declare a mode in their `CONTRIBUTING.md`:
+Projects declare a mode in their `CONTRIBUTING.md` to control how much human involvement is required:
 
 | Mode | Behavior |
 |---|---|
@@ -145,7 +147,7 @@ Projects declare a mode in their `CONTRIBUTING.md`:
 
 *Each reviewer reads all prior feedback first.*
 
-A **[committee](glossary.md)** is the full team of personas reviewing work in sequence. Not a meeting — a structured protocol.
+A **[committee](glossary.md)** is the full team of personas reviewing work in sequence. It's not a meeting — it's a structured protocol designed to build cumulative insight. Each persona reads everything that came before, so later reviewers can build on (or challenge) earlier observations rather than duplicating them.
 
 ```mermaid
 graph TD
@@ -167,15 +169,17 @@ graph TD
 
 ### Key rules
 
-1. **Sequential posting** — Each persona reads *all* prior comments first. No parallel reviews. This builds cumulative insight.
-2. **[Overwrite-to-consensus](glossary.md)** — After the Engineering Manager synthesizes, members whose positions changed edit their original comments. Readers see clean final positions, not a debate thread.
-3. **[Fresh-eyes validation](glossary.md)** — A zero-context sub-agent reads only the final spec and flags anything ambiguous. Catches "curse of knowledge" gaps.
+1. **Sequential posting** — Each persona reads *all* prior comments first. No parallel reviews. This prevents redundant observations and lets later reviewers address gaps the earlier ones missed.
+2. **[Overwrite-to-consensus](glossary.md)** — After the Engineering Manager synthesizes all feedback, members whose positions changed edit their original comments to show their final stance. Readers see clean conclusions, not a debate thread they have to interpret.
+3. **[Fresh-eyes validation](glossary.md)** — A zero-context sub-agent reads only the final spec and flags anything ambiguous. This catches assumptions the committee built during discussion but forgot to write down — the "curse of knowledge" problem.
 
 ---
 
 ## Manifests
 
-A **[manifest](glossary.md)** is a YAML file — the single source of truth for a team's config: who's on the team, what the pipeline looks like, what vocabulary they use.
+*One file to rule them all.*
+
+A **[manifest](glossary.md)** is a YAML file that serves as the single source of truth for a team's configuration: who's on the team, what the pipeline looks like, and what vocabulary they use. When the manifest changes, the change cascades everywhere — no drift between docs and config.
 
 ```yaml
 # teams/engineering/manifest.yml (simplified)
@@ -201,15 +205,15 @@ vocabularies:
       blocks: merge
 ```
 
-Change the manifest → the change cascades everywhere. Add a persona, reorder the review sequence, adjust severity levels — all in one place.
+Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/TEMPLATE/` and fill in roles.
 
-Every team gets its own manifest. A sales team would define different roles, stages, and vocabularies. Same structure, different content.
+Every team gets its own manifest. A sales team would define different roles, stages, and vocabularies — but the structure is the same.
 
 ---
 
 ## Severity Levels
 
-Review findings use a shared [severity vocabulary](glossary.md):
+Review findings use a shared [severity vocabulary](glossary.md) so there's no ambiguity about what blocks progress:
 
 | Severity | Meaning | Blocks? |
 |---|---|---|
@@ -229,13 +233,13 @@ Configuration lives at three levels. Each adds specificity without duplicating t
 | **2. Organization** (optional) | `<org>/.github` or org-level repo | Domain compliance, org-specific workflows, shared CI |
 | **3. Project** | Each project repo | Tech stack, architecture, environment config |
 
-The directives repo provides the *what* and *why*. The project repo provides the *how* and *where*.
+The directives repo provides the *what* and *why*. The project repo provides the *how* and *where*. The organization tier is optional — useful when multiple projects share domain-specific requirements (like HIPAA compliance) but not needed for most setups.
 
 ---
 
 ## Domain Overlays
 
-An **[overlay](glossary.md)** adds domain-specific rules (HIPAA, PCI, etc.) on top of the base process. Additive — never replaces.
+An **[overlay](glossary.md)** adds domain-specific rules (HIPAA, PCI, etc.) on top of the base process. Overlays are additive — they extend the base, never replace it. This keeps domain compliance cleanly separated from team fundamentals.
 
 ---
 

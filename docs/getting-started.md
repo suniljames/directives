@@ -1,6 +1,6 @@
 # Getting Started
 
-Set up this system in your project. Adopt the full [pipeline](glossary.md) or start with the pieces that help most.
+Set up this system in your project. You can adopt the full [pipeline](glossary.md) or start with just the pieces that help most — each level builds on the last, so you're never locked into a decision.
 
 ---
 
@@ -12,21 +12,21 @@ Set up this system in your project. Adopt the full [pipeline](glossary.md) or st
 
 ---
 
-## Three Levels of Adoption
+## Adoption Levels
 
-Pick one. Move up later if you want.
+Pick the level that fits your needs right now. You can move up later without reworking what you've already done.
 
 | Level | What you get | Time |
 |-------|-------------|------|
-| **1. Personas only** | Better AI reviews with zero config | 15 min |
-| **2. + Pipeline** | Structured workflow with labels and gates | 30 min |
-| **3. + Multi-agent** | Builder/validator split across providers | 1 hour |
+| **Quick start** | Better AI reviews using persona definitions — zero config files | 15 min |
+| **Standard** | Structured pipeline with labels, stage gates, and repeatable process | 30 min |
+| **Full system** | Builder/validator split across different LLM providers (the AI tools that do the work) for independent review | 1 hour |
 
 ---
 
-## Level 1: Persona-Driven Reviews (15 minutes)
+## Quick Start: Persona-Driven Reviews (15 minutes)
 
-Use [persona](glossary.md) definitions to improve AI reviews. No config files, no pipeline, no multi-agent setup.
+Use [persona](glossary.md) definitions to improve AI reviews. No config files, no pipeline, no multi-agent setup — just better prompts that produce deeper feedback.
 
 ### Pick your personas
 
@@ -57,13 +57,13 @@ Categorize findings as MUST-FIX, SHOULD-FIX, or NIT.
 
 **Expected output:** Instead of *"Looks good, maybe add some tests"*, you'll get targeted findings like *"MUST-FIX: This endpoint accepts user input at line 47 without sanitization. SQL injection via the `name` parameter."*
 
-That's it. You're already getting deeper reviews.
+That's it — you're already getting deeper reviews. The persona file gives the AI a professional identity to reason from, which changes the quality of its feedback dramatically.
 
 ---
 
-## Level 2: Pipeline + Personas (30 minutes)
+## Standard: Pipeline + Personas (30 minutes)
 
-Add the structured workflow: labels, stage gates, repeatable process.
+Add the structured workflow on top of persona-driven reviews: labels track progress, stage gates prevent skipping steps, and the process becomes repeatable across projects.
 
 ### 1. Copy the templates
 
@@ -74,7 +74,7 @@ cp templates/CLAUDE.md.template        your-project/CLAUDE.md
 
 ### 2. Set your pipeline mode
 
-Edit `CONTRIBUTING.md`:
+Edit `CONTRIBUTING.md` to declare which team this project belongs to and how much human involvement the pipeline requires:
 
 ```markdown
 <!-- team: engineering -->
@@ -88,9 +88,11 @@ Edit `CONTRIBUTING.md`:
 
 ### 3. Fill in project-specific sections
 
-Templates have `TODO` markers. Add your tech stack, dev environment, and project docs.
+Templates have `TODO` markers for your tech stack, dev environment, and project docs. Fill these in so the AI has the context it needs to work effectively in your project.
 
 ### 4. Create slash commands
+
+Each pipeline stage maps to a slash command. Create these files in your project:
 
 ```
 .claude/commands/
@@ -101,9 +103,11 @@ Templates have `TODO` markers. Add your tech stack, dev environment, and project
   summarize.md  # /summarize — Stakeholder summary
 ```
 
-See [pipeline docs](../teams/engineering/process/pipeline.md) for what each stage produces.
+See [pipeline docs](../teams/engineering/process/pipeline.md) for what each stage produces and the artifacts that flow between them.
 
 ### 5. Set up labels
+
+The pipeline uses GitHub labels to track which stages are complete. Create them once per repository:
 
 ```bash
 gh label create "pm-reviewed"     --color "6f42c1" --repo your-org/your-repo
@@ -138,9 +142,9 @@ sequenceDiagram
 
 ---
 
-## Level 3: Multi-Agent Setup (1 hour)
+## Full System: Multi-Agent Setup (1 hour)
 
-Split [builder and validator](glossary.md) across different LLM providers for genuinely independent reviews.
+Split [builder and validator](glossary.md) across different LLM providers for genuinely independent reviews. This is the highest-quality configuration — different models with different training catch different things.
 
 ### 1. Configure agents.yml
 
@@ -155,7 +159,7 @@ assignments:
 
 ### 2. Add validator agent config
 
-Create `GEMINI.md` (or equivalent) in your project:
+Create `GEMINI.md` (or equivalent) in your project. This file primes the validator so it knows its role:
 
 ```markdown
 # Validator Agent Config
@@ -169,7 +173,7 @@ for persona definitions and review process.
 
 ### 3. Assign roles to agent types
 
-The [manifest](glossary.md) already does this — each role has an `agent:` field:
+The [manifest](glossary.md) already does this — each role has an `agent:` field that determines which agent type runs it:
 
 ```yaml
 roles:
@@ -181,7 +185,7 @@ roles:
 
 ### 4. Single-provider fallback
 
-Only one AI tool? Run both agent types in **separate sessions**:
+Only one AI tool? You can still get most of the benefit by running both agent types in **separate sessions**:
 
 ```
 Session 1 (Builder):
@@ -192,15 +196,15 @@ Session 2 (Validator — separate conversation):
    Review it independently."
 ```
 
-The key: **never share conversation history** between sessions.
+The key: **never share conversation history** between sessions. The validator's value comes from having no memory of the builder's reasoning — it can't inherit assumptions it never saw.
 
 ---
 
 ## Customizing Personas
 
-**Add a persona:** Create `teams/engineering/personas/your-role.md` following the [template](../teams/TEMPLATE/personas/example-role.md), then add the role to `manifest.yml`.
+**Add a persona:** Create `teams/engineering/personas/your-role.md` following the [template](../teams/TEMPLATE/personas/example-role.md), then add the role to `manifest.yml`. The template includes all the fields the system expects: backstory, expertise, review lens, and interaction style.
 
-**Change review order:** Edit `review_order` in the manifest. Engineering Manager is always last (`review_order: last`).
+**Change review order:** Edit `review_order` in the manifest. The order matters because each persona reads all prior feedback — later reviewers build on earlier observations. Engineering Manager is always last (`review_order: last`) because they synthesize everything.
 
 **Create a new team:** Copy `teams/TEMPLATE/` → `teams/your-team/`. See the [template manifest](../teams/TEMPLATE/manifest.yml) for field docs.
 
@@ -208,10 +212,10 @@ The key: **never share conversation history** between sessions.
 
 ## Beyond Engineering
 
-To create a non-engineering team:
+The system is team-agnostic — engineering is the first fully-built team, but the same structure works for any team that benefits from structured review. To create a non-engineering team:
 
 1. **Copy the template:** `cp -r teams/TEMPLATE teams/sales`
-2. **Define personas:** What roles review work?
+2. **Define personas:** What roles review work on your team?
 
    | Role | Focus |
    |---|---|
@@ -220,16 +224,16 @@ To create a non-engineering team:
    | Legal Reviewer | Contract terms, compliance, risk |
    | VP of Sales | Strategic alignment, forecast impact |
 
-3. **Define pipeline stages:** What does work flow through?
+3. **Define pipeline stages:** What does work flow through? A sales team might use Qualify → Propose → Review → Close instead of Define → Design → Implement → Review.
 4. **Define vocabularies:** What severity levels and categories apply?
 
-Agent types, manifest structure, pipeline mechanics, and committee protocol all transfer directly. Only personas, stages, and vocabulary change.
+Agent types, manifest structure, pipeline mechanics, and committee protocol all transfer directly. Only the personas, stages, and vocabulary change.
 
 ---
 
 ## Adding Domain Overlays
 
-Domain-specific requirements (healthcare, fintech)? Add an [overlay](glossary.md):
+Domain-specific requirements (healthcare, fintech) can be layered on top of the base process using [overlays](glossary.md):
 
 ```
 overlays/
@@ -237,7 +241,7 @@ overlays/
   your-domain/       # Your domain-specific rules
 ```
 
-Overlays extend the base process. Reference them from your `CONTRIBUTING.md`.
+Overlays are additive — they extend the base process, never replace it. Reference them from your `CONTRIBUTING.md`.
 
 ---
 
@@ -261,17 +265,17 @@ your-project/
       project-context.md    # Project-specific persona knowledge
 ```
 
-Link to directives, don't copy.
+Link to directives, don't copy. Your project references the persona files and process docs in this repo — that way updates flow automatically.
 
 ---
 
 ## Troubleshooting
 
-**"My AI doesn't follow the persona well"** — Provide the full persona file, not just the role name. The backstory and interaction style anchor the AI's decisions.
+**"My AI doesn't follow the persona well"** — Provide the full persona file, not just the role name. The backstory and interaction style are what anchor the AI's decisions — without them, you're just asking for a generic review.
 
-**"The pipeline feels heavy for small changes"** — Use the ad-hoc work gate. The pipeline warns when you skip stages but doesn't block you. Skip to implementation for quick fixes.
+**"The pipeline feels heavy for small changes"** — Use the ad-hoc work gate. The pipeline warns when you skip stages but doesn't block you. For quick fixes, skip straight to implementation — you'll be asked to confirm, and a note is added to the PR.
 
-**"I only have one AI tool"** — See single-provider fallback above. Level 1 persona reviews work with any single tool.
+**"I only have one AI tool"** — See [single-provider fallback](#4-single-provider-fallback) above. Quick start persona reviews work with any single tool, and even the Standard level works fine with one provider.
 
 ---
 
