@@ -5,7 +5,7 @@ Quick reference for every term used in this repo.
 | Term | Definition | Why it matters |
 |------|-----------|----------------|
 | **Agent type** | An abstract role describing *what kind* of work gets done — not which AI model does it. Currently two: builder and validator. | Lets you swap AI providers without rewriting your process. |
-| **Builder** | The agent type that creates work — writes code, drafts proposals, produces content, deploys. | Keeps creation and review separate. |
+| **Builder** | The agent type that creates work — produces deliverables, verifies quality, publishes results. | Keeps creation and review separate. |
 | **Committee** | All of a team's **personas** reviewing work in sequence, each reading prior feedback first. | Produces multi-perspective review that no single reviewer can match. |
 | **Fresh-eyes validation** | A zero-context sub-agent reads only the final spec and flags gaps. Catches assumptions the committee forgot to write down. | Ensures specs are self-contained for whoever implements them. |
 | **Manifest** | A YAML file (`manifest.yml`) that defines a team's roles, pipeline stages, and vocabularies. Single source of truth. | Change one file, update everywhere. No drift between docs and config. |
@@ -15,7 +15,7 @@ Quick reference for every term used in this repo.
 | **Pipeline** | A multi-stage workflow (e.g., define → design → implement → review → deploy → summarize). Each stage produces artifacts the next consumes. | Prevents skipping steps. Tracks progress with labels. |
 | **Per-stage override** | An optional `stages` map on a manifest role that overrides the role's default agent type for specific pipeline stages. Resolution: `role.stages[stage] || role.agent`. | Lets builder roles act as validators during review without changing their default assignment. |
 | **Pipeline mode** | How much human involvement a project requires. **Autonomous**: no human gates. **Gated**: pauses for human approval at key stages. | Lets you tune the system from fully automated to human-in-the-loop. |
-| **Severity level** | A tag on review findings. **MUST-FIX**: blocks merge. **SHOULD-FIX**: blocks current round. **NIT**: suggestion only. | Shared vocabulary prevents disagreements about what's blocking. |
+| **Severity level** | A tag on review findings. **MUST-FIX**: blocks integration. **SHOULD-FIX**: blocks current round. **NIT**: suggestion only. | Shared vocabulary prevents disagreements about what's blocking. |
 | **Three-tier model** | Configuration lives at three levels: Tier 1 (this repo — shared practices), Tier 2 (organization — optional), Tier 3 (project — tech stack and environment). | Prevents duplication. Each tier adds specificity without repeating the tier above. |
 | **Validator** | The agent type that reviews work — audits deliverables, checks quality, flags issues. | Independent review catches blind spots the builder can't see. |
 

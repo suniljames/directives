@@ -23,10 +23,10 @@ version: 1
 #   agent:         agent type ID from agents.yml (e.g., builder, validator)
 #   stages:        optional per-stage agent type overrides (see below)
 #   persona:       path to persona markdown file (relative to this directory)
-#   reviews_code:  does this role participate in code review? (default: false)
+#   reviews_code:  does this role participate in review? (default: false)
 #   review_order:  numeric position in review sequence, or "last" for synthesizer
 #   synthesizes:   true if this role posts last and synthesizes all feedback
-#   pipeline_only: true if this role only participates in pipeline stages (not code review)
+#   pipeline_only: true if this role only participates in pipeline stages (not review)
 
 roles:
   - id: example-role

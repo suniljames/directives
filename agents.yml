@@ -12,27 +12,27 @@ agent_types:
   - id: builder
     description: "Creates work — implements, produces, deploys"
     capabilities:
-      - edit_files
-      - run_tests
-      - deploy
-      - merge
+      - create_deliverables
+      - verify_quality
+      - publish
+      - integrate
 
   - id: validator
     description: "Reviews work — audits, checks quality, flags issues"
     capabilities:
-      - review_code
-      - write_specs
-      - file_issues
+      - review_work
+      - write_specifications
+      - file_findings
 
 providers:
   - id: claude-code
     name: Claude Code
     binary: claude
     strengths:
-      - code_generation
-      - refactoring
+      - content_creation
+      - iterative_refinement
       - tool_use
-      - deployment
+      - delivery
 
   - id: gemini-cli
     name: Gemini CLI

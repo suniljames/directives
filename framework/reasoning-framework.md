@@ -8,46 +8,48 @@ Scale reasoning depth to problem complexity. Simple questions get simple answers
 2. **Explore** — What are the options?
 3. **Plan** — What's the approach?
 4. **Execute** — Implement incrementally
-5. **Review** — Does code match plan? Are tests passing? Error cases handled?
+5. **Review** — Does the output match the plan? Quality checks passing? Edge cases handled?
 6. **Verify** — Does it actually work? Did I solve the right problem?
 
 ## Complexity Triggers (go deeper when present)
 
-- Multiple files or systems involved
+- Multiple files, systems, or stakeholders involved
 - Unclear requirements
-- Performance-sensitive code
-- Security implications
-- Breaking API changes
+- Performance-sensitive work
+- Security or compliance implications
+- Breaking changes to existing contracts or interfaces
 
 ## Task Modes
 
-**Build**: Design API first. **Write tests BEFORE implementation** (except prototypes — mark with `[SPIKE]`). Consider extensibility. Test as you go.
+Teams instantiate these modes for their domain. The pattern is universal; the specifics change.
 
-**Debug**:
-1. **Reproduce** — Confirm the bug exists with minimal example
+**Create**: Define requirements first. **Verify quality BEFORE finalizing** (except exploratory work — mark with `[SPIKE]`). Consider extensibility. Validate as you go.
+
+**Diagnose**:
+1. **Reproduce** — Confirm the problem exists with a minimal example
 2. **Hypothesis** — What might cause this? List 2-3 possibilities
-3. **Evidence** — Test each hypothesis with logs/debugger/tests
+3. **Evidence** — Test each hypothesis against available data
 4. **Fix** — Implement minimal change targeting root cause
-5. **Verify** — Confirm bug is resolved AND no regressions introduced
+5. **Verify** — Confirm the problem is resolved AND no regressions introduced
 
-**Refactor**: Tests first. One change at a time. Preserve behavior.
+**Restructure**: Validate first. One change at a time. Preserve behavior.
 
 **Review**: Correctness > style. Flag what matters, ignore what doesn't.
 
-## Codebase Integration
+## Project Integration
 
 - Read project config files first (CLAUDE.md, GEMINI.md, CONTRIBUTING.md)
-- Match existing patterns (naming, error handling, structure)
-- Leave code better than you found it
+- Match existing patterns (naming, conventions, structure)
+- Leave things better than you found them
 
 ## Review Checklist (Use After Each Execute Phase)
 
 Before moving to Verify, confirm:
-- [ ] **Specification Match**: Does code implement what was planned?
-- [ ] **Tests Exist**: Are there tests for new functionality? (or `[SPIKE]` marker)
-- [ ] **Tests Pass**: Do all tests pass locally?
-- [ ] **Error Handling**: Are edge cases and failure modes handled?
-- [ ] **Code Quality**: Is code self-documenting? Comments only where logic isn't obvious?
+- [ ] **Specification Match**: Does the output match what was planned?
+- [ ] **Quality Verified**: Has quality been validated? (or `[SPIKE]` marker)
+- [ ] **Checks Pass**: Do all quality checks pass?
+- [ ] **Edge Cases**: Are boundary conditions and failure modes handled?
+- [ ] **Clarity**: Is the work self-explanatory? Annotations only where logic isn't obvious?
 - [ ] **No Regressions**: Did I break existing functionality?
 
 If any item fails, return to Execute phase. Don't proceed to Verify with known issues.
@@ -56,19 +58,19 @@ If any item fails, return to Execute phase. Don't proceed to Verify with known i
 
 Before finishing, ask:
 - Did I solve the stated problem AND the real problem?
-- Would I approve this PR?
+- Would I approve this work?
 - What could go wrong?
 
 ## Escalation to Committee
 
-When any of these apply, escalate to the [engineering committee](../teams/engineering/process/committee-process.md):
-- **Architectural changes** that affect multiple systems or long-term design
-- **Breaking API changes** that impact other developers or services
-- **Security implications** requiring threat modeling review
-- **Performance-sensitive decisions** with scaling implications
-- **Major refactoring** affecting core abstractions
-- **Technology choices** (frameworks, databases, infrastructure)
-- **Cross-cutting concerns** (observability, error handling, data models)
+When any of these apply, escalate to the team's [committee](../docs/glossary.md):
+- **Structural changes** that affect multiple systems or long-term design
+- **Breaking changes** that impact other teams or downstream consumers
+- **Security or compliance implications** requiring specialist review
+- **High-stakes decisions** with significant resource or reputation impact
+- **Major restructuring** affecting core processes or abstractions
+- **Tool or platform choices** with long-term commitment
+- **Cross-cutting concerns** that span multiple roles or domains
 
 Provide the committee with:
 1. Your analysis (what you explored, why you chose this approach)
@@ -76,7 +78,7 @@ Provide the committee with:
 3. Implementation approach
 4. Risk assessment
 
-The Engineering Manager synthesizes feedback into a final plan that balances technical excellence with business impact and TCO.
+The committee lead synthesizes feedback into a final plan that balances quality with business impact.
 
 ## Initialization & Completion
 

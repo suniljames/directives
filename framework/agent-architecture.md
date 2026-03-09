@@ -13,8 +13,8 @@ Split roles across abstract **agent types** — a **builder** and a **validator*
 
 | Type | Purpose | Capabilities |
 |------|---------|-------------|
-| **Builder** | Creates work — implements, produces, deploys | edit_files, run_tests, deploy, merge |
-| **Validator** | Reviews work — audits, checks quality, flags issues | review_code, write_specs, file_issues |
+| **Builder** | Creates work — implements, produces, publishes | create_deliverables, verify_quality, publish, integrate |
+| **Validator** | Reviews work — audits, checks quality, flags issues | review_work, write_specifications, file_findings |
 
 ## Provider Assignment
 
@@ -30,11 +30,13 @@ When only one provider is available, it runs both agent types in **isolated sess
 
 This is less effective than two different models but significantly better than one session doing both. The key is that the validator has no memory of the builder's reasoning — it can't inherit assumptions it never saw.
 
-## Build-then-Validate Flow
+## Create-then-Review Flow
 
 ```
-Builder implements → Validator reviews → Builder addresses feedback
+Builder creates → Validator reviews → Builder addresses feedback
 ```
+
+The pattern is the same regardless of team. Here's the engineering example:
 
 1. **PM (validator)** writes requirements and acceptance criteria
 2. **EM (builder)** plans work, assigns tasks, oversees execution
@@ -44,6 +46,8 @@ Builder implements → Validator reviews → Builder addresses feedback
 6. **SRE (builder)** deploys and monitors
 7. **Writer (validator)** documents the feature
 
+A sales team would follow the same structure: Deal Strategist (builder) creates the proposal → Pricing Analyst and Legal Reviewer (validators) audit it → Deal Strategist addresses findings.
+
 ## Coordination Protocol
 
 - **Structured artifacts** — PRDs, test reports, review comments follow defined formats
@@ -51,11 +55,11 @@ Builder implements → Validator reviews → Builder addresses feedback
 - **Explicit acceptance criteria** — PM defines "done." QA verifies "done."
 - **Label-driven coordination** — Agents check issue labels to determine pipeline stage
 - **PR labels** — Autonomous PRs labeled `ai:autonomous`
-- **Review findings** — Posted with [severity levels](../docs/glossary.md) (see [`code-review-framework.md`](../teams/engineering/process/code-review-framework.md))
+- **Review findings** — Posted with [severity levels](../docs/glossary.md) (see the team's review framework in its manifest directory)
 
 ## Guiding Principles
 
-1. **Builders need tooling.** Code, infrastructure, and runtime roles belong on the builder.
+1. **Builders need tooling.** Roles that create, produce, and publish belong on the builder.
 2. **Validators should be independent.** Audit and review roles gain most from a different model.
-3. **Keep the boundary clean.** Building on one agent, auditing on the other. Explicit handoffs.
-4. **Rationale must be technical.** Assignments based on capability and fit, not marketing.
+3. **Keep the boundary clean.** Creating on one agent, reviewing on the other. Explicit handoffs.
+4. **Rationale must be substantive.** Assignments based on capability and fit, not marketing.

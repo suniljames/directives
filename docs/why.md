@@ -34,16 +34,16 @@ This is grading your own homework — and the grade is always generous.
 ```mermaid
 graph LR
     subgraph "Builder Agent"
-        B1["Writes code"]
-        B2["Runs tests"]
-        B3["Deploys"]
+        B1["Creates deliverables"]
+        B2["Verifies quality"]
+        B3["Publishes"]
     end
     subgraph "Validator Agent"
-        V1["Reviews code"]
-        V2["Audits security"]
-        V3["Writes specs"]
+        V1["Reviews work"]
+        V2["Audits quality"]
+        V3["Writes specifications"]
     end
-    B1 -->|"PR + artifacts"| V1
+    B1 -->|"Deliverables"| V1
     V1 -->|"Findings"| B1
 
     style B1 fill:#0075ca,color:#fff
@@ -66,11 +66,11 @@ Not as good as two genuinely different models, but significantly better than one
 
 ## Solution 2: Personas Create Depth
 
-**Key insight: "review this code" produces shallow feedback. A specific [persona](glossary.md) produces targeted, deep feedback.**
+**Key insight: "review this" produces shallow feedback. A specific [persona](glossary.md) produces targeted, deep feedback.**
 
 | Generic prompt | Persona-driven prompt |
 |---|---|
-| "Review this PR for issues" | Security Engineer reviews for: injection, auth bypass, data exposure, CSRF |
+| "Review this for issues" | Security Engineer reviews for: injection, auth bypass, data exposure, CSRF |
 | "Looks good, maybe add some tests" | "MUST-FIX: This endpoint accepts user input at line 47 without sanitization. SQL injection via `name` parameter." |
 
 The difference isn't just specificity — it's the entire way the agent thinks about the problem. Each persona has:
@@ -82,7 +82,7 @@ The difference isn't just specificity — it's the entire way the agent thinks a
 
 ### Why multiple?
 
-Real work is multi-disciplinary. Architecturally sound code might be inaccessible. Code passing all tests might have a SQL injection. A sales proposal with great positioning might have wrong pricing.
+Real work is multi-disciplinary. Architecturally sound code might be inaccessible. A sales proposal with great positioning might have wrong pricing. A marketing campaign with sharp copy might violate brand guidelines.
 
 No single reviewer — human or AI — holds all lenses simultaneously. [Personas](glossary.md) make each lens explicit and ensure nothing falls through the cracks because "someone else was supposed to check that."
 
@@ -97,9 +97,9 @@ graph TD
     A["GitHub Issue"] --> B{"Define<br/><code>/define</code>"}
     B -->|"PRD posted"| C{"Design<br/><code>/design</code>"}
     C -->|"Committee reviews"| D{"Implement<br/><code>/implement</code>"}
-    D -->|"TDD: tests first"| E{"Review<br/><code>/review</code>"}
+    D -->|"Quality-first"| E{"Review<br/><code>/review</code>"}
     E -->|"Up to 3 rounds"| F{"Deploy & Verify<br/><em>(automatic)</em>"}
-    F -->|"Health check"| G["Issue Closed"]
+    F -->|"Verify + deliver"| G["Issue Closed"]
 
     style A fill:#333,color:#fff
     style B fill:#6f42c1,color:#fff

@@ -28,9 +28,9 @@ No. It's config files and documentation. Copy the [templates](../templates/) int
 
 ---
 
-**Just want better code reviews?**
+**Just want better reviews?**
 
-Start with [Quick start](getting-started.md#quick-start-persona-driven-reviews-15-minutes). Pick a [persona](../teams/engineering/personas/) (e.g., Security Engineer), paste the link into your AI prompt, and ask it to review your PR through that lens. The persona file gives the AI a professional identity that shapes how it thinks about the problem — the difference in feedback quality is immediate.
+Start with [Quick start](getting-started.md#quick-start-persona-driven-reviews-15-minutes). Pick a [persona](../teams/engineering/personas/) (e.g., Security Engineer), paste the link into your AI prompt, and ask it to review your work through that lens. The persona file gives the AI a professional identity that shapes how it thinks about the problem — the difference in feedback quality is immediate.
 
 ---
 

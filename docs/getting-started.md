@@ -98,8 +98,8 @@ Each pipeline stage maps to a slash command. Create these files in your project:
 .claude/commands/
   define.md     # /define — Define requirements (PRD)
   design.md     # /design — Committee design review
-  implement.md  # /implement — TDD implementation
-  review.md     # /review — Code review & merge
+  implement.md  # /implement — Quality-first implementation
+  review.md     # /review — Committee review & integrate
   summarize.md  # /summarize — Stakeholder summary
 ```
 
@@ -136,7 +136,7 @@ sequenceDiagram
     AI->>AI: Write failing tests, implement until green
     AI->>GH: Push feature branch
     You->>AI: /review
-    AI->>GH: Create PR, run code review, squash merge
+    AI->>GH: Create PR, run committee review, integrate
     AI->>GH: Close issue
 ```
 
@@ -261,7 +261,7 @@ your-project/
       summarize.md          # /summarize command
   docs/
     developer/
-      code-review-lenses.md # Tech-specific review checklists
+      review-lenses.md      # Domain-specific review checklists
       project-context.md    # Project-specific persona knowledge
 ```
 

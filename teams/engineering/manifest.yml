@@ -205,7 +205,7 @@ vocabularies:
     - id: autonomous
       description: "No human review gates. Pipeline runs end-to-end."
     - id: gated
-      description: "Agents notify and wait for human authorization before PRs and merging."
+      description: "Agents notify and wait for human authorization before publishing and integrating."
 
   task_modes:
     - id: build

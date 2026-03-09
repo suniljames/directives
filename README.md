@@ -12,8 +12,8 @@ The system is team-agnostic. Engineering is the first fully-built team, but the 
 
 | Problem | How Directives addresses it |
 |---------|----------------------------|
-| **AI agents skip steps under pressure** | A [pipeline](docs/glossary.md) defines every stage from requirements to deployment. GitHub labels track progress. Skip a stage and the system warns you. |
-| **Generic AI feedback is shallow** | [Personas](docs/glossary.md) (detailed character profiles — backstory, expertise, review lens) produce targeted, deep feedback instead of "looks good, maybe add tests." |
+| **AI agents skip steps under pressure** | A [pipeline](docs/glossary.md) defines every stage from requirements to delivery. GitHub labels track progress. Skip a stage and the system warns you. |
+| **Generic AI feedback is shallow** | [Personas](docs/glossary.md) (detailed character profiles — backstory, expertise, review lens) produce targeted, deep feedback instead of "looks good, maybe add some checks." |
 | **One agent reviews its own work** | The architecture separates builder and validator [agent types](docs/glossary.md). Different agents — or isolated sessions — catch different blind spots. |
 | **Process lives in tribal knowledge** | [Manifests](docs/glossary.md) (YAML config files) are the single source of truth for teams, roles, stages, and vocabularies. Machine-readable, version-controlled, no drift. |
 | **Setting up takes too long** | Three adoption levels let you start small. Use personas alone in 15 minutes. Add the pipeline when you're ready. Split agents later. |

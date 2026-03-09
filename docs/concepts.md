@@ -34,8 +34,8 @@ An **[agent type](glossary.md)** describes *what kind of work* gets done — not
 
 | Type | What it does |
 |------|-------------|
-| **Builder** | Writes code, runs tests, deploys, merges PRs |
-| **Validator** | Reviews code, audits security, writes specs, files issues |
+| **Builder** | Creates deliverables, verifies quality, publishes, integrates |
+| **Validator** | Reviews work, audits quality, writes specifications, flags issues |
 
 **Key insight:** the model that *builds* should not be the same model that *validates*. When one agent does both, its blind spots repeat in every phase — it reviews work it created and misses the same things twice.
 
@@ -121,14 +121,16 @@ graph LR
     style F fill:#d4c5f9,color:#000
 ```
 
-| Stage | What happens | Who | Label |
+The engineering team's pipeline has six stages (other teams define their own):
+
+| Stage | What happens (engineering) | Who | Label |
 |---|---|---|---|
 | Define | PM writes a PRD with acceptance criteria | Validator | `pm-reviewed` |
 | Design | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
 | Implement | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
-| Review | Up to 3 rounds of committee code review, then squash merge | Both | `merged` |
-| Deploy & Verify | Rebuild, health check, close issue (automatic) | Builder | Issue closed |
-| Summarize | Stakeholder summary of what shipped and why | Validator | `summarized` |
+| Review | Up to 3 rounds of committee review, then integrate | Both | `merged` |
+| Deploy & Verify | Verify, deliver, close issue (automatic) | Builder | Issue closed |
+| Summarize | Stakeholder summary of what was delivered and why | Validator | `summarized` |
 
 The pipeline is advisory, not a hard block. If you skip a stage, the system warns you and asks for confirmation — but it won't prevent you. Hotfixes happen, and the process should support them rather than getting in the way.
 
@@ -217,8 +219,8 @@ Review findings use a shared [severity vocabulary](glossary.md) so there's no am
 
 | Severity | Meaning | Blocks? |
 |---|---|---|
-| **MUST-FIX** | Correctness bug, security vulnerability, data loss risk | Merge |
-| **SHOULD-FIX** | Code quality issue, missing edge case, poor naming | Current round |
+| **MUST-FIX** | Correctness issue, security risk, data loss risk | Merge |
+| **SHOULD-FIX** | Quality issue, missing edge case, unclear naming | Current round |
 | **NIT** | Style preference, minor suggestion | Nothing |
 
 ---
