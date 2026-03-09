@@ -21,6 +21,7 @@ version: 1
 #   id:            kebab-case identifier (used in cross-references)
 #   name:          display name
 #   agent:         agent type ID from agents.yml (e.g., builder, validator)
+#   stages:        optional per-stage agent type overrides (see below)
 #   persona:       path to persona markdown file (relative to this directory)
 #   reviews_code:  does this role participate in code review? (default: false)
 #   review_order:  numeric position in review sequence, or "last" for synthesizer
@@ -31,6 +32,8 @@ roles:
   - id: example-role
     name: Example Role
     agent: builder
+    # stages:                    # optional: per-stage agent type override
+    #   review-merge: validator  # keys must match pipeline[].stage IDs
     persona: personas/example-role.md
     reviews_code: true
     review_order: 1
@@ -38,6 +41,9 @@ roles:
   # Add more roles here. Tips:
   # - Builder roles: implement, create, deploy
   # - Validator roles: review, audit, specify
+  # - Use stages to override agent type for specific pipeline stages
+  #   (e.g., builder roles acting as validator during code review)
+  # - Only add overrides where they differ from the default agent type
   # - One role should have synthesizes: true and review_order: last
   # - One role can have pipeline_only: true if it only feeds the pipeline (like PM)
 
