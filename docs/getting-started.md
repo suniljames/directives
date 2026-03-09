@@ -164,7 +164,7 @@ Create `GEMINI.md` (or equivalent) in your project. This file primes the validat
 ```markdown
 # Validator Agent Config
 
-You are the **validator** agent. You did NOT build this code.
+You are the **validator** agent. You did NOT create this work.
 Review independently using the personas assigned to you.
 
 Refer to the [engineering directives](https://github.com/suniljames/directives)
@@ -192,7 +192,7 @@ Session 1 (Builder):
   "You are the builder agent. Implement the feature."
 
 Session 2 (Validator — separate conversation):
-  "You are the validator agent. You did NOT build this code.
+  "You are the validator agent. You did NOT create this work.
    Review it independently."
 ```
 

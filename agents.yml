@@ -10,7 +10,7 @@
 
 agent_types:
   - id: builder
-    description: "Implements features, writes code, deploys"
+    description: "Creates work — implements, produces, deploys"
     capabilities:
       - edit_files
       - run_tests
@@ -18,7 +18,7 @@ agent_types:
       - merge
 
   - id: validator
-    description: "Reviews, audits, writes specs and docs"
+    description: "Reviews work — audits, checks quality, flags issues"
     capabilities:
       - review_code
       - write_specs

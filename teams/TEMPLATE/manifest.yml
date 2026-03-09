@@ -42,7 +42,7 @@ roles:
   # - Builder roles: implement, create, deploy
   # - Validator roles: review, audit, specify
   # - Use stages to override agent type for specific pipeline stages
-  #   (e.g., builder roles acting as validator during code review)
+  #   (e.g., builder roles acting as validator during review)
   # - Only add overrides where they differ from the default agent type
   # - One role should have synthesizes: true and review_order: last
   # - One role can have pipeline_only: true if it only feeds the pipeline (like PM)

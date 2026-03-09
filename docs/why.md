@@ -58,7 +58,7 @@ Two different models with different training, architectures, and biases catch di
 
 ### What if you only have one provider?
 
-The system runs both [agent types](glossary.md) in **isolated sessions** — separate conversations with no shared context. The validator is primed: *"You did NOT build this code. Review it independently."*
+The system runs both [agent types](glossary.md) in **isolated sessions** — separate conversations with no shared context. The validator is primed: *"You did NOT create this work. Review it independently."*
 
 Not as good as two genuinely different models, but significantly better than one session doing everything. The key is that the validator has no memory of the builder's reasoning, so it can't inherit the builder's assumptions.
 

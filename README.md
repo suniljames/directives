@@ -98,7 +98,7 @@ Other teams define their own personas and review sequences — the structure is 
 
 ### Builder and validator
 
-The architecture separates work into two [agent types](docs/glossary.md): a **builder** (creates work — writes code, runs tests, deploys) and a **validator** (reviews independently — audits, writes specs, files issues). When backed by different LLM providers, they bring different training and biases, catching things the other misses. Even with a single provider, isolated sessions prevent the validator from inheriting the builder's blind spots.
+The architecture separates work into two [agent types](docs/glossary.md): a **builder** (creates work — implements, produces, deploys) and a **validator** (reviews independently — audits, checks quality, flags issues). When backed by different LLM providers, they bring different training and biases, catching things the other misses. Even with a single provider, isolated sessions prevent the validator from inheriting the builder's blind spots.
 
 ---
 

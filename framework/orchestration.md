@@ -44,7 +44,7 @@ For each agent_type in agents.yml.agent_types:
 When the same provider backs both agent types (fallback scenario), the orchestrator must:
 
 - Run each agent type in a **separate, isolated session** (no shared conversation history)
-- Prime the validator session with: "You are the validator agent. You did NOT build this code."
+- Prime the validator session with: "You are the validator agent. You did NOT create this work."
 - Never merge builder and validator sessions
 
 ## Pipeline Execution
@@ -125,7 +125,7 @@ The pipeline `agent` field gates participation — it tells the orchestrator whi
 
 When a per-stage override moves a role from one agent session to another (e.g., a builder-default role acting as validator during Review), the orchestrator must re-prime the session. Apply the same independence priming used in Single-Provider Mode:
 
-> "You are the validator agent. You did NOT build this code."
+> "You are the validator agent. You did NOT create this work."
 
 This ensures the role operates with genuine independence, regardless of its default assignment.
 

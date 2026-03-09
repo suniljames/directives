@@ -13,8 +13,8 @@ Split roles across abstract **agent types** — a **builder** and a **validator*
 
 | Type | Purpose | Capabilities |
 |------|---------|-------------|
-| **Builder** | Implements features, writes code, deploys | edit_files, run_tests, deploy, merge |
-| **Validator** | Reviews, audits, writes specs and docs | review_code, write_specs, file_issues |
+| **Builder** | Creates work — implements, produces, deploys | edit_files, run_tests, deploy, merge |
+| **Validator** | Reviews work — audits, checks quality, flags issues | review_code, write_specs, file_issues |
 
 ## Provider Assignment
 
@@ -26,7 +26,7 @@ When only one provider is available, it runs both agent types in **isolated sess
 
 1. **Session isolation** — Validator runs in a separate session with no shared builder context.
 2. **Mandatory fresh-eyes validation** — Required (not optional) in single-provider mode.
-3. **Explicit role priming** — Validator prompt: *"You are the validator agent. You did NOT build this code. Review it independently."*
+3. **Explicit role priming** — Validator prompt: *"You are the validator agent. You did NOT create this work. Review it independently."*
 
 This is less effective than two different models but significantly better than one session doing both. The key is that the validator has no memory of the builder's reasoning — it can't inherit assumptions it never saw.
 
