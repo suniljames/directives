@@ -14,11 +14,13 @@ version: 1
 # --- Roles ---
 # Persona files are relative to this manifest's directory.
 # Agent type IDs reference agents.yml.
+# Optional `stages` map overrides the default `agent` for specific pipeline stages.
 
 roles:
   - id: ux-designer
     name: UX Designer
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/ux-designer.md
     reviews_code: true
     review_order: 1
@@ -26,6 +28,7 @@ roles:
   - id: software-engineer
     name: Software Engineer
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/software-engineer.md
     reviews_code: true
     review_order: 2
@@ -33,6 +36,7 @@ roles:
   - id: system-architect
     name: System Architect
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/system-architect.md
     reviews_code: true
     review_order: 3
@@ -40,6 +44,7 @@ roles:
   - id: data-engineer
     name: Data Engineer
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/data-engineer.md
     reviews_code: true
     review_order: 4
@@ -47,6 +52,7 @@ roles:
   - id: ai-ml-engineer
     name: AI/ML Engineer
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/ai-ml-engineer.md
     reviews_code: true
     review_order: 5
@@ -68,6 +74,7 @@ roles:
   - id: sre
     name: SRE
     agent: builder
+    stages: { review-merge: validator }
     persona: personas/sre.md
     reviews_code: true
     review_order: 8

@@ -90,6 +90,56 @@ Read from `<!-- pipeline-mode: ... -->` in the project's `CONTRIBUTING.md`.
 | `autonomous` | Run all stages without human gates |
 | `gated` | Pause after Design and after Review for human authorization |
 
+## Role-Level Stage Overrides
+
+A role's `agent` field defines its default agent type. The optional `stages` map overrides that default for specific pipeline stages — a **per-stage override**.
+
+```yaml
+# From manifest.yml
+- id: software-engineer
+  agent: builder              # default
+  stages:
+    review-merge: validator   # per-stage override
+```
+
+### Resolution Logic
+
+```
+effective_agent(role, stage) = role.stages[stage] || role.agent
+```
+
+Two-step lookup: if the role has a `stages` entry for the current stage, use it. Otherwise, fall back to `role.agent`. If the `stages` field is missing or empty, the role always uses its default `agent` type.
+
+### How This Interacts with Pipeline `agent`
+
+The pipeline and role levels answer different questions:
+
+| Level | Field | Question it answers |
+|-------|-------|-------------------|
+| Pipeline stage | `agent: [builder, validator]` | Which agent sessions are active for this stage? |
+| Role | `stages: { review-merge: validator }` | Which session does this specific role run on? |
+
+The pipeline `agent` field gates participation — it tells the orchestrator which sessions to spawn. The role `stages` map routes individual roles to the correct session. Both are needed.
+
+### Session-Switch Priming
+
+When a per-stage override moves a role from one agent session to another (e.g., a builder-default role acting as validator during Review), the orchestrator must re-prime the session. Apply the same independence priming used in Single-Provider Mode:
+
+> "You are the validator agent. You did NOT build this code."
+
+This ensures the role operates with genuine independence, regardless of its default assignment.
+
+### Edge Cases
+
+- **Missing `stages` field:** Falls back to `role.agent`. Backward-compatible with manifests that don't use overrides.
+- **Empty `stages: {}`:** Same as missing — falls back to `role.agent`.
+- **Invalid stage key:** Silently ignored (fail-open). Keys must match `pipeline[].stage` IDs exactly.
+- **Redundant entries:** Only include overrides that differ from the default. If `agent: builder` and `stages: { implement: builder }`, the `implement` entry is redundant — omit it.
+
+### Logging Recommendation
+
+Orchestrators should log routing decisions when applying per-stage overrides, so operators can trace which session handled each role at each stage.
+
 ## Orchestration Patterns
 
 Different orchestration tools offer different execution models. Here's how each maps to the pipeline:
