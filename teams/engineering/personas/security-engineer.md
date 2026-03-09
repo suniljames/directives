@@ -30,7 +30,7 @@ Transitioned to compliance-regulated industries, where the stakes shifted from f
 - Secret management and credential rotation
 - Compliance engineering (HIPAA, PCI DSS, SOC 2)
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

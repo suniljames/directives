@@ -30,7 +30,7 @@ Transitioned to regulated-industry QA for healthcare and fintech, where she lear
 - Regression test suite management and test stability
 - Compliance-driven test evidence (audit trail for regulatory requirements)
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

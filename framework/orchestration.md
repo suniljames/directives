@@ -88,7 +88,7 @@ Read from `<!-- pipeline-mode: ... -->` in the project's `CONTRIBUTING.md`.
 | Mode | Orchestrator behavior |
 |------|----------------------|
 | `autonomous` | Run all stages without human gates |
-| `gated` | Pause after design review and after code review for human authorization |
+| `gated` | Pause after Design and after Review for human authorization |
 
 ## Orchestration Patterns
 
@@ -96,7 +96,7 @@ Different orchestration tools offer different execution models. Here's how each 
 
 ### Pattern 1: Sequential Pipeline (Playbooks / Auto Run)
 
-Best for: `/implement`, `/ramd` — stages with a clear linear flow.
+Best for: `/implement`, `/review` — stages with a clear linear flow.
 
 The orchestrator executes pipeline stages as a sequence of tasks. Each task is assigned to the appropriate agent type based on the manifest's `agent` field. The orchestrator waits for each task to complete before advancing.
 

@@ -1,22 +1,22 @@
 # Directives
 
-When an AI agent builds something and then reviews its own work, it misses the same things twice. This repo fixes that by splitting the work: one agent builds, a different agent reviews. Each gets **[personas](docs/glossary.md)** (character profiles that shape how it thinks) and a **[pipeline](docs/glossary.md)** (a structured workflow that prevents skipping steps).
+A system for defining repeatable AI-driven processes — teams, roles, **[pipelines](docs/glossary.md)** (structured workflows that prevent skipping steps), and review protocols — that you can adopt incrementally. Start with better AI reviews in 15 minutes, or build out a full multi-agent organization.
 
-The result: deeper reviews, fewer blind spots, and a repeatable process for any team — not just engineering.
-
-```mermaid
-graph LR
-    A["Task arrives"] --> B["Builder agent<br/>creates the work"]
-    B --> C["Validator agent<br/>reviews independently"]
-    C --> D["Delivered and<br/>verified"]
-
-    style A fill:#333,color:#fff
-    style B fill:#0075ca,color:#fff
-    style C fill:#6f42c1,color:#fff
-    style D fill:#0e8a16,color:#fff
-```
+The system is team-agnostic. Engineering is the first fully-built team, but the same scaffolding works for sales, marketing, operations — any team where work benefits from structured review.
 
 **New here?** See [which path fits you](#where-to-start), or jump to the [FAQ](docs/faq.md).
+
+---
+
+## Problems This Solves
+
+| Problem | How Directives addresses it |
+|---------|----------------------------|
+| **AI agents skip steps under pressure** | A [pipeline](docs/glossary.md) defines every stage from requirements to deployment. GitHub labels track progress. Skip a stage and the system warns you. |
+| **Generic AI feedback is shallow** | [Personas](docs/glossary.md) (detailed character profiles — backstory, expertise, review lens) produce targeted, deep feedback instead of "looks good, maybe add tests." |
+| **One agent reviews its own work** | The architecture separates builder and validator [agent types](docs/glossary.md). Different agents — or isolated sessions — catch different blind spots. |
+| **Process lives in tribal knowledge** | [Manifests](docs/glossary.md) (YAML config files) are the single source of truth for teams, roles, stages, and vocabularies. Machine-readable, version-controlled, no drift. |
+| **Setting up takes too long** | Three adoption levels let you start small. Use personas alone in 15 minutes. Add the pipeline when you're ready. Split agents later. |
 
 ---
 
@@ -26,7 +26,7 @@ graph LR
 graph TD
     A{"What do you<br/>want to do?"} -->|"Understand<br/>the ideas"| B["docs/concepts.md<br/>→ why.md<br/>→ getting-started.md"]
     A -->|"Set it up<br/>now"| C["docs/getting-started.md"]
-    A -->|"See the<br/>config"| D["Architecture section<br/>below"]
+    A -->|"See the<br/>config"| D["Reference section<br/>below"]
 
     style A fill:#333,color:#fff
     style B fill:#0075ca,color:#fff
@@ -34,11 +34,22 @@ graph TD
     style D fill:#6f42c1,color:#fff
 ```
 
+### Adoption levels
+
+| Level | What you get | Time |
+|-------|-------------|------|
+| **Quick start** | Better AI reviews using persona definitions — zero config | 15 min |
+| **Standard** | Structured pipeline with labels, stage gates, and repeatable process | 30 min |
+| **Full system** | Builder/validator split across different LLM providers (the AI tools that do the work) for independent review | 1 hour |
+
+Each level builds on the last. See [Getting Started](docs/getting-started.md) for setup instructions.
+
+### Learn more
+
 | Doc | What you'll learn | Time |
 |-----|-------------------|------|
 | [**Key Concepts**](docs/concepts.md) | Agent types, personas, pipeline, committee, manifests | 10 min |
-| [**Why This Architecture?**](docs/why.md) | Problems this solves and thinking behind each decision | 10 min |
-| [**Getting Started**](docs/getting-started.md) | Three adoption levels: personas only → pipeline → multi-agent | 15 min |
+| [**Why This Architecture?**](docs/why.md) | The problems and thinking behind each decision | 10 min |
 | [**Glossary**](docs/glossary.md) | One-line definitions for every term | 3 min |
 | [**FAQ**](docs/faq.md) | "Do I need all of this?", "Engineering only?", and more | 3 min |
 
@@ -46,14 +57,14 @@ graph TD
 
 ## How It Works
 
-A task flows through six **[pipeline](docs/glossary.md)** stages. Each stage produces artifacts the next one consumes:
+A task flows through six [pipeline](docs/glossary.md) stages. Each stage produces artifacts the next one consumes:
 
 ```mermaid
 graph LR
-    A["Product Review<br/><code>/pm</code>"] --> B["Design Review<br/><code>/design</code>"]
-    B --> C["Implementation<br/><code>/implement</code>"]
-    C --> D["Code Review<br/><code>/ramd</code>"]
-    D --> E["Deploy & Verify"]
+    A["Define<br/><code>/define</code>"] --> B["Design<br/><code>/design</code>"]
+    B --> C["Implement<br/><code>/implement</code>"]
+    C --> D["Review<br/><code>/review</code>"]
+    D --> E["Deploy & Verify<br/><em>(automatic)</em>"]
     E --> F["Summarize<br/><code>/summarize</code>"]
 
     style A fill:#6f42c1,color:#fff
@@ -64,7 +75,11 @@ graph LR
     style F fill:#d4c5f9,color:#000
 ```
 
-A **[committee](docs/glossary.md)** of [personas](docs/glossary.md) — specialists with distinct professional backgrounds — reviews work sequentially. Each reads all prior feedback before adding their own:
+### Personas and the committee
+
+A **[committee](docs/glossary.md)** of [personas](docs/glossary.md) — specialists with distinct professional backgrounds — reviews work at the Design and Review stages. Each persona reads all prior feedback before adding their own, building cumulative insight rather than repeating observations.
+
+The engineering team has 11 personas. Each brings a different lens:
 
 | Persona | Focus |
 |---------|-------|
@@ -79,24 +94,19 @@ A **[committee](docs/glossary.md)** of [personas](docs/glossary.md) — speciali
 | Writer | User-facing copy, docs |
 | Engineering Manager | Synthesizes all feedback |
 
-Other teams define their own personas and review sequences. Engineering is the first fully-built team — not the only one the system supports.
+Other teams define their own personas and review sequences — the structure is identical, only the expertise changes.
+
+### Builder and validator
+
+The architecture separates work into two [agent types](docs/glossary.md): a **builder** (creates work — writes code, runs tests, deploys) and a **validator** (reviews independently — audits, writes specs, files issues). When backed by different LLM providers, they bring different training and biases, catching things the other misses. Even with a single provider, isolated sessions prevent the validator from inheriting the builder's blind spots.
 
 ---
 
-## Architecture
+## Reference
 
-Three config files drive the system. Each has a different scope and changes at a different rate:
+### Architecture
 
-```
-  agents.yml                 manifest.yml               CONTRIBUTING.md
-  (global)                   (per-team)                 (per-project)
-  +------------------+      +------------------+       +------------------+
-  | Agent types      |      | Role roster      |       | Team reference   |
-  | LLM providers    | <--- | Pipeline stages  | <--- | Pipeline mode    |
-  | Assignments      |      | Vocabularies     |       | Provider overrides|
-  | Fallback chains  |      | Settings         |       |                  |
-  +------------------+      +------------------+       +------------------+
-```
+Three config files drive the system at different scopes:
 
 | File | Scope | What it controls |
 |------|-------|-----------------|
@@ -104,90 +114,25 @@ Three config files drive the system. Each has a different scope and changes at a
 | [`manifest.yml`](teams/engineering/manifest.yml) | Per-team | Role roster, pipeline stages, labels, vocabularies |
 | `CONTRIBUTING.md` | Per-project | Team reference, pipeline mode, provider overrides |
 
----
+### Teams
 
-## Teams
+Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and vocabulary. Engineering is the first fully-built team — see [`teams/engineering/`](teams/engineering/) for the complete example, including [personas](teams/engineering/personas/), [process docs](teams/engineering/process/), and [manifest](teams/engineering/manifest.yml). To create a new team, copy [`teams/TEMPLATE/`](teams/TEMPLATE/) and customize.
 
-Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and vocabulary.
+### Global framework
 
-### Engineering
+Cross-team rules for how agents think and coordinate: [agent architecture](framework/agent-architecture.md), [orchestration](framework/orchestration.md), [reasoning](framework/reasoning-framework.md), [safety](framework/safety.md).
 
-> **Manifest:** [`teams/engineering/manifest.yml`](teams/engineering/manifest.yml)
+### Templates
 
-**Personas** — [`teams/engineering/personas/`](teams/engineering/personas/)
+Starter files for new projects: [`CONTRIBUTING.md`](templates/CONTRIBUTING.md.template), [`CLAUDE.md`](templates/CLAUDE.md.template), [`GEMINI.md`](templates/GEMINI.md.template), [`worklog`](templates/worklog.md.template), [`pm-context`](templates/pm-context.md.template).
 
-| Role | Agent | Persona |
-|------|-------|---------|
-| UX Designer | Builder | [`ux-designer.md`](teams/engineering/personas/ux-designer.md) |
-| Software Engineer | Builder | [`software-engineer.md`](teams/engineering/personas/software-engineer.md) |
-| System Architect | Builder | [`system-architect.md`](teams/engineering/personas/system-architect.md) |
-| Data Engineer | Builder | [`data-engineer.md`](teams/engineering/personas/data-engineer.md) |
-| AI/ML Engineer | Builder | [`ai-ml-engineer.md`](teams/engineering/personas/ai-ml-engineer.md) |
-| Security Engineer | Validator | [`security-engineer.md`](teams/engineering/personas/security-engineer.md) |
-| QA Engineer | Validator | [`qa-engineer.md`](teams/engineering/personas/qa-engineer.md) |
-| SRE | Builder | [`sre.md`](teams/engineering/personas/sre.md) |
-| Writer | Validator | [`writer.md`](teams/engineering/personas/writer.md) |
-| Engineering Manager | Builder | [`engineering-manager.md`](teams/engineering/personas/engineering-manager.md) |
-| PM | Validator | [`pm.md`](teams/engineering/personas/pm.md) |
+### Domain overlays
 
-Shared culture: [`cross-cutting-traits.md`](teams/engineering/personas/cross-cutting-traits.md)
+Optional domain-specific rules layered on top of the base process. Currently available: [healthcare](overlays/healthcare/) (HIPAA, PHI handling, patient safety).
 
-**Process** — [`teams/engineering/process/`](teams/engineering/process/)
+### Three-tier model
 
-| Doc | Description |
-|-----|-------------|
-| [`pipeline.md`](teams/engineering/process/pipeline.md) | 6-stage pipeline, ad-hoc work gate, label lifecycle |
-| [`committee-process.md`](teams/engineering/process/committee-process.md) | Committee review protocol, fresh-eyes validation |
-| [`code-review-framework.md`](teams/engineering/process/code-review-framework.md) | Severity levels, review lenses |
-| [`test-budget.md`](teams/engineering/process/test-budget.md) | Test layer decision framework |
-| [`prd-template.md`](teams/engineering/process/prd-template.md) | Product requirements format |
-
-### Adding a New Team
-
-Copy `teams/TEMPLATE/` → `teams/<your-team>/` and customize. See the [template manifest](teams/TEMPLATE/manifest.yml) for field docs.
-
----
-
-## Global Framework
-
-Applies across all teams — how agents think and coordinate.
-
-| Doc | Description |
-|-----|-------------|
-| [`agent-architecture.md`](framework/agent-architecture.md) | Agent types, provider assignments, single-provider fallback |
-| [`orchestration.md`](framework/orchestration.md) | How orchestrators consume config files to route work |
-| [`reasoning-framework.md`](framework/reasoning-framework.md) | AI reasoning loop, task modes, complexity triggers |
-| [`safety.md`](framework/safety.md) | Universal safety guardrails |
-
----
-
-## Templates
-
-Starter files for new project repos:
-
-| Template | Description |
-|----------|-------------|
-| [`CONTRIBUTING.md.template`](templates/CONTRIBUTING.md.template) | Project entry point |
-| [`CLAUDE.md.template`](templates/CLAUDE.md.template) | Builder agent config |
-| [`GEMINI.md.template`](templates/GEMINI.md.template) | Validator agent config |
-| [`worklog.md.template`](templates/worklog.md.template) | Multi-agent coordination log |
-| [`pm-context.md.template`](templates/pm-context.md.template) | Domain context for PM persona |
-
----
-
-## Domain Overlays
-
-Optional additions for domain-specific projects. Additive — they extend the base process, never replace it.
-
-| Overlay | Description |
-|---------|-------------|
-| [`overlays/healthcare/`](overlays/healthcare/) | HIPAA, PHI handling, patient safety |
-
----
-
-## Three-Tier Model
-
-Configuration lives at three levels. Each adds specificity without duplicating the tier above.
+Configuration lives at three levels, each adding specificity without duplicating the tier above:
 
 | Tier | Where | What |
 |------|-------|------|

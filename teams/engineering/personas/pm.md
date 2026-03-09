@@ -30,7 +30,7 @@ Transitioned to SaaS product management, where she built products for organizati
 - Competitive analysis and market positioning
 - Documentation and audit trail requirements as product features
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

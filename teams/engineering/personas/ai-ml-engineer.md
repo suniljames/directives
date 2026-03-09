@@ -30,7 +30,7 @@ Transitioned to applied AI in regulated industries, where she built decision sup
 - Sensitive data handling in AI pipelines (data minimization, redaction, audit logging)
 - Cost and token usage management (model selection, caching, batching)
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

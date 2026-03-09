@@ -30,7 +30,7 @@ Transitioned to healthcare data platforms, where he encountered the unique chall
 - Data pipeline architecture (ETL, streaming, event sourcing)
 - Data integrity constraints and validation at the database level
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 

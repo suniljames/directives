@@ -6,7 +6,7 @@ The thinking behind the system. Read this to understand *why* the pieces exist, 
 
 ## The Problem: One Agent, Correlated Failures
 
-AI agents can create, review, and deliver work across many domains. But when one model does all of that, its blind spots repeat in every phase.
+AI agents can create, review, and deliver work across many domains. But when one model does all of that, its blind spots repeat in every phase. The model that wrote a SQL query won't notice it's injectable during review — it wrote it that way on purpose. The model that drafted a proposal won't catch the pricing error during QA — it chose those numbers.
 
 ```mermaid
 graph TD
@@ -21,11 +21,9 @@ graph TD
     style E fill:#d73a49,color:#fff
 ```
 
-The model that wrote a SQL query won't notice it's injectable during review — it wrote it that way on purpose. The model that drafted a proposal won't catch the pricing error during QA — it chose those numbers.
+This is grading your own homework — and the grade is always generous.
 
-This is grading your own homework.
-
-**Non-technical example:** Imagine a marketing team where the same person writes the ad copy, reviews it for brand compliance, and approves the budget. They'll miss the same things at every step because they made the original decisions.
+**Non-technical example:** Imagine a marketing team where the same person writes the ad copy, reviews it for brand compliance, and approves the budget. They'll miss the same things at every step because they made the original decisions. A fresh pair of eyes catches what familiarity hides.
 
 ---
 
@@ -56,13 +54,13 @@ graph LR
     style V3 fill:#6f42c1,color:#fff
 ```
 
-Two different models with different training, architectures, and biases catch different things. The overlap in what they miss shrinks.
+Two different models with different training, architectures, and biases catch different things. The overlap in what they miss shrinks significantly — each model's blind spots are unlikely to line up with the other's.
 
 ### What if you only have one provider?
 
 The system runs both [agent types](glossary.md) in **isolated sessions** — separate conversations with no shared context. The validator is primed: *"You did NOT build this code. Review it independently."*
 
-Not as good as two different models. Significantly better than one session doing both.
+Not as good as two genuinely different models, but significantly better than one session doing everything. The key is that the validator has no memory of the builder's reasoning, so it can't inherit the builder's assumptions.
 
 ---
 
@@ -75,18 +73,18 @@ Not as good as two different models. Significantly better than one session doing
 | "Review this PR for issues" | Security Engineer reviews for: injection, auth bypass, data exposure, CSRF |
 | "Looks good, maybe add some tests" | "MUST-FIX: This endpoint accepts user input at line 47 without sanitization. SQL injection via `name` parameter." |
 
-Each persona has:
+The difference isn't just specificity — it's the entire way the agent thinks about the problem. Each persona has:
 
-- **A backstory** — anchors decision-making (not decoration)
-- **Core expertise** — what they evaluate
-- **A review lens** — specific checklist of things to find
-- **An interaction style** — how they communicate findings
+- **A backstory** — anchors decision-making by giving the agent a professional identity (not decoration)
+- **Core expertise** — what they evaluate and what they know deeply
+- **A review lens** — a specific checklist of things to find
+- **An interaction style** — how they communicate findings and how blunt they are
 
 ### Why multiple?
 
 Real work is multi-disciplinary. Architecturally sound code might be inaccessible. Code passing all tests might have a SQL injection. A sales proposal with great positioning might have wrong pricing.
 
-No single reviewer — human or AI — holds all lenses simultaneously. [Personas](glossary.md) make them explicit.
+No single reviewer — human or AI — holds all lenses simultaneously. [Personas](glossary.md) make each lens explicit and ensure nothing falls through the cracks because "someone else was supposed to check that."
 
 ---
 
@@ -96,11 +94,11 @@ No single reviewer — human or AI — holds all lenses simultaneously. [Persona
 
 ```mermaid
 graph TD
-    A["GitHub Issue"] --> B{"PM Review<br/><code>/pm</code>"}
-    B -->|"PRD posted"| C{"Design Review<br/><code>/design</code>"}
-    C -->|"Committee reviews"| D{"Implementation<br/><code>/implement</code>"}
-    D -->|"TDD: tests first"| E{"Code Review<br/><code>/ramd</code>"}
-    E -->|"Up to 3 rounds"| F{"Deploy & Verify"}
+    A["GitHub Issue"] --> B{"Define<br/><code>/define</code>"}
+    B -->|"PRD posted"| C{"Design<br/><code>/design</code>"}
+    C -->|"Committee reviews"| D{"Implement<br/><code>/implement</code>"}
+    D -->|"TDD: tests first"| E{"Review<br/><code>/review</code>"}
+    E -->|"Up to 3 rounds"| F{"Deploy & Verify<br/><em>(automatic)</em>"}
     F -->|"Health check"| G["Issue Closed"]
 
     style A fill:#333,color:#fff
@@ -112,19 +110,21 @@ graph TD
     style G fill:#333,color:#fff
 ```
 
-Each stage has a **label** tracking completion, **checks** the previous label, and **produces artifacts** the next stage consumes.
+Each stage has a **label** tracking completion, **checks** the previous label, and **produces artifacts** the next stage consumes. This creates a chain of accountability — you can look at any issue and immediately see where it is in the process.
 
-Skip PM review and jump to implementation? The system warns you. You can override — it's advisory, not a hard block — but you make a conscious choice.
+Skip Define and jump to Implement? The system warns you. You can override — it's advisory, not a hard block — but you make a conscious choice rather than accidentally skipping something important.
 
 ### Why labels, not a database?
 
-The source of truth lives where the work lives — GitHub. Labels are visible, inspectable, and need zero infrastructure.
+The source of truth lives where the work lives — GitHub. Labels are visible, inspectable, and need zero infrastructure. Anyone looking at an issue can see its pipeline state without special tooling.
 
 ---
 
 ## Solution 4: Manifests Make It Configurable
 
 **Key insight: hardcoding personas, stages, and review order in docs creates maintenance debt.**
+
+When process definitions live in prose, they drift. Someone updates the persona list but forgets to update the pipeline doc. Machine-readable manifests solve this — change one file, and the change is immediately authoritative.
 
 Three config files drive everything:
 
@@ -155,7 +155,7 @@ graph TD
     style E fill:#fbca04,color:#000
 ```
 
-A zero-context agent simulates the experience of whoever will actually do the work. Catches assumptions the committee forgot to write down.
+During discussion, committee members develop a shared understanding of the problem. But whoever implements the work wasn't part of that discussion — they'll only see the final spec. A zero-context agent simulates that experience, reading only the final output and flagging anything that requires context the reader wouldn't have. This catches the "curse of knowledge" problem — assumptions that feel obvious to the people who discussed them but aren't written down.
 
 ---
 
@@ -164,7 +164,7 @@ A zero-context agent simulates the experience of whoever will actually do the wo
 | Principle | What it means |
 |-----------|--------------|
 | **Decouple roles from providers** | "Security Engineer" means a review role, not "Gemini." Swap providers without rewriting process. |
-| **Repo is the source of truth** | All coordination through files, PRs, issues, labels. No side channels. |
+| **Repo is the source of truth** | All coordination through files, PRs, issues, labels. No side channels, no external databases. |
 | **Advisory gates, not hard blocks** | Pipeline warns when you skip stages. Doesn't prevent you. Hotfixes happen. |
 | **Configuration over convention** | Machine-readable manifests, not documentation you have to interpret. |
 | **Additive domain overlays** | Healthcare needs HIPAA. Fintech needs PCI. Additions, not replacements. |

@@ -30,7 +30,7 @@ After 15 years as a principal engineer and engineering leader at the world's lar
 - Cross-functional synthesis (UX + security + performance + operability trade-offs)
 - Risk assessment and mitigation planning
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, she speaks last and evaluates:
 

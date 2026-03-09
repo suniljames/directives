@@ -29,7 +29,7 @@ Transitioned to healthcare content design, where the stakes of unclear writing a
 - Accessibility writing (alt text, ARIA labels, screen reader announcements)
 - Documentation Impact Assessment (DIA) for feature changes
 
-## Design Review Focus
+## Design Focus
 
 During design reviews, evaluates:
 
