@@ -59,11 +59,29 @@ The review order follows a deliberate funnel: user impact → implementation →
 ## UX Mockup Generation (UI/UX Changes Only)
 
 - **When:** User-facing UI changes. Skip for backend/API/infra issues.
-- **Format:** SVG. Renders natively in GitHub.
+- **Format:** SVG. Renders natively in GitHub's blob viewer.
 - **Storage:** `docs/mockups/<issue-number>/`
 - **Viewports:** Mobile (<=480px), Tablet (481-1024px), Desktop (>1024px)
 - **States:** Default, error, success, loading for each viewport where they differ.
-- **Process:** UX Designer generates, commits to branch, posts comment with GitHub-relative SVG links. Subsequent members reference these.
+- **Process:**
+  1. Generate SVGs into `docs/mockups/<issue-number>/`.
+  2. Commit and push to the working branch.
+  3. Construct blob links: `https://github.com/<owner>/<repo>/blob/<branch>/docs/mockups/<issue-number>/<filename>.svg`
+  4. Post a comment with clickable text links. Subsequent members reference these.
+
+### SVG Linking in GitHub Issues
+
+GitHub's Content Security Policy blocks inline rendering of SVGs from `raw.githubusercontent.com`. Image embeds (`![alt](raw.githubusercontent.com/...)`) produce broken images or plain-text downloads.
+
+**Do:** Use markdown text links pointing to the blob URL:
+```markdown
+[Portal Chooser — Mobile](https://github.com/OWNER/REPO/blob/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+```
+
+**Do not:** Use image embed syntax:
+```markdown
+![Portal Chooser](https://raw.githubusercontent.com/OWNER/REPO/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+```
 
 ## Overwrite-to-Final-Consensus
 
