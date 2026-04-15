@@ -1,0 +1,72 @@
+# Projects audited by scripts/directives-audit.sh.
+#
+# Each project entry lists a local clone to inspect for promotion candidates
+# (generic assets that should be moved upstream to dotfiles/directives) and
+# for drift (stale references to now-renamed files/commands).
+#
+# Paths under `scan:` are walked recursively for hooks/commands/scripts.
+# `shared_targets` lists the canonical "promote to" destinations.
+#
+# To add a project: clone it locally, add an entry here, commit. Next run
+# will pick it up.
+#
+# To exclude a project (e.g. not managed by this user anymore): remove or
+# comment out the entry. The script silently skips entries whose local_path
+# doesn't exist, so you can also just ignore clones on other machines.
+
+projects:
+  - name: project-leila
+    owner: Project-Leila
+    repo: Core
+    local_path: ~/Code/project-leila
+    scan:
+      - .claude/hooks
+      - .claude/commands
+      - scripts
+
+  - name: COREcare-v2
+    owner: suniljames
+    repo: COREcare-v2
+    local_path: ~/Code/COREcare-v2
+    scan:
+      - .claude/hooks
+      - .claude/commands
+      - scripts
+
+# Canonical locations for promoted assets
+shared_targets:
+  - name: dotfiles
+    owner: suniljames
+    repo: dotfiles
+    local_path: ~/Code/dotfiles
+    paths:
+      hooks: .claude/hooks
+      scripts: scripts
+
+  - name: directives
+    owner: suniljames
+    repo: directives
+    local_path: ~/Code/directives
+    paths:
+      commands: templates/commands
+
+# Strings that, if present in a file's content, mark it as project-specific
+# and disqualify it from auto-promotion. Edit when new projects are added.
+project_specific_vocabulary:
+  - COREcare
+  - corecare
+  - COREcare-v2
+  - COREcare-access
+  - project-leila
+  - Project-Leila
+  - project_leila
+  - leila
+  - hcunanan79
+  - hazel
+  - antigravity
+  - supabase
+  - twilio
+  - render.com
+  - ferpa
+  - coppa
+  - hipaa
