@@ -475,33 +475,30 @@ def append_comment(repo: str, issue_number: int, body: str, dry_run: bool) -> No
 def open_promotion_pr(
     candidate: dict, shared_target: dict, dry_run: bool
 ) -> str | None:
-    """Open a draft PR against dotfiles promoting a candidate file.
+    """Open a draft PR against a shared target promoting a candidate file.
+
+    Uses a temporary git worktree so the user's main checkout is never
+    modified. Worktree is removed on every exit path.
 
     Returns PR URL on success, or None on dry-run / existing PR / error.
     """
+    import shutil
+
     src_path: Path = candidate["path"]
     name = src_path.name
     dest_repo = f"{shared_target['owner']}/{shared_target['repo']}"
-    dest_rel = shared_target["paths"]["hooks"] if "hook" in str(src_path).lower() else shared_target["paths"].get("scripts", "scripts")
+    dest_rel = (
+        shared_target["paths"]["hooks"]
+        if "hook" in str(src_path).lower()
+        else shared_target["paths"].get("scripts", "scripts")
+    )
     dest_path = f"{dest_rel}/{name}"
     branch = f"auto-promote/{name.replace('.', '-')}"
 
     # Check for existing open PR on this branch
     rc, out, _ = gh(
-        [
-            "pr",
-            "list",
-            "--repo",
-            dest_repo,
-            "--head",
-            branch,
-            "--state",
-            "open",
-            "--json",
-            "number,url",
-            "--limit",
-            "1",
-        ]
+        ["pr", "list", "--repo", dest_repo, "--head", branch, "--state", "open",
+         "--json", "number,url", "--limit", "1"]
     )
     if rc == 0:
         existing = json.loads(out or "[]")
@@ -513,54 +510,60 @@ def open_promotion_pr(
         return None
 
     dest_local = expand_path(shared_target["local_path"])
-    rc, _, err = run(["git", "fetch", "origin"], cwd=dest_local)
-    if rc != 0:
-        return None
-    rc, _, err = run(["git", "checkout", "-B", branch, "origin/main"], cwd=dest_local)
-    if rc != 0:
-        return None
+    # Work in an isolated worktree to avoid modifying the user's main checkout
+    temp_worktree = Path("/tmp") / f"audit-{shared_target['name']}-{branch.replace('/', '-')}"
+    if temp_worktree.exists():
+        shutil.rmtree(temp_worktree, ignore_errors=True)
 
-    target_full = dest_local / dest_path
-    target_full.parent.mkdir(parents=True, exist_ok=True)
-    target_full.write_bytes(src_path.read_bytes())
-    # Preserve executable bit
-    if os.access(src_path, os.X_OK):
-        os.chmod(target_full, 0o755)
-    rc, _, _ = run(["git", "add", dest_path], cwd=dest_local)
-    if rc != 0:
-        return None
-    msg = (
-        f"auto-promote: add {dest_path} from {candidate['project']}\n\n"
-        f"Automated promotion by directives-audit.sh.\n"
-        f"Source: {candidate['project']}:{src_path.relative_to(expand_path(candidate['project_root']))}\n"
-        f"Reasons:\n" + "\n".join(f"  - {r}" for r in candidate["reasons"])
-    )
-    rc, _, err = run(["git", "commit", "-m", msg], cwd=dest_local)
-    if rc != 0:
-        return None
-    rc, _, err = run(["git", "push", "-u", "origin", branch], cwd=dest_local)
-    if rc != 0:
-        return None
-    rc, out, err = gh(
-        [
-            "pr",
-            "create",
-            "--repo",
-            dest_repo,
-            "--draft",
-            "--base",
-            "main",
-            "--head",
-            branch,
-            "--title",
-            f"auto-promote: {name} from {candidate['project']}",
-            "--body",
-            _pr_body(candidate, dest_path),
-        ]
-    )
-    if rc != 0:
-        return None
-    return out.strip()
+    try:
+        rc, _, err = run(["git", "fetch", "origin"], cwd=dest_local)
+        if rc != 0:
+            return None
+        rc, _, err = run(
+            ["git", "worktree", "add", "-B", branch, str(temp_worktree), "origin/main"],
+            cwd=dest_local,
+        )
+        if rc != 0:
+            return None
+
+        target_full = temp_worktree / dest_path
+        target_full.parent.mkdir(parents=True, exist_ok=True)
+        target_full.write_bytes(src_path.read_bytes())
+        if os.access(src_path, os.X_OK):
+            os.chmod(target_full, 0o755)
+
+        rc, _, _ = run(["git", "add", dest_path], cwd=temp_worktree)
+        if rc != 0:
+            return None
+
+        src_rel = str(src_path.relative_to(expand_path(candidate["project_root"])))
+        msg = (
+            f"auto-promote: add {dest_path} from {candidate['project']}\n\n"
+            f"Automated promotion by directives-audit.sh.\n"
+            f"Source: {candidate['project']}:{src_rel}\n"
+            f"Reasons:\n" + "\n".join(f"  - {r}" for r in candidate["reasons"])
+        )
+        rc, _, err = run(["git", "commit", "-m", msg], cwd=temp_worktree)
+        if rc != 0:
+            return None
+        rc, _, err = run(["git", "push", "-u", "origin", branch], cwd=temp_worktree)
+        if rc != 0:
+            return None
+
+        rc, out, err = gh(
+            ["pr", "create", "--repo", dest_repo, "--draft", "--base", "main",
+             "--head", branch,
+             "--title", f"auto-promote: {name} from {candidate['project']}",
+             "--body", _pr_body(candidate, dest_path)]
+        )
+        if rc != 0:
+            return None
+        return out.strip()
+    finally:
+        # Always clean up the worktree, regardless of success
+        run(["git", "worktree", "remove", "--force", str(temp_worktree)], cwd=dest_local)
+        if temp_worktree.exists():
+            shutil.rmtree(temp_worktree, ignore_errors=True)
 
 
 def _pr_body(candidate: dict, dest_path: str) -> str:
