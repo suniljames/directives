@@ -391,8 +391,15 @@ def find_or_create_monthly_issue(repo: str, dry_run: bool) -> int | None:
     """Return issue number for this month's rolling audit log."""
     now = dt.datetime.now()
     title_tag = f"{now.year:04d}-{now.month:02d}"
+    # Ensure label exists before any list/create operation. --force is idempotent.
+    gh([
+        "label", "create", AUDIT_LABEL, "--repo", repo,
+        "--color", "0366d6",
+        "--description", "Rolling log for directives-audit cron",
+        "--force",
+    ])
     # Search for open issue with label + title containing tag
-    rc, out, err = gh(
+    rc, out, _ = gh(
         [
             "issue",
             "list",
@@ -408,13 +415,7 @@ def find_or_create_monthly_issue(repo: str, dry_run: bool) -> int | None:
             "20",
         ]
     )
-    if rc != 0:
-        # Label may not exist yet; create it (idempotent)
-        if "label does not exist" in err.lower() or rc != 0:
-            gh(["label", "create", AUDIT_LABEL, "--repo", repo, "--color", "0366d6", "--force"])
-        issues = []
-    else:
-        issues = json.loads(out or "[]")
+    issues = json.loads(out or "[]") if rc == 0 else []
 
     for issue in issues:
         if title_tag in issue["title"]:
