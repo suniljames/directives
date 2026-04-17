@@ -79,136 +79,20 @@ def file_digest(path: Path) -> str:
     return h.hexdigest()
 
 
-# ---------- YAML loading (minimal, no PyYAML dep) ----------
+# ---------- YAML loading ----------
 
 
 def load_yaml(path: Path) -> dict:
-    """Minimal YAML loader — handles the subset we use in projects.yml.
-
-    Supports: top-level keys, nested dicts (2-space indent), lists with `- `
-    prefix, lists of scalars, and lists of dicts. Comments with `#` stripped.
-    Not a general YAML parser; optimized for projects.yml.
-    """
+    """Load a YAML file. Requires PyYAML."""
     try:
-        import yaml as pyyaml  # type: ignore
+        import yaml
+    except ImportError as e:
+        raise RuntimeError(
+            "PyYAML is required. Install with: pip install pyyaml"
+        ) from e
 
-        with open(path) as f:
-            return pyyaml.safe_load(f) or {}
-    except ImportError:
-        pass
-
-    # Fallback: minimal parser
-    data: dict = {}
-    stack: list[tuple[int, Any]] = [(-1, data)]
     with open(path) as f:
-        lines = f.readlines()
-
-    for raw in lines:
-        line = raw.rstrip("\n")
-        # Strip full-line comments
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        # Strip inline comments (naive — no quoted-string awareness needed here)
-        if " #" in line:
-            line = line.split(" #", 1)[0]
-        indent = len(line) - len(line.lstrip())
-        stripped = line.strip()
-
-        # Pop stack until we're at an indent < current
-        while stack and stack[-1][0] >= indent:
-            stack.pop()
-
-        parent_indent, parent = stack[-1]
-
-        if stripped.startswith("- "):
-            item_body = stripped[2:].strip()
-            if not isinstance(parent, list):
-                raise ValueError(f"list item under non-list at indent {indent}: {line}")
-            if ":" in item_body:
-                # List of dicts: "- key: val"
-                k, _, v = item_body.partition(":")
-                new_dict: dict = {k.strip(): _parse_scalar(v.strip())}
-                parent.append(new_dict)
-                stack.append((indent, new_dict))
-            else:
-                parent.append(_parse_scalar(item_body))
-        elif ":" in stripped:
-            k, _, v = stripped.partition(":")
-            key = k.strip()
-            val = v.strip()
-            if not isinstance(parent, dict):
-                raise ValueError(f"key under non-dict at indent {indent}: {line}")
-            if val == "":
-                # Either nested dict or nested list — look ahead? Simpler: assume list if next non-blank line starts with "- ".
-                # Default to dict; will be replaced with list on first "- " child.
-                parent[key] = {}
-                stack.append((indent, parent[key]))
-            else:
-                parent[key] = _parse_scalar(val)
-
-    # Second pass: promote empty-dicts to lists if any "- " children pushed strings
-    # (Handled inline above, but our lookahead isn't done. Use a simpler approach:
-    #  re-parse by detecting "key:" followed by "  - ..." lines.)
-    return _fixup_lists(data, lines)
-
-
-def _parse_scalar(v: str) -> Any:
-    v = v.strip()
-    if v == "":
-        return ""
-    if v.lower() in ("true", "yes"):
-        return True
-    if v.lower() in ("false", "no"):
-        return False
-    if v.lower() == "null":
-        return None
-    # Strip quotes
-    if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
-        return v[1:-1]
-    try:
-        return int(v)
-    except ValueError:
-        pass
-    try:
-        return float(v)
-    except ValueError:
-        pass
-    return v
-
-
-def _fixup_lists(data: dict, lines: list[str]) -> dict:
-    """Re-scan lines to convert empty-dict children to lists where appropriate.
-
-    If a key `foo:` is followed by indented `- item` children, promote foo from
-    dict to list. This is a second pass because forward-lookahead is simpler
-    here than tracking state during the first pass.
-    """
-    # Build a key -> is_list map by scanning
-    # Walk lines looking for `key:` followed (within the same indent scope) by `  - `
-    # Keep it simple: iterate top-level paths
-    # (For our projects.yml structure this is sufficient.)
-
-    def convert(obj: Any, path_segments: list[str]) -> Any:
-        if isinstance(obj, dict):
-            new = {}
-            for k, v in obj.items():
-                new[k] = convert(v, path_segments + [k])
-            # Heuristic: if every value in this dict is an empty dict AND
-            # the raw text has list markers under this key, convert to list.
-            # Simplified: if the dict has exactly one "dash-prefixed" style key
-            # named something odd, skip. We handle via first-pass logic above.
-            return new
-        return obj
-
-    # Our minimal parser above handles list items explicitly via "- ".
-    # The only case we miss is an empty `key:` that should be a list.
-    # Patch: if a key has value {} but the next non-blank line at deeper indent
-    # starts with "- ", it should be a list. Rebuild.
-    #
-    # For now, trust the first pass to have created lists correctly via the
-    # "- " detection under dict parents. If an empty dict slipped through,
-    # just leave it as {}.
-    return convert(data, [])
+        return yaml.safe_load(f) or {}
 
 
 # ---------- core logic ----------
