@@ -42,6 +42,35 @@ Teams instantiate these modes for their domain. The pattern is universal; the sp
 - Match existing patterns (naming, conventions, structure)
 - Leave things better than you found them
 
+### LSP-First Code Navigation
+
+When a symbol's location is known (a class name, function, import), prefer semantic lookups over exploratory file reads:
+
+- Use `goToDefinition`, `findReferences`, `hover` via the LSP integration rather than reading whole files to locate a symbol
+- For Python projects: install [Pyright](https://github.com/microsoft/pyright) as the LSP server; also install [`django-stubs`](https://github.com/typeddjango/django-stubs) for full Django ORM and view type coverage — without it, Pyright gives partial benefit on Django codebases
+- For TypeScript/JavaScript: `typescript-language-server` covers the same lookups
+- LSP server config goes in `dotfiles/.claude/settings.json` — see your dotfiles repo for setup instructions
+
+A chain of exploratory file reads to trace a call path costs more tokens than one `goToDefinition`. Reach for LSP first when navigating unfamiliar code.
+
+### GEMINI.md Equivalence
+
+If a project contains a `GEMINI.md` at its root, treat it as equivalent context authority to `CLAUDE.md` for that provider session — it defines identity, pipeline commands, session isolation rules, and role scope for the Gemini CLI agent. Read it before starting work in a Gemini session the same way you would read `CLAUDE.md` in a Claude Code session.
+
+See [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) for the canonical template.
+
+### Model Selection
+
+Match model capability to task complexity:
+
+| Task type | Model guidance |
+|-----------|---------------|
+| Planning, architecture, synthesis, complex debugging | Most capable available model |
+| Mechanical execution — formatting, repetitive edits, log parsing, simple lookups | Cost-efficient model |
+| Validator / review pass | Most capable available; independent model preferred |
+
+This is a heuristic for when paying for full capability is worth the cost, not a rule about which model to use. A session that starts on a capable model for planning and switches to a smaller model for execution passes the cheaper work to the cheaper tool without sacrificing decision quality.
+
 ## Review Checklist (Use After Each Execute Phase)
 
 Before moving to Verify, confirm:
