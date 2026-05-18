@@ -55,7 +55,9 @@ A chain of exploratory file reads to trace a call path costs more tokens than on
 
 ### GEMINI.md Equivalence
 
-If a project contains a `GEMINI.md` at its root, treat it as equivalent context authority to `CLAUDE.md` for that provider session — it defines identity, pipeline commands, session isolation rules, and role scope for the Gemini CLI agent. Read it before starting work in a Gemini session the same way you would read `CLAUDE.md` in a Claude Code session.
+> **Note to Claude Code:** This guidance is addressed to the Gemini CLI agent. When configuring a Gemini session, include this instruction in the session primer or in `GEMINI.md` itself.
+
+If a project contains a `GEMINI.md` at its root, treat it as equivalent context authority to `CLAUDE.md` — it defines identity, pipeline commands, session isolation rules, and role scope for the Gemini CLI agent. Read it before starting work the same way a Claude Code session reads `CLAUDE.md`.
 
 See [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) for the canonical template.
 
@@ -65,9 +67,9 @@ Match model capability to task complexity:
 
 | Task type | Model guidance |
 |-----------|---------------|
-| Planning, architecture, synthesis, complex debugging | Most capable available model |
+| Planning, architecture, synthesis, complex debugging | Highest-capability model in your subscription |
 | Mechanical execution — formatting, repetitive edits, log parsing, simple lookups | Cost-efficient model |
-| Validator / review pass | Most capable available; independent model preferred |
+| Validator / review pass | Highest-capability model in your subscription; independent model preferred |
 
 This is a heuristic for when paying for full capability is worth the cost, not a rule about which model to use. A session that starts on a capable model for planning and switches to a smaller model for execution passes the cheaper work to the cheaper tool without sacrificing decision quality.
 

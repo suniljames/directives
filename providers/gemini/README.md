@@ -31,5 +31,5 @@ To add a provider (e.g., `providers/openai/` for a ChatGPT CLI):
 
 1. Create `providers/<provider-name>/README.md` explaining the provider's role in the system
 2. Create `providers/<provider-name>/<PROVIDER>-template.md` following the same 5-section structure as `GEMINI-template.md`
-3. Add the provider to [`agents.yml`](../../agents.yml) under `providers:`
+3. Add an entry to the [`providers:` list in `agents.yml`](../../agents.yml) with the required fields: `id`, `name`, `binary` (CLI binary name on the system PATH), and `strengths` (short description for assignment rationale)
 4. Link from this README and from the root `README.md` reference section

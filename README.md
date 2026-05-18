@@ -120,9 +120,7 @@ Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and voc
 
 ### Global framework
 
-Cross-team rules for how agents think and coordinate: [agent architecture](framework/agent-architecture.md), [orchestration](framework/orchestration.md), [reasoning](framework/reasoning-framework.md), [safety](framework/safety.md).
-
-**CLAUDE.md authoring:** See [docs/claude-md-authoring.md](docs/claude-md-authoring.md) for the canonical guide on writing thin root configs with progressive disclosure — root = behavioral rules + index only; detail in sub-documents.
+Cross-team rules for how agents think and coordinate: [agent architecture](framework/agent-architecture.md), [orchestration](framework/orchestration.md), [reasoning](framework/reasoning-framework.md), [safety](framework/safety.md). For writing thin root configs with progressive disclosure, see [CLAUDE.md authoring](docs/claude-md-authoring.md) — root = behavioral rules + index only; detail in sub-documents.
 
 ### Templates
 

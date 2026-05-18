@@ -101,7 +101,7 @@ You are a Django specialist. [system prompt body follows]
 
 Required fields:
 - `name` — kebab-case identifier, unique within the project
-- `description` — one or two sentences; Claude Code uses this to decide when to invoke the agent
+- `description` — one or two sentences used by Claude Code to **automatically decide when to invoke the agent** — this field is behaviorally significant, not just documentation. A vague or generic description silently degrades auto-invocation. Be specific about the domain and trigger conditions.
 - `tools` — explicit list of tools this agent may use; omit tools the domain doesn't need
 
 The body below the front matter is the agent's system prompt. Keep it focused on the domain.
@@ -120,6 +120,8 @@ Request only the tools a domain requires:
 - An agent that runs tests needs `Bash` with a narrow scope, not open-ended shell access
 
 Over-permissioned specialists inherit all the blast radius of a general-purpose agent while providing none of the scope benefits.
+
+**No sandbox isolation.** Session specialists do not run in a sandboxed environment. A specialist with `Bash` in its tool list can execute arbitrary shell commands with the same permissions as the parent session. Minimum-privilege tool lists are your only mitigation.
 
 ### Relationship to Orchestration
 

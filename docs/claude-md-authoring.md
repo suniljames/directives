@@ -36,9 +36,8 @@ Sub-documents live in a referenced directory (typically `docs/developer/` or `.c
 - You're writing a runbook, reference table, or checklist
 
 **Naming conventions:**
-- Use `SCREAMING_SNAKE_CASE.md` for operational docs (`TESTING.md`, `WORKFLOW.md`)
-- Use `TITLE_CASE.md` for domain docs (`DJANGO_PATTERNS.md`, `SERVICE_LAYER.md`)
 - Be specific: `TESTING.md` is better than `DOCS.md`
+- Be consistent within your project — pick a casing convention and stick to it across all sub-documents
 
 **How Claude Code loads them:**
 Link sub-documents in the root index table with a relative path. Claude Code follows the link and loads the referenced file automatically when the session reaches content that references it. No `@` include syntax is needed — standard markdown links work.
@@ -61,7 +60,7 @@ Use this to audit an existing `CLAUDE.md` or review a new one before merging.
 - [ ] No inline section exceeds 15 lines
 - [ ] Every block of > 5 rules points to a sub-document via a link
 - [ ] The index table covers every major workflow the project uses
-- [ ] The root file reads in under 3 minutes
+- [ ] The root file fits on a single screen without scrolling
 
 **Sub-documents (should be true of each one):**
 - [ ] The document has a single, clear topic
@@ -86,7 +85,8 @@ Before enabling third-party tools as Claude Code hooks, consider the interaction
 1. Read the hook source before installing — especially for tools that intercept all shell output
 2. Verify provenance: pinned version + checksum, ideally with a published release on a known-good registry
 3. Make hooks fail-open (`exec hook-binary || exit 0`) so a crashed hook binary doesn't block agent execution
-4. Document the tradeoff in your project's `SAFETY.md` or equivalent: what you gave up and why it was worth it
+4. Understand the scope: a `PostToolUse` hook on Bash receives output from **every** shell command in the session — not just the specific tool that triggered it. This includes commands that surface environment variables, API responses, file contents, or data query results. Scope your hook's processing accordingly.
+5. Document the tradeoff in your project's `SAFETY.md` or equivalent: what you gave up and why it was worth it
 
 See [`framework/safety.md`](../framework/safety.md) for the framework-level safety rules this doc extends.
 

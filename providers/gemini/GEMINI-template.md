@@ -29,9 +29,17 @@ You are the **validator** agent. Your pipeline stages and the commands that trig
 | `/review` | Review | Code review via assigned validator personas; post findings by severity |
 | `/ramd` | Merge | Final gate check before merge |
 
+> **Customize for your team.** The table above shows the engineering pipeline defaults. If your project uses a different pipeline (e.g., `Qualify → Propose → Review → Close`), replace these rows with your team's stages. See `manifest.yml` for the canonical stage list.
+
 You do not own builder stages (Implement, Deploy). File findings; don't fix.
 
-**Gemini CLI invocation pattern:** Run pipeline commands via the `gemini` CLI with the appropriate project context loaded. See [`framework/orchestration.md`](https://github.com/suniljames/directives/blob/main/framework/orchestration.md) for how the orchestrator routes commands to agent types.
+**Gemini CLI invocation pattern:** Start a session with this file loaded, then issue pipeline commands:
+```bash
+gemini --context GEMINI.md
+# then in the session:
+# /design 42
+```
+See [`framework/orchestration.md`](https://github.com/suniljames/directives/blob/main/framework/orchestration.md) for how the orchestrator routes commands to agent types.
 
 ---
 
@@ -71,6 +79,10 @@ This file is committed to version control. Any secret embedded here is a committ
 For API key management:
 - Use environment variables (`GEMINI_API_KEY`, etc.) set in your shell profile or CI secrets
 - Use a secrets manager (1Password, AWS Secrets Manager, etc.) for production values
-- Reference `docs/developer/CREDENTIALS.md` in your project for project-specific secret storage patterns
+- Refer to your project's credential management documentation or your organization's secrets manager for storage patterns
 
-If you are copy-pasting this template and find any value that looks like a key, token, or password: stop, remove it, rotate the credential, and audit your git history.
+If you find a value that looks like a key, token, or password in this file: remove it, rotate the credential immediately, then run:
+```bash
+git log -p --all -- GEMINI.md
+```
+to confirm it never appeared in a prior commit. If it did, the rotation is mandatory — removing the file from the working tree does not scrub git history.
