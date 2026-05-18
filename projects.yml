@@ -33,6 +33,15 @@ projects:
       - .claude/commands
       - scripts
 
+  - name: COREcare-access
+    owner: hcunanan79  # Different from suniljames — this repo belongs to hcunanan79. Ensure gh auth has hcunanan79 credentials when the audit script runs GitHub API calls for this entry.
+    repo: COREcare-access
+    local_path: ~/Code/COREcare-access
+    scan:
+      - .claude/hooks
+      - .claude/commands
+      - scripts
+
 # Canonical locations for promoted assets
 shared_targets:
   - name: dotfiles

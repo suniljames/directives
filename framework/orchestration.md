@@ -3,6 +3,8 @@
 How external orchestrators (Maestro, future alternatives) consume the directives config files to route work across AI agents.
 
 > This document is **orchestrator-agnostic**. It describes the contract — what an orchestrator reads and how it should behave — not any specific tool's configuration format.
+>
+> Session-level domain specialization via `.claude/agents/` is below this contract's scope — see [`framework/agent-architecture.md`](agent-architecture.md).
 
 ## Config Files an Orchestrator Reads
 

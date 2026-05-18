@@ -159,17 +159,17 @@ assignments:
 
 ### 2. Add validator agent config
 
-Create `GEMINI.md` (or equivalent) in your project. This file primes the validator so it knows its role:
+Create `GEMINI.md` in your project. This file primes the validator so it knows its role, pipeline commands, and session isolation rules.
 
-```markdown
-# Validator Agent Config
+For the full 5-section reference template: [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md)
+For a minimal starter: [`templates/GEMINI.md.template`](../templates/GEMINI.md.template)
 
-You are the **validator** agent. You did NOT create this work.
-Review independently using the personas assigned to you.
-
-Refer to the [engineering directives](https://github.com/suniljames/directives)
-for persona definitions and review process.
-```
+The full template covers:
+- GitHub identity and credential safety rules
+- Pipeline command mapping (your stage → Gemini's responsibility)
+- Session isolation (why the validator must start fresh, not inherit builder context)
+- Validator role declaration (maps back to `agents.yml` — the template doesn't redefine the role)
+- Explicit no-credentials section
 
 ### 3. Assign roles to agent types
 
@@ -286,3 +286,5 @@ Link to directives, don't copy. Your project references the persona files and pr
 - [Glossary](glossary.md) — Definitions for every term
 - [Pipeline details](../teams/engineering/process/pipeline.md) — Deep dive into each stage
 - [Committee process](../teams/engineering/process/committee-process.md) — How the review protocol works
+- [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
+- [Gemini provider config](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup

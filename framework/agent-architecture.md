@@ -63,3 +63,68 @@ A sales team would follow the same structure: Deal Strategist (builder) creates 
 2. **Validators should be independent.** Audit and review roles gain most from a different model.
 3. **Keep the boundary clean.** Creating on one agent, reviewing on the other. Explicit handoffs.
 4. **Rationale must be substantive.** Assignments based on capability and fit, not marketing.
+
+---
+
+## Native Session Specialists (`.claude/agents/`)
+
+Claude Code supports a first-class sub-agent mechanism via YAML files in `.claude/agents/`. These are **session specialists** — agents scoped to a domain within a provider session. They are distinct from the provider-level builder/validator split described above.
+
+### Terminology
+
+| Concept | Where defined | What it controls |
+|---------|--------------|-----------------|
+| **Provider agents** | `agents.yml` | Which LLM provider backs each agent type (builder/validator) |
+| **Session specialists** | `.claude/agents/*.md` | What a sub-agent focuses on *within* a Claude Code session |
+
+Provider agents answer "which tool does the work." Session specialists answer "which domain does this sub-agent stay inside." Both layers are independent and composable.
+
+### YAML Front-Matter Schema
+
+Each file in `.claude/agents/` uses YAML front matter followed by the agent's system prompt:
+
+```yaml
+---
+name: django-specialist
+description: >
+  Expert in Django ORM, migrations, admin customization, and URL routing.
+  Invoke for any task touching models, views, serializers, or admin.py.
+tools:
+  - Read
+  - Edit
+  - Bash
+  - Grep
+---
+
+You are a Django specialist. [system prompt body follows]
+```
+
+Required fields:
+- `name` — kebab-case identifier, unique within the project
+- `description` — one or two sentences used by Claude Code to **automatically decide when to invoke the agent** — this field is behaviorally significant, not just documentation. A vague or generic description silently degrades auto-invocation. Be specific about the domain and trigger conditions.
+- `tools` — explicit list of tools this agent may use; omit tools the domain doesn't need
+
+The body below the front matter is the agent's system prompt. Keep it focused on the domain.
+
+### The Benefit: Scope Discipline
+
+Session specialists reduce **scope drift** — the tendency of a general-purpose agent to wander into adjacent domains when given a large codebase. A `django-specialist` agent stays in the Django layer; a `data-integrity-agent` stays in data-health logic. Each specialist loads only the context its domain needs.
+
+This is not about reducing session-start overhead (session startup cost is fixed regardless). The benefit is behavioral: specialists produce more focused, domain-accurate work because their system prompt constrains the reasoning surface.
+
+### Minimum-Privilege Principle
+
+Request only the tools a domain requires:
+- A read-only analysis agent needs `Read`, `Grep` — not `Edit`, `Bash`, `Write`
+- A specialist that generates code but doesn't run it needs `Read`, `Edit` — not `Bash`
+- An agent that runs tests needs `Bash` with a narrow scope, not open-ended shell access
+
+Over-permissioned specialists inherit all the blast radius of a general-purpose agent while providing none of the scope benefits.
+
+**No sandbox isolation.** Session specialists do not run in a sandboxed environment. A specialist with `Bash` in its tool list can execute arbitrary shell commands with the same permissions as the parent session. Minimum-privilege tool lists are your only mitigation.
+
+### Relationship to Orchestration
+
+Session specialists operate below the scope of `orchestration.md`, which describes how external orchestrators route work between provider-level agents. Session specialists are an internal Claude Code mechanism — they are spawned within a single provider session, not across providers.
+
+See [`framework/orchestration.md`](orchestration.md) for the provider-level contract.
