@@ -25,7 +25,7 @@ In gated mode, the committee process pauses after Design and after Review to wai
 
 | Stage | Purpose | Produces | Label |
 |-------|---------|----------|-------|
-| **1. Define** | Evaluate the issue, write a PRD with acceptance criteria | PRD comment on the GitHub issue | `pm-reviewed` |
+| **1. Define** | Evaluate the issue, write a PRD with acceptance criteria | PRD comment on the GitHub issue | `define-reviewed` |
 | **2. Design** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
 | **3. Implement** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
 | **4. Review** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
@@ -37,8 +37,8 @@ Each agent implements this pipeline using its own tooling. The labels and artifa
 ## Label Lifecycle
 
 ```
-Define      -> adds `pm-reviewed`
-Design      -> checks `pm-reviewed`, adds `design-complete`
+Define      -> adds `define-reviewed`
+Design      -> checks `define-reviewed`, adds `design-complete`
 Implement   -> checks `design-complete`, adds `implementing`
 Review      -> checks CI + labels, after merge: adds `merged`, removes `implementing`
 Summarize   -> adds `summarized` (optional, after deploy)
@@ -48,13 +48,13 @@ Summarize   -> adds `summarized` (optional, after deploy)
 
 When working on issues **without** using the full pipeline (e.g., quick fixes, ad-hoc tasks), check for lifecycle labels before creating a PR:
 
-- If `pm-reviewed` is missing: the PM hasn't reviewed the requirements
+- If `define-reviewed` is missing: the PM hasn't reviewed the requirements
 - If `design-complete` is missing: the committee hasn't reviewed the design
 
 If either label is missing, warn:
 
 > **Lifecycle labels missing on #\<issue\>:**
-> - [ ] `pm-reviewed` (PM review)
+> - [ ] `define-reviewed` (PM review)
 > - [ ] `design-complete` (committee review)
 >
 > Skipping stages may result in incomplete requirements or unreviewed designs. Proceed anyway? [Y/n]
@@ -66,20 +66,32 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 
 ## Who Does What
 
-| Stage | Validator | Builder |
+| Stage | Validator (Adversarial Peer) | Builder |
 |-------|-----------|---------|
-| 1. Define | Writes the PRD, adds `pm-reviewed` | — |
+| 1. Define | Writes the PRD, adds `define-reviewed` | — |
 | 2. Design | Security + QA lenses, test specification | Architecture, UX, data, SRE lenses |
 | 3. Implement | — | TDD: scaffold tests -> implement -> green |
-| 4. Review | Security + QA review, post findings | Addresses findings, merges |
+| 4. Review | Security + QA review, post findings | Addresses ALL findings, merges |
 | 5. Deploy & Verify | — | Rebuild, health check, close issue |
 | 6. Summarize | Writer summary | — |
+
+### Adversarial Mandate
+The Validator MUST act as an **adversarial peer**. It does not default to
+agreement. Its role is to challenge implementation risks, identify mechanical
+flaws, and advocate for architectural integrity.
+
+### Fix-ALL Mandate
+The Builder MUST fix **ALL** findings from a `/review` (MUST-FIX, SHOULD-FIX,
+and NITs). Follow-up issues are reserved strictly for significant architectural
+shifts or feature expansions.
 
 ## Handoff Protocol
 
 - **The repo is the source of truth.** All handoffs happen through files, PR comments, and issue comments — never through inter-agent messages.
 - **Structured artifacts** follow defined formats (see [`committee-process.md`](committee-process.md) for test spec format, [`prd-template.md`](prd-template.md) for PRDs).
 - **Label-driven coordination.** Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
+- **Machine-to-Machine Signaling.** Use `review:in-progress` labels for
+  visibility and detailed comment "data packets" for handoffs.
 - **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../../../templates/worklog.md.template) to track current context and handoff state.
 
 ## Implement Workflow (Stage 3)
@@ -106,7 +118,8 @@ This gate is advisory — it warns and asks for confirmation, but does not hard-
 ### 4. Verify (pre-PR)
 - All tests GREEN
 - Full quality gate passes (lint + typecheck + test + build)
-- **Only proceed to Review if the quality gate passes at 100%**
+- **Automated Validator Bridge.** Call `gemini /review` (or equivalent).
+- **Only proceed to Review if the Validator returns ALL CLEAR.**
 
 ## Multi-Phase Issues
 
@@ -116,3 +129,5 @@ Complete each phase as a separate PR.
 
 - **Every code change must be associated with a GitHub issue.**
 - **The main checkout must stay on `main`.** All feature work happens in isolated branches or worktrees.
+- **Issue-Number Worktree Naming.** Worktrees MUST be named with the issue
+  number (e.g., `issue-1523`) for easy identification and session auditing.

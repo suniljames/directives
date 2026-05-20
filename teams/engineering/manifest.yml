@@ -113,7 +113,7 @@ pipeline:
     command: /define
     agent: validator
     label:
-      name: pm-reviewed
+      name: define-reviewed
       color: "6f42c1"
     produces: "PRD comment on the GitHub issue"
 

@@ -190,7 +190,20 @@ NIT: ...        → informational, does not block
 
 ### Review Loop
 
-The orchestrator enforces `manifest.yml.settings.max_review_rounds`. If MUST-FIX findings remain after the maximum rounds, the orchestrator escalates to the user rather than merging.
+The orchestrator enforces `manifest.yml.settings.max_review_rounds`.
+
+#### Machine-to-Machine Signaling
+When routing work between builder and validator agents:
+- **Visibility.** Use `review:in-progress` and `review:clear` labels.
+- **Handoffs.** Findings must be posted as structured comment "data packets"
+  for the recipient agent to consume.
+
+#### Stalemate Trigger
+To prevent token waste in stylistic arguments, the orchestrator MUST implement
+ a **Stalemate Trigger**:
+- If the same finding is repeated in a second review round without resolution
+  or meaningful change from the builder, the orchestrator MUST **STOP** and
+  escalate to the human immediately.
 
 ## Remote Agent Execution
 
