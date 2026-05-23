@@ -45,7 +45,14 @@ providers:
 
 # Default: which provider backs each agent type.
 # Orchestrators use this unless the project overrides.
-# fallback_order: if preferred provider is unavailable, try the next.
+#
+# fallback_order: if the preferred provider is unavailable, use the next one.
+# "Unavailable" is not just a missing binary — it includes rate-limiting
+# (HTTP 429) and credit/quota exhaustion. When one provider becomes unavailable,
+# the other assumes the open role (bidirectional role swap): Claude Code can act
+# as validator when Gemini is rate-limited, and Gemini can act as builder when
+# Claude is out of credits. See framework/agent-architecture.md →
+# "Role Swap on Provider Unavailability".
 assignments:
   default:
     builder: claude-code
@@ -53,6 +60,19 @@ assignments:
   fallback_order:
     builder:
       - claude-code
+      - gemini-cli
     validator:
       - gemini-cli
       - claude-code
+
+# Model selection is intentionally NOT pinned here.
+#   - Builder model: whatever the active CLI session is configured to use, set
+#     natively (Claude Code `/model`; Gemini `gemini -m <model>`). Whoever you
+#     launch is the builder, so its model is already chosen by how you start it.
+#   - Validator model: designated per session by the builder when it invokes the
+#     validator bridge, so it can be a smaller/cheaper read-only model:
+#       * Gemini-as-validator → GEMINI_MODEL env var read by the project's
+#         validator wrapper (default gemini-2.5-flash-lite — rate-limit headroom).
+#       * Claude-as-validator → the model of the /code-review session (or
+#         `claude -p --model <model>`) the builder spawns.
+# Pinning concrete values here would drift from the CLIs that actually own them.

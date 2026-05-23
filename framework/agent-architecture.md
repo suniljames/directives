@@ -18,7 +18,18 @@ Split roles across abstract **agent types** — a **builder** and a **validator*
 
 ## Provider Assignment
 
-Default assignments and fallback chains are in `agents.yml`. When the preferred provider is unavailable, the system falls back to the next provider in the chain.
+Default assignments and fallback chains are in `agents.yml`. When the preferred provider is unavailable, the system falls back to the next provider in the chain. **"Unavailable" includes rate-limiting (HTTP 429) and credit/quota exhaustion — not just a missing binary.** This is the common trigger in practice: a provider that is installed and working can still be temporarily unusable.
+
+### Role Swap on Provider Unavailability
+
+The default assignment (builder ↔ validator → provider) is a *preference*, not a fixed identity. The roles are **bidirectional**: either provider can play either role, and the mapping swaps when a provider becomes unavailable.
+
+- **Default (Scenario 1):** Claude Code = builder, Gemini = validator.
+- **Swapped (Scenario 2):** Gemini = builder, Claude Code = validator — e.g. when Claude is out of credits, or when the operator simply launches a Gemini session to build.
+
+The operative rule for whichever tool is running: **if your counterpart provider is rate-limited or out of credits, assume the open role.** A builder with no available validator runs the validator pass itself (in an isolated session, below); a tool launched to build when the usual builder is unavailable *is* the builder. Neither role goes unfilled because one provider is down.
+
+In practice the launched CLI determines the builder: start Gemini and Gemini builds; start Claude Code and Claude builds. The validator is then the *other* provider, invoked as a bridge (see model designation in [`agents.yml`](../agents.yml)) — or, if that provider is also unavailable, the same provider in a fresh isolated session.
 
 ### Single-Provider Fallback
 
