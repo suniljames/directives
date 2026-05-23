@@ -41,6 +41,8 @@ For each agent_type in agents.yml.agent_types:
 4. If no provider available: skip this agent type (warn the user)
 ```
 
+**"Unavailable" includes rate-limiting (HTTP 429) and credit/quota exhaustion**, not just a missing binary. A provider that returns 429 mid-run, or whose account is out of credits, should be treated as unavailable so the resolver falls through to the next provider in the chain. Because the chains are symmetric (`agents.yml`), this is what lets a builder-default provider be resolved into the validator role (and vice versa) when its counterpart is down — the bidirectional role swap described in [`agent-architecture.md`](agent-architecture.md).
+
 ### Single-Provider Mode
 
 When the same provider backs both agent types (fallback scenario), the orchestrator must:
