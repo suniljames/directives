@@ -34,9 +34,9 @@ providers:
       - tool_use
       - delivery
 
-  - id: gemini-cli
-    name: Gemini CLI
-    binary: gemini
+  - id: antigravity-cli
+    name: Antigravity CLI
+    binary: agy
     strengths:
       - analysis
       - review
@@ -56,13 +56,13 @@ providers:
 assignments:
   default:
     builder: claude-code
-    validator: gemini-cli
+    validator: antigravity-cli
   fallback_order:
     builder:
       - claude-code
       - gemini-cli
     validator:
-      - gemini-cli
+      - antigravity-cli
       - claude-code
 
 # Model selection is intentionally NOT pinned here.
