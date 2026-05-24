@@ -7,7 +7,7 @@ Set up this system in your project. You can adopt the full [pipeline](glossary.m
 ## Prerequisites
 
 - A GitHub repository
-- At least one AI tool (Claude Code, Gemini CLI, Cursor, ChatGPT, etc.)
+- At least one AI tool (Claude Code, Antigravity CLI, Cursor, ChatGPT, etc.)
 - Familiarity with the [key concepts](concepts.md)
 
 ---
@@ -148,13 +148,13 @@ Split [builder and validator](glossary.md) across different LLM providers for ge
 
 ### 1. Configure agents.yml
 
-The default [`agents.yml`](../agents.yml) maps Claude Code as builder, Gemini CLI as validator. Adjust for your providers:
+The default [`agents.yml`](../agents.yml) maps Claude Code as builder, Antigravity CLI as validator. Adjust for your providers:
 
 ```yaml
 assignments:
   default:
-    builder: claude-code      # Your primary coding AI
-    validator: gemini-cli     # Your review/audit AI
+    builder: claude-code         # Your primary coding AI
+    validator: antigravity-cli   # Your review/audit AI
 ```
 
 ### 2. Add validator agent config
@@ -178,7 +178,7 @@ The [manifest](glossary.md) already does this — each role has an `agent:` fiel
 ```yaml
 roles:
   - id: security-engineer
-    agent: validator        # Runs on the validator (Gemini)
+    agent: validator        # Runs on the validator (Antigravity)
   - id: software-engineer
     agent: builder          # Runs on the builder (Claude)
 ```

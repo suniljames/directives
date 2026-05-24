@@ -47,14 +47,14 @@ An **[agent type](glossary.md)** describes *what kind of work* gets done — not
 
 ### Provider assignment
 
-Agent types are backed by **LLM providers** (the AI tools that do the work — Claude Code, Gemini CLI, etc.). The mapping lives in [`agents.yml`](../agents.yml):
+Agent types are backed by **LLM providers** (the AI tools that do the work — Claude Code, Antigravity CLI, etc.). The mapping lives in [`agents.yml`](../agents.yml):
 
 ```yaml
-# Default: Claude builds, Gemini validates
+# Default: Claude builds, Antigravity validates
 assignments:
   default:
     builder: claude-code
-    validator: gemini-cli
+    validator: antigravity-cli
 ```
 
 If a provider isn't available, the system falls back — even running both types on the same provider in **isolated sessions** so they can't share context. Not as good as two different models, but significantly better than one session doing both.
