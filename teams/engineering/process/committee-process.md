@@ -35,6 +35,11 @@ The review order follows a deliberate funnel: user impact → implementation →
 - Members post in strict order, each reading all prior comments first.
 - A member may reference, agree with, challenge, or build on any prior point.
 - Engineering Manager posts last, synthesizing all feedback into a final plan.
+- **Synthesis means merging the members' asks, not concatenating them.** A final plan
+  that assigns each member's concern its own phase has not been synthesized. The
+  Implementation Plan is where PR count is really decided, so apply
+  [PR Slicing — fewest, not smallest](pipeline.md#pr-slicing--fewest-not-smallest) here:
+  default to one PR, and name a forcing constraint for any boundary you keep.
 - No parallel posting — sequential so each persona genuinely absorbs prior feedback.
 
 ## Process
@@ -103,7 +108,11 @@ Catches assumptions the committee forgot to write down. Inspired by the [Anthrop
 2. Provide **only** the updated issue description (no committee comments).
 3. Prompt: *"You are a senior developer picking up this issue cold. Produce a step-by-step implementation plan. Flag anything ambiguous, context-dependent, or too vague to implement without guessing."*
 4. If gaps flagged: Engineering Manager updates the description. Out-of-scope gaps get `[Context: ...]` annotations.
-5. If the sub-agent produces a coherent plan with no questions, validation passes.
+5. If the plan is sliced into more than one PR, check that **every boundary past the
+   first names a forcing constraint** from
+   [PR Slicing](pipeline.md#pr-slicing--fewest-not-smallest). An unjustified boundary —
+   or one resting on a reason that section rules out — is a FAIL.
+6. If the sub-agent produces a coherent plan with no questions, validation passes.
 
 **Why it works:** Committee members build shared context cumulatively. A zero-context agent simulates the experience of whoever actually implements the work.
 

@@ -121,9 +121,69 @@ shifts or feature expansions.
 - **Automated Validator Bridge.** Call `gemini /review` (or equivalent).
 - **Only proceed to Review if the Validator returns ALL CLEAR.**
 
-## Multi-Phase Issues
+## PR Slicing — fewest, not smallest
 
-Complete each phase as a separate PR.
+**Default to ONE PR.** The target is the largest change that can be safely shipped and
+verified at once — never the smallest reviewable diff. Every boundary past the first must
+name a forcing constraint from the closed list below, **in the recommendation itself**. A
+boundary with no named constraint is a defect in the plan, not a style preference.
+
+Why this is a rule and not advice: a plan that states a PR count without attaching an
+objective to it leaves a vacuum, and the default prior — small PRs are virtuous — fills
+it. Two structural forces push the same way. A committee has many members each raising
+their concern as a separable slice, and a synthesis step that concatenates rather than
+merges turns every member's ask into its own phase. And splitting is the blame-safe
+choice for whoever proposes it: nobody is criticized for five PRs, while one large PR
+that goes wrong is visible. The result is a plan optimized for the proposer's comfort
+rather than for delivery.
+
+**The cost being minimized is real.** Each boundary is a full CI run, a review round, a
+merge, and a rebase-collision window against every other branch in flight. On most teams
+that pipeline latency, not diff size, is the binding constraint on how fast work lands.
+Reviewer attention is a real cost too — but it is paid per *concept*, and splitting one
+concept across phases raises it rather than lowering it.
+
+### Legitimate reasons to split
+
+A second (or third) PR is justified **only** by one of these, named explicitly:
+
+1. **Deploy or data sequencing through the live environment.** A migration or backfill
+   must be applied and verified in production before the code depending on it can ship;
+   or a suppression may only be removed after the failure it hid is actually fixed.
+2. **Ship-dark-then-enable.** Something ships inert and is switched on as a separate,
+   separately-authorized step — because enabling it before the environment is clean would
+   make it fire on known-bad state from birth. Merging these two is a defect, so this
+   split is mandatory rather than merely permitted.
+3. **A human or console step must run between the halves** — a flag flip, an
+   infrastructure setting, a credential rotation: anything not present in the diff.
+4. **Part of the scope is still awaiting authorization.** Ship what is authorized.
+5. **A half is genuinely blocked** on an external answer, vendor, or upstream fix, and
+   the unblocked half delivers standalone value.
+
+Anything not on this list merges into the preceding PR. Extending the list is a change to
+this document, not a per-issue judgment call.
+
+### Not reasons to split
+
+Each of these is a reason to write a clearer PR description, never to open a second PR:
+
+- "reviewability" / "easier to review" / "smaller diff"
+- "logical separation" / "separation of concerns" / "distinct layers"
+- tests, docs, or bookkeeping files in their own PR
+- one PR per committee member, per file, per module, or per acceptance criterion
+- "de-risking" with no named forcing constraint — an untestable half is not lower risk,
+  it is unverified for longer
+- "the issue lists N deliverables" — a deliverable list is not a merge plan
+
+### Do not wait to be asked
+
+If the question *"in how few PRs can this be delivered, and why?"* would lower the
+number, then the lower number was the recommendation. Present that one, with the forcing
+constraint stated for each boundary you kept. An operator having to ask means the plan
+was optimizing for the wrong thing.
+
+**Genuinely multi-phase issues** — those where a boundary is forced by the list above —
+complete each phase as a separate PR, in the stated order.
 
 ## Session Isolation
 
