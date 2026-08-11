@@ -9,7 +9,7 @@ Scale reasoning depth to problem complexity. Simple questions get simple answers
 3. **Plan** — What's the approach?
 4. **Execute** — Implement incrementally
 5. **Review** — Does the output match the plan? Quality checks passing? Edge cases handled?
-6. **Verify** — Does it actually work? Did I solve the right problem?
+6. **Verify** — Does it actually work? Did I solve the right problem? Use independent instruments, not re-reads of your own reasoning ([`verification.md`](verification.md)). Two rules with no exceptions: run the environment rather than reasoning about it when correctness depends on an external system's behavior, and treat comments/docs as claims to verify, not evidence.
 
 ## Complexity Triggers (go deeper when present)
 
@@ -25,12 +25,13 @@ Teams instantiate these modes for their domain. The pattern is universal; the sp
 
 **Create**: Define requirements first. **Verify quality BEFORE finalizing** (except exploratory work — mark with `[SPIKE]`). Consider extensibility. Validate as you go.
 
-**Diagnose**:
-1. **Reproduce** — Confirm the problem exists with a minimal example
-2. **Hypothesis** — What might cause this? List 2-3 possibilities
-3. **Evidence** — Test each hypothesis against available data
-4. **Fix** — Implement minimal change targeting root cause
-5. **Verify** — Confirm the problem is resolved AND no regressions introduced
+**Diagnose**: follow [`diagnosis.md`](diagnosis.md) — the core rule is *no red-capable check, no theorizing*:
+1. **Rule out known impostors** — environment failures that look like code bugs (keep a repo-local list)
+2. **Reproduce** — one already-run command that goes red on the exact symptom, green when fixed
+3. **Hypotheses** — 3-5 ranked, each with a falsifiable prediction; no prediction = discard
+4. **Evidence** — one variable at a time, each probe mapped to a prediction
+5. **Fix & force red** — minimal root-cause change; reintroduce the bug, watch it fail, restore
+6. **Retrospective** — name the missing verification layer and the check that would have caught it earlier
 
 **Restructure**: Validate first. One change at a time. Preserve behavior.
 
