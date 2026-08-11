@@ -118,7 +118,7 @@ shifts or feature expansions.
 ### 4. Verify (pre-PR)
 - All tests GREEN
 - Full quality gate passes (lint + typecheck + test + build)
-- **Automated Validator Bridge.** Call `gemini /review` (or equivalent).
+- **Automated Validator Bridge.** Invoke the validator provider's review command (the provider named in [`agents.yml`](../../../agents.yml)), read-only, in an isolated session.
 - **Only proceed to Review if the Validator returns ALL CLEAR.**
 
 ## PR Slicing — fewest, not smallest

@@ -125,7 +125,7 @@ The engineering team's pipeline has six stages (other teams define their own):
 
 | Stage | What happens (engineering) | Who | Label |
 |---|---|---|---|
-| Define | PM writes a PRD with acceptance criteria | Validator | `pm-reviewed` |
+| Define | PM writes a PRD with acceptance criteria | Validator | `define-reviewed` |
 | Design | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
 | Implement | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
 | Review | Up to 3 rounds of committee review, then integrate | Both | `merged` |
@@ -199,7 +199,7 @@ pipeline:
     command: /define
     agent: validator
     label:
-      name: pm-reviewed
+      name: define-reviewed
 
 vocabularies:
   severity_levels:

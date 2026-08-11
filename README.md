@@ -93,6 +93,7 @@ The engineering team has 11 personas. Each brings a different lens:
 | SRE | Ops, health checks, logging |
 | Writer | User-facing copy, docs |
 | Engineering Manager | Synthesizes all feedback |
+| PM | Requirements, scope, PRDs (pipeline only — not a code reviewer) |
 
 Other teams define their own personas and review sequences — the structure is identical, only the expertise changes.
 
@@ -128,7 +129,7 @@ Starter files for new projects: [`CONTRIBUTING.md`](templates/CONTRIBUTING.md.te
 
 ### Provider configs
 
-Full reference configuration templates for each LLM provider. Currently available: [Gemini CLI](providers/gemini/) — includes [GEMINI-template.md](providers/gemini/GEMINI-template.md) (5-section reference) and the `providers/` vs `overlays/` distinction.
+Full reference configuration templates for each LLM provider — which providers exist and which backs each agent type is defined in [`agents.yml`](agents.yml), never in process docs. [`providers/gemini/`](providers/gemini/) is the worked example: a provider README, a 5-section context-file template, and the `providers/` vs `overlays/` distinction. Add a provider by following that shape.
 
 ### Domain overlays
 

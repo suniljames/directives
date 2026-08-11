@@ -38,7 +38,7 @@ Teams instantiate these modes for their domain. The pattern is universal; the sp
 
 ## Project Integration
 
-- Read project config files first (CLAUDE.md, GEMINI.md, CONTRIBUTING.md)
+- Read project config files first (CLAUDE.md, any counterpart provider context files, CONTRIBUTING.md)
 - Match existing patterns (naming, conventions, structure)
 - Leave things better than you found them
 
@@ -53,13 +53,11 @@ When a symbol's location is known (a class name, function, import), prefer seman
 
 A chain of exploratory file reads to trace a call path costs more tokens than one `goToDefinition`. Reach for LSP first when navigating unfamiliar code.
 
-### GEMINI.md Equivalence
+### Counterpart Context File Equivalence
 
-> **Note to Claude Code:** This guidance is addressed to the Gemini CLI agent. When configuring a Gemini session, include this instruction in the session primer or in `GEMINI.md` itself.
+Each provider reads its own root context file (example: Claude Code reads `CLAUDE.md`; Gemini CLI reads `GEMINI.md`). If a project contains a counterpart provider's context file at its root, treat it as equivalent context authority to your own — it defines identity, pipeline commands, session isolation rules, and role scope for that agent. When configuring a counterpart session, include this equivalence instruction in the session primer or in that provider's context file itself.
 
-If a project contains a `GEMINI.md` at its root, treat it as equivalent context authority to `CLAUDE.md` — it defines identity, pipeline commands, session isolation rules, and role scope for the Gemini CLI agent. Read it before starting work the same way a Claude Code session reads `CLAUDE.md`.
-
-See [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) for the canonical template.
+See [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) for a worked template (Gemini example).
 
 ### Model Selection
 

@@ -110,7 +110,7 @@ See [pipeline docs](../teams/engineering/process/pipeline.md) for what each stag
 The pipeline uses GitHub labels to track which stages are complete. Create them once per repository:
 
 ```bash
-gh label create "pm-reviewed"     --color "6f42c1" --repo your-org/your-repo
+gh label create "define-reviewed" --color "6f42c1" --repo your-org/your-repo
 gh label create "design-complete" --color "0e8a16" --repo your-org/your-repo
 gh label create "implementing"    --color "fbca04" --repo your-org/your-repo
 gh label create "merged"          --color "6e5494" --repo your-org/your-repo
@@ -128,7 +128,7 @@ sequenceDiagram
 
     You->>GH: Create issue
     You->>AI: /define 42
-    AI->>GH: Post PRD, add pm-reviewed label
+    AI->>GH: Post PRD, add define-reviewed label
     You->>AI: /design 42
     AI->>GH: Post committee reviews (sequential)
     AI->>GH: Add design-complete label
@@ -159,14 +159,14 @@ assignments:
 
 ### 2. Add validator agent config
 
-Create `GEMINI.md` in your project. This file primes the validator so it knows its role, pipeline commands, and session isolation rules.
+Create the validator provider's context file in your project (each provider reads its own root config — example: `GEMINI.md` for Gemini CLI). This file primes the validator so it knows its role, pipeline commands, and session isolation rules.
 
-For the full 5-section reference template: [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md)
+For the full 5-section reference template (Gemini example): [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md)
 For a minimal starter: [`templates/GEMINI.md.template`](../templates/GEMINI.md.template)
 
 The full template covers:
 - GitHub identity and credential safety rules
-- Pipeline command mapping (your stage → Gemini's responsibility)
+- Pipeline command mapping (your stage → the validator's responsibility)
 - Session isolation (why the validator must start fresh, not inherit builder context)
 - Validator role declaration (maps back to `agents.yml` — the template doesn't redefine the role)
 - Explicit no-credentials section
@@ -251,7 +251,7 @@ Overlays are additive — they extend the base process, never replace it. Refere
 your-project/
   CONTRIBUTING.md           # Team, pipeline mode, tech stack
   CLAUDE.md                 # Builder agent config
-  GEMINI.md                 # Validator agent config (optional)
+  GEMINI.md                 # Validator provider's context file (optional; name per provider)
   .claude/
     commands/
       define.md             # /define command
@@ -287,4 +287,4 @@ Link to directives, don't copy. Your project references the persona files and pr
 - [Pipeline details](../teams/engineering/process/pipeline.md) — Deep dive into each stage
 - [Committee process](../teams/engineering/process/committee-process.md) — How the review protocol works
 - [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
-- [Gemini provider config](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup
+- [Provider config example (Gemini)](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup

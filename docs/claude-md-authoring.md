@@ -96,4 +96,4 @@ See [`framework/safety.md`](../framework/safety.md) for the framework-level safe
 
 - [`framework/safety.md`](../framework/safety.md) — framework safety rules
 - [`framework/reasoning-framework.md`](../framework/reasoning-framework.md) — how agents navigate code and switch providers
-- [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) — the validator agent's equivalent of this config
+- [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) — a validator provider's equivalent of this config (Gemini example)
