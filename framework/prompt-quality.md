@@ -19,7 +19,7 @@ A skill/command file exists to wrangle **determinism** out of a stochastic syste
 
 ## Root context files
 
-Root config (`CLAUDE.md` or counterpart) has one job: behavioral rules and an index. Detail lives in sub-documents loaded on demand. See [claude-md-authoring.md](../docs/claude-md-authoring.md) for the progressive-disclosure checklist.
+Root config (`CLAUDE.md` or counterpart) has one job: behavioral rules and an index. Detail lives in sub-documents loaded on demand. See [claude-md-authoring.md](../docs/claude-md-authoring.md) for the progressive-disclosure checklist. For keeping these files (and every other knowledge store) current without losing hard-won rules, see [knowledge-pruning](../teams/engineering/process/knowledge-pruning.md).
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08 (checklist core adapted from the mattpocock/skills skill-quality discipline).*

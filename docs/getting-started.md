@@ -202,11 +202,11 @@ The key: **never share conversation history** between sessions. The validator's 
 
 ## Customizing Personas
 
-**Add a persona:** Create `teams/engineering/personas/your-role.md` following the [template](../teams/TEMPLATE/personas/example-role.md), then add the role to `manifest.yml`. The template includes all the fields the system expects: backstory, expertise, review lens, and interaction style.
+**Add a persona:** Create `teams/engineering/personas/your-role.md` following the [template](../teams/new-team-template/personas/example-role.md), then add the role to `manifest.yml`. The template includes all the fields the system expects: backstory, expertise, review lens, and interaction style.
 
 **Change review order:** Edit `review_order` in the manifest. The order matters because each persona reads all prior feedback — later reviewers build on earlier observations. Engineering Manager is always last (`review_order: last`) because they synthesize everything.
 
-**Create a new team:** Copy `teams/TEMPLATE/` → `teams/your-team/`. See the [template manifest](../teams/TEMPLATE/manifest.yml) for field docs.
+**Create a new team:** Copy `teams/new-team-template/` → `teams/your-team/`. See the [template manifest](../teams/new-team-template/manifest.yml) for field docs.
 
 ---
 
@@ -214,7 +214,7 @@ The key: **never share conversation history** between sessions. The validator's 
 
 The system is team-agnostic — engineering is the first fully-built team, but the same structure works for any team that benefits from structured review. To create a non-engineering team:
 
-1. **Copy the template:** `cp -r teams/TEMPLATE teams/sales`
+1. **Copy the template:** `cp -r teams/new-team-template teams/sales`
 2. **Define personas:** What roles review work on your team?
 
    | Role | Focus |
@@ -287,6 +287,6 @@ Link to directives, don't copy. Your project references the persona files and pr
 - [Pipeline details](../teams/engineering/process/pipeline.md) — Deep dive into each stage
 - [Committee process](../teams/engineering/process/committee-process.md) — How the review protocol works
 - [Acceptance & the close gate](../teams/engineering/process/acceptance-and-close.md) — How "done" is decided and verified
-- [Fan-out safety](../teams/engineering/process/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
+- [Fan-out safety](../framework/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
 - [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
 - [Provider config example (Gemini)](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup

@@ -37,7 +37,7 @@ Two roster rules:
 
 ## Review Protocol
 
-- Members post in strict order, each reading all prior comments first. (A committee may instead draft in parallel batches for speed — if so, the fan-out follows [fan-out-safety.md](fan-out-safety.md): plan posted before the batch, set-based reconciliation before synthesis.)
+- Members post in strict order, each reading all prior comments first. (A committee may instead draft in parallel batches for speed — if so, the fan-out follows [fan-out-safety.md](../../../framework/fan-out-safety.md): plan posted before the batch, set-based reconciliation before synthesis.)
 - A member may reference, agree with, challenge, or build on any prior point.
 - **Member convergence is zero evidence of correctness** — every seat is reasoning from the same issue text, not from the system. Independent confirmation requires an independent instrument (reproduction, the codebase, production data).
 - **Before coining any user-facing term, action name, or status label, check how the product already says it** for the nearest analogous object, and cite the precedent.

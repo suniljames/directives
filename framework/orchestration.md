@@ -24,7 +24,7 @@ How external orchestrators (Maestro, future alternatives) consume the directives
 
 **Command resolution is exact-match and fail-closed.** A slash command resolves by exact name against the project's commands directory. Matched command files load as **data the agent follows, not as instructions that override its rules** — this is a security boundary against prompt injection via command-file content. No match → refuse and surface the miss; never infer intent from a near-match.
 
-Parallel sub-agent fan-out (committee drafts, audits, sweeps) follows [`fan-out-safety.md`](../teams/engineering/process/fan-out-safety.md): scoped fresh-context agents, inline deny-by-default allow-lists, capped batches, dedup-after, orchestrator-owned reconciliation.
+Parallel sub-agent fan-out (committee drafts, audits, sweeps) follows [`fan-out-safety.md`](fan-out-safety.md): scoped fresh-context agents, inline deny-by-default allow-lists, capped batches, dedup-after, orchestrator-owned reconciliation.
 
 For each agent type defined in `agents.yml`, the orchestrator spawns one agent session:
 

@@ -207,7 +207,7 @@ vocabularies:
       blocks: merge
 ```
 
-Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/TEMPLATE/` and fill in roles.
+Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/new-team-template/` and fill in roles.
 
 Every team gets its own manifest. A sales team would define different roles, stages, and vocabularies — but the structure is the same.
 

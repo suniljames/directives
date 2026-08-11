@@ -117,7 +117,7 @@ Three config files drive the system at different scopes:
 
 ### Teams
 
-Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and vocabulary. Engineering is the first fully-built team — see [`teams/engineering/`](teams/engineering/) for the complete example, including [personas](teams/engineering/personas/), [process docs](teams/engineering/process/), and [manifest](teams/engineering/manifest.yml). To create a new team, copy [`teams/TEMPLATE/`](teams/TEMPLATE/) and customize.
+Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and vocabulary. Engineering is the first fully-built team — see [`teams/engineering/`](teams/engineering/) for the complete example, including [personas](teams/engineering/personas/), [process docs](teams/engineering/process/), and [manifest](teams/engineering/manifest.yml). To create a new team, copy [`teams/new-team-template/`](teams/new-team-template/) and customize.
 
 ### Global framework
 

@@ -134,7 +134,7 @@ Three config files drive everything:
 | `manifest.yml` | Per-team | You adjust the team or process (occasional) |
 | `CONTRIBUTING.md` | Per-project | A project needs a different mode (per-project) |
 
-Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/TEMPLATE/` and fill in roles.
+Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/new-team-template/` and fill in roles.
 
 ---
 
