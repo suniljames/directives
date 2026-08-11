@@ -282,33 +282,54 @@ def find_or_create_monthly_issue(repo: str, dry_run: bool) -> int | None:
         "--description", "Rolling log for directives-audit cron",
         "--force",
     ])
-    # Search for open issue with label + title containing tag
+    # Look up by exact title among ALL open issues — deliberately NOT filtered
+    # by label. GitHub silently drops labels on create/edit when the
+    # authenticated account lacks triage permission (this cron shares gh auth
+    # with other projects' accounts), so a label-filtered lookup cannot see
+    # those issues and every run manufactures a duplicate. The title is the
+    # deterministic key; the label is presentation, healed below.
     rc, out, _ = gh(
         [
             "issue",
             "list",
             "--repo",
             repo,
-            "--label",
-            AUDIT_LABEL,
             "--state",
             "open",
             "--json",
-            "number,title",
+            "number,title,labels",
             "--limit",
-            "20",
+            "100",
         ]
     )
     issues = json.loads(out or "[]") if rc == 0 else []
 
-    for issue in issues:
-        if title_tag in issue["title"]:
-            return issue["number"]
+    title = f"Automation: directives-audit log — {title_tag}"
+    matches = [i for i in issues if i["title"] == title]
+    if matches:
+        # Oldest match is the canonical rolling issue; later ones are
+        # duplicates from past runs (closed manually, not by this script).
+        issue = min(matches, key=lambda i: i["number"])
+        has_label = any(
+            lbl.get("name") == AUDIT_LABEL for lbl in issue.get("labels", [])
+        )
+        if not has_label and not dry_run:
+            rc, _, err = gh(
+                [
+                    "issue", "edit", str(issue["number"]), "--repo", repo,
+                    "--add-label", AUDIT_LABEL,
+                ]
+            )
+            if rc != 0:
+                print(
+                    f"warning: could not heal {AUDIT_LABEL} on "
+                    f"{repo}#{issue['number']} (insufficient permission?): {err}"
+                )
+        return issue["number"]
 
     if dry_run:
         return None
 
-    title = f"Automation: directives-audit log — {title_tag}"
     body = (
         f"Rolling log of weekly audits and daily drift checks for {title_tag}.\n\n"
         "Each run appends a comment with heartbeat + findings. Silence past "
@@ -335,7 +356,27 @@ def find_or_create_monthly_issue(repo: str, dry_run: bool) -> int | None:
     m = re.search(r"/issues/(\d+)", out)
     if not m:
         raise RuntimeError(f"couldn't parse issue number from: {out}")
-    return int(m.group(1))
+    number = int(m.group(1))
+    # Verify the label actually stuck — create silently drops it without
+    # triage permission. Best-effort heal + warn; the title-keyed lookup
+    # above keeps dedupe working either way.
+    rc, out, _ = gh(
+        ["issue", "view", str(number), "--repo", repo, "--json", "labels"]
+    )
+    labels = json.loads(out or "{}").get("labels", []) if rc == 0 else []
+    if not any(lbl.get("name") == AUDIT_LABEL for lbl in labels):
+        rc, _, err = gh(
+            [
+                "issue", "edit", str(number), "--repo", repo,
+                "--add-label", AUDIT_LABEL,
+            ]
+        )
+        if rc != 0:
+            print(
+                f"warning: {repo}#{number} created without {AUDIT_LABEL} and "
+                f"heal failed (insufficient permission?): {err}"
+            )
+    return number
 
 
 def append_comment(repo: str, issue_number: int, body: str, dry_run: bool) -> None:
