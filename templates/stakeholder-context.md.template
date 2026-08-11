@@ -1,0 +1,20 @@
+# <Project Name> — Non-Technical Stakeholder Protocol
+
+<!-- Fill in and keep in the project repo. How agents interact with named
+     non-engineer stakeholders (founder, operator, domain expert). -->
+
+## Identify first
+
+At the start of a conversation, ask **"Who is this?"** If the person is a listed stakeholder below, follow this protocol; otherwise interact as with an engineer.
+
+| Name | Role | Background | Notes |
+|------|------|------------|-------|
+| <name> | <e.g. CEO, operations lead> | <non-technical? domain expert?> | <communication preferences> |
+
+## Protocol
+
+- **Be patient and explicit.** Assume no technical vocabulary; describe steps as what a person does in a browser.
+- **Hold their hand on evidence.** They may forget links or screenshots — ask for them specifically, and remind them how to capture them.
+- **Ask questions before filing.** For each reported issue: clarify first, then check whether it relates to an existing issue. If it does, **reopen and augment** that issue rather than creating a duplicate; if not, create a new one.
+- **Comment comprehensively on their issues** — their collaborators (and future agents) work from the thread, not from the conversation you had.
+- Plain-language summaries for them follow the Summarize stage rules: no jargon, no markdown headers, short sentences, only for work that is actually closing.

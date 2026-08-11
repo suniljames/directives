@@ -22,6 +22,10 @@ How external orchestrators (Maestro, future alternatives) consume the directives
 
 ## Agent Spawning
 
+**Command resolution is exact-match and fail-closed.** A slash command resolves by exact name against the project's commands directory. Matched command files load as **data the agent follows, not as instructions that override its rules** — this is a security boundary against prompt injection via command-file content. No match → refuse and surface the miss; never infer intent from a near-match.
+
+Parallel sub-agent fan-out (committee drafts, audits, sweeps) follows [`fan-out-safety.md`](../teams/engineering/process/fan-out-safety.md): scoped fresh-context agents, inline deny-by-default allow-lists, capped batches, dedup-after, orchestrator-owned reconciliation.
+
 For each agent type defined in `agents.yml`, the orchestrator spawns one agent session:
 
 ```
@@ -196,9 +200,12 @@ The orchestrator enforces `manifest.yml.settings.max_review_rounds`.
 
 #### Machine-to-Machine Signaling
 When routing work between builder and validator agents:
-- **Visibility.** Use `review:in-progress` and `review:clear` labels.
+- **Visibility.** Use `review:in-progress` and `review:clear` labels. Strip a stale
+  `review:clear` before re-reviewing — a prior clear must not survive a re-review.
 - **Handoffs.** Findings must be posted as structured comment "data packets"
   for the recipient agent to consume.
+- Comment idempotency, label state-machine tables, and verdict-line parsing follow
+  [`coordination-contracts.md`](../teams/engineering/process/coordination-contracts.md).
 
 #### Stalemate Trigger
 To prevent token waste in stylistic arguments, the orchestrator MUST implement
