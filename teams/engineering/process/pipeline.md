@@ -32,7 +32,18 @@ In gated mode, the committee process pauses after Design and after Review to wai
 | **5. Deploy & Verify** (automatic) | Rebuild, health check, close issue | Running deployment | Issue closed |
 | **6. Summarize** (optional) | Plain-language stakeholder summary | Summary comment | `summarized` |
 
-Each agent implements this pipeline using its own tooling. The labels and artifacts are the shared contract — tooling is agent-specific.
+Each agent implements this pipeline using its own tooling. The labels and artifacts are the shared contract — tooling is agent-specific. Coordination mechanics (comment guards, label table shape, machine-readable verdicts): [`coordination-contracts.md`](coordination-contracts.md). How much process an issue gets (trivial vs full committee): [`scope-classification.md`](scope-classification.md).
+
+### Define: the discovery path
+
+`/define` accepts more than an issue number. Resolve the argument mechanically, in order: (1) an explicit or verified issue number → evaluate that issue; (2) an issue inferable from context; (3) free prose → **discovery**: turn a half-formed idea into a confirmed, well-formed issue *before* any design or code exists. On ambiguity, ask — never guess. Discovery rules:
+
+- **Duplicate research first**, before anything is drafted — if a match exists, present it and offer to switch.
+- **Question loops are capped** (≤2 rounds, ≤4 questions, each with a recommended option and an "you decide" escape). Unresolved items go to the PRD's Open Questions — the agent never invents answers.
+- **Provenance rule:** every factual claim in the draft traces to (a) the user's words, (b) a named executed check, or (c) is marked `(assumption)`.
+- **Show the complete draft; declined = nothing is filed.** No issue, no label, no comment.
+- Post via a body file, never shell-interpolated prose; guard the filing with a time-windowed duplicate search.
+- Discovery is for **product ideas**; dev chores go straight to a lightweight issue at Implement.
 
 ## Label Lifecycle
 
@@ -83,7 +94,24 @@ flaws, and advocate for architectural integrity.
 ### Fix-ALL Mandate
 The Builder MUST fix **ALL** findings from a `/review` (MUST-FIX, SHOULD-FIX,
 and NITs). Follow-up issues are reserved strictly for significant architectural
-shifts or feature expansions.
+shifts or feature expansions. Severity governs what *blocks*, not what gets
+fixed — see [`code-review-framework.md`](code-review-framework.md) → Severity Levels.
+
+### Merge & Close (Stage 4 exit)
+
+Merging and closing is a gate, not a formality; the validator context template's merge
+command implements it. Full contract: [`acceptance-and-close.md`](acceptance-and-close.md).
+
+- Pre-merge: repo-integrity check (fail-closed — if the check cannot run, abort), CI
+  verdict from the completed run at the exact SHA, and a **close-keyword scan over the PR
+  body AND every commit body** (a squash merge promotes commit text to where the
+  platform's close-parser reads it; the parser ignores negation).
+- Post-merge: deploy/health verification, then the **Acceptance Walkthrough** — one
+  evidence row per acceptance criterion, computed verdict, WAIVED never rounds to PASS.
+- Any bypass flag skips only advisory gates, never the integrity check, the keyword scan,
+  or the walkthrough; every bypass use emits an audit line.
+- The stakeholder summary runs only when the issue closes, and refuses to post over a
+  missing or FAIL walkthrough.
 
 ## Handoff Protocol
 
@@ -91,8 +119,13 @@ shifts or feature expansions.
 - **Structured artifacts** follow defined formats (see [`committee-process.md`](committee-process.md) for test spec format, [`prd-template.md`](prd-template.md) for PRDs).
 - **Label-driven coordination.** Agents check GitHub issue labels to determine which pipeline stage is complete before proceeding.
 - **Machine-to-Machine Signaling.** Use `review:in-progress` labels for
-  visibility and detailed comment "data packets" for handoffs.
+  visibility and detailed comment "data packets" for handoffs. Guard automated
+  comments per [`coordination-contracts.md`](coordination-contracts.md) (author-filtered,
+  typed semantics).
 - **Coordination log.** For multi-agent projects, use a [`WORKLOG.md`](../../../templates/worklog.md.template) to track current context and handoff state.
+- **Handoff artifacts ship inside the feature PR** (progress notes, worklog updates),
+  updated before review — a stale handoff file actively misinforms the next session, and
+  a separate bookkeeping PR is never worth a CI cycle.
 
 ## Implement Workflow (Stage 3)
 
@@ -101,24 +134,27 @@ shifts or feature expansions.
 - Verify dev services are running
 
 ### 2. Scaffold Tests (RED)
+0. **Acceptance-criteria drain hook:** if the issue body lacks an acceptance-criteria section, author one now, before any work exists ([`acceptance-and-close.md`](acceptance-and-close.md)). Keying the hook on missing state makes it self-extinguishing; running it before the work means the criteria describe intent, not the diff. If the body supports no falsifiable outcome, say so and stop — that is a design gap, not something to paper over with filler. (Self-written *test assertions* never satisfy acceptance criteria.)
 1. Read the **Test Specification** from the GitHub issue
 2. If no Test Specification: write 2-3 criteria from the issue description
 3. Write failing tests at appropriate layers (see [`test-budget.md`](test-budget.md))
-4. Commit: `test(#<issue>): scaffold failing tests`
-5. Run tests to confirm they fail correctly
+4. **Commit the failing tests before any feature code:** `test(#<issue>): scaffold failing tests`
+5. Run tests to confirm they fail correctly — **for bug fixes, the failing test must reproduce the user's exact symptom** and must not compute the value under test ([`framework/verification.md`](../../../framework/verification.md))
 
 > **Service tests first.** Start with the cheapest test layer — fastest, no UI dependency.
 
 ### 3. Implement (GREEN -> REFACTOR)
 - Write minimum code to pass tests
 - Run the full quality gate after each meaningful change
-- Refactor once green
+- Refactor once green — commit refactor-only passes separately (`refactor(#<issue>): ...`) so review can tell behavior change from cleanup
 - Commit early and often
 
 ### 4. Verify (pre-PR)
-- All tests GREEN
+- All tests GREEN — judged by the completed full run's machine verdict, not by re-running the tests you just fixed
 - Full quality gate passes (lint + typecheck + test + build)
-- **Automated Validator Bridge.** Invoke the validator provider's review command (the provider named in [`agents.yml`](../../../agents.yml)), read-only, in an isolated session.
+- **Irreversible-value check, answered in the PR body either way:** can this change alter, mis-date, mis-attribute, or silently drop a value that a critical downstream computation (pay, billing, retention) reads? Deliberately not scoped to files that look financial — the worst instances originate elsewhere in the input chain. If no: say so and name why there is no path. Silence is not the same claim.
+- **UI changes: visual-verify against the design before merge.** Structural tests, linters, and accessibility CI do not render pixels; classify every divergence explicitly rather than declaring any "close enough".
+- **Automated Validator Bridge.** Invoke the validator provider's review command (the provider named in [`agents.yml`](../../../agents.yml)), read-only, in an isolated session. Extract the verdict in the harness from a machine sentinel — never trust the agent's own summary; missing/ambiguous sentinel or non-zero exit reads BLOCK.
 - **Only proceed to Review if the Validator returns ALL CLEAR.**
 
 ## PR Slicing — fewest, not smallest
@@ -191,3 +227,20 @@ complete each phase as a separate PR, in the stated order.
 - **The main checkout must stay on `main`.** All feature work happens in isolated branches or worktrees.
 - **Issue-Number Worktree Naming.** Worktrees MUST be named with the issue
   number (e.g., `issue-1523`) for easy identification and session auditing.
+- **Never remove another session's worktree.** Parallel sessions cannot see which
+  worktrees are in use; stale worktrees are harmless, deleted live ones are not.
+
+### Git hazards (each has caused a real incident)
+
+- **Never add work to a squash-merged branch** — its commits are already on main under a
+  different SHA, and the next PR re-presents them. Detector:
+  `git rev-list --left-right --count origin/main...HEAD`.
+- **Diff against `origin/main`, not local `main`** — local main in a worktree clone goes
+  stale silently.
+- **Never pipe a commit command through `tail`/`grep`** — the pipe's exit code masks an
+  aborted commit, and the wrapper's "ok" line is not a commit. Trust only the moved HEAD;
+  before dispatching anything that verifies "the fix", assert the remote ref equals local
+  HEAD.
+- **Resolve conflicts by traced intent**: find each side's primary source and preserve
+  both intents — never resolve by which text looks newer, and never abort-and-force-push
+  over the other side's work.
