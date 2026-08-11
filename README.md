@@ -121,11 +121,15 @@ Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and voc
 
 ### Global framework
 
-Cross-team rules for how agents think and coordinate: [agent architecture](framework/agent-architecture.md), [orchestration](framework/orchestration.md), [reasoning](framework/reasoning-framework.md), [safety](framework/safety.md). For writing thin root configs with progressive disclosure, see [CLAUDE.md authoring](docs/claude-md-authoring.md) — root = behavioral rules + index only; detail in sub-documents.
+Cross-team rules for how agents think and coordinate: [agent architecture](framework/agent-architecture.md), [orchestration](framework/orchestration.md), [reasoning](framework/reasoning-framework.md), [safety](framework/safety.md), [data safety](framework/data-safety.md).
+
+Verification discipline — how to know work actually works: [verification](framework/verification.md) (force-red, independent instruments), [controls & detectors](framework/controls-and-detectors.md) (every control must be able to go RED), [diagnosis](framework/diagnosis.md) (no red-capable check, no theorizing), [prompt quality](framework/prompt-quality.md) (prompt files are process code).
+
+For writing thin root configs with progressive disclosure, see [CLAUDE.md authoring](docs/claude-md-authoring.md) — root = behavioral rules + index only; detail in sub-documents.
 
 ### Templates
 
-Starter files for new projects: [`CONTRIBUTING.md`](templates/CONTRIBUTING.md.template), [`CLAUDE.md`](templates/CLAUDE.md.template), [`GEMINI.md`](templates/GEMINI.md.template), [`worklog`](templates/worklog.md.template), [`pm-context`](templates/pm-context.md.template).
+Starter files for new projects: [`CONTRIBUTING.md`](templates/CONTRIBUTING.md.template), [`CLAUDE.md`](templates/CLAUDE.md.template), [`GEMINI.md`](templates/GEMINI.md.template), [`worklog`](templates/worklog.md.template), [`pm-context`](templates/pm-context.md.template), [`stakeholder-context`](templates/stakeholder-context.md.template), [`credentials`](templates/credentials.md.template).
 
 ### Provider configs
 
