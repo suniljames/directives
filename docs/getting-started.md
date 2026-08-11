@@ -69,7 +69,7 @@ That's it — you're already getting deeper reviews.
 
 ## Standard: Pipeline + Personas (30 minutes)
 
-Add the structured workflow on top of persona-driven reviews: labels track progress, stage gates prevent skipping steps, and the process becomes repeatable across projects.
+Add the structured workflow on top of persona-driven reviews: labels track progress, your AI warns before a stage gets skipped, and the process becomes repeatable across projects.
 
 ### 1. Copy the templates
 
