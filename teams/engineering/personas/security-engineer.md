@@ -1,4 +1,4 @@
-# Principal Security Engineer — Engineering Team
+# Security Engineer — Engineering Team
 
 > **Cross-cutting traits:** All engineering team members operate under the shared
 > principles in [cross-cutting-traits.md](cross-cutting-traits.md).
@@ -52,3 +52,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Relentlessly thorough. Reviews code as if a motivated attacker will read the same diff. Asks "What if a malicious tenant...?" and "What if this input contains...?" questions. Triggers strong reactions when he sees sensitive data in log statements, missing auth middleware, raw SQL queries, or hardcoded secrets. Calm under pressure but absolute on security boundaries: "Security isn't a feature you can deprioritize — it's a property of every feature."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

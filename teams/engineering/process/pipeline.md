@@ -4,6 +4,8 @@ End-to-end development lifecycle. Each stage produces artifacts the next stage c
 
 > **Canonical stage definitions:** [`manifest.yml`](../manifest.yml) — stages, labels, agent assignments.
 
+**Contents:** [Modes](#pipeline-modes) · [Stages](#stages) · [Labels](#label-lifecycle) · [Ad-hoc gate](#ad-hoc-work-gate) · [Who does what](#who-does-what) · [Handoffs](#handoff-protocol) · [Implement workflow](#implement-workflow-stage-3) · [PR slicing](#pr-slicing--fewest-not-smallest) · [Session isolation](#session-isolation)
+
 ## Pipeline Modes
 
 Projects choose one of two modes in their `CONTRIBUTING.md`:
@@ -13,13 +15,13 @@ Projects choose one of two modes in their `CONTRIBUTING.md`:
 | **Autonomous** | No human review gates. Pipeline runs end-to-end without stopping. | Solo AI agent, trusted automation |
 | **Gated** | Agents notify and wait for human authorization before creating PRs and merging. | Teams with human contributors, early-stage projects |
 
-Default: **autonomous**. To use gated mode, add to your project's `CONTRIBUTING.md`:
+Default: **autonomous**. To use gated mode, set the config marker in your project's `CONTRIBUTING.md` (the HTML-comment form is the one parsers read — the template ships with it):
 
 ```markdown
-pipeline-mode: gated
+<!-- pipeline-mode: gated -->
 ```
 
-In gated mode, the committee process pauses after Design and after Review to wait for human authorization. See [`committee-process.md`](committee-process.md) step 9.
+In gated mode, the committee process pauses at the authorization moment after Design ([`committee-process.md`](committee-process.md) step 8) and again after Review, waiting for human authorization.
 
 ## Stages
 
@@ -29,7 +31,7 @@ In gated mode, the committee process pauses after Design and after Review to wai
 | **2. Design** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
 | **3. Implement** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
 | **4. Review** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
-| **5. Deploy & Verify** (automatic) | Rebuild, health check, close issue | Running deployment | Issue closed |
+| **5. Deploy & Verify** | Rebuild, health check, close issue | Running deployment | — |
 | **6. Summarize** (optional) | Plain-language stakeholder summary | Summary comment | `summarized` |
 
 Each agent implements this pipeline using its own tooling. The labels and artifacts are the shared contract — tooling is agent-specific. Coordination mechanics (comment guards, label table shape, machine-readable verdicts): [`coordination-contracts.md`](coordination-contracts.md). How much process an issue gets (trivial vs full committee): [`scope-classification.md`](scope-classification.md).
@@ -99,8 +101,9 @@ fixed — see [`code-review-framework.md`](code-review-framework.md) → Severit
 
 ### Merge & Close (Stage 4 exit)
 
-Merging and closing is a gate, not a formality; the validator context template's merge
-command implements it. Full contract: [`acceptance-and-close.md`](acceptance-and-close.md).
+Merging and closing is a gate, not a formality; the `/review` command runs it at merge
+time (the [starter command](../../../templates/commands/review.md) carries the core
+checks). Full contract: [`acceptance-and-close.md`](acceptance-and-close.md).
 
 - Pre-merge: repo-integrity check (fail-closed — if the check cannot run, abort), CI
   verdict from the completed run at the exact SHA, and a **close-keyword scan over the PR
@@ -244,3 +247,6 @@ complete each phase as a separate PR, in the stated order.
 - **Resolve conflicts by traced intent**: find each side's primary source and preserve
   both intents — never resolve by which text looks newer, and never abort-and-force-push
   over the other side's work.
+
+---
+[← Process index](README.md) · [README](../../../README.md)

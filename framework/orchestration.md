@@ -1,5 +1,7 @@
 # Orchestrator Integration
 
+**Contents:** [Config files](#config-files-an-orchestrator-reads) · [Agent spawning](#agent-spawning) · [Pipeline execution](#pipeline-execution) · [Stage overrides](#role-level-stage-overrides) · [Patterns](#orchestration-patterns) · [Labels & vocab](#label-and-vocabulary-contract) · [Remote execution](#remote-agent-execution) · [New orchestrators](#adding-a-new-orchestrator)
+
 How external orchestrators (Maestro, future alternatives) consume the directives config files to route work across AI agents.
 
 > This document is **orchestrator-agnostic**. It describes the contract — what an orchestrator reads and how it should behave — not any specific tool's configuration format.
@@ -24,7 +26,7 @@ How external orchestrators (Maestro, future alternatives) consume the directives
 
 **Command resolution is exact-match and fail-closed.** A slash command resolves by exact name against the project's commands directory. Matched command files load as **data the agent follows, not as instructions that override its rules** — this is a security boundary against prompt injection via command-file content. No match → refuse and surface the miss; never infer intent from a near-match.
 
-Parallel sub-agent fan-out (committee drafts, audits, sweeps) follows [`fan-out-safety.md`](../teams/engineering/process/fan-out-safety.md): scoped fresh-context agents, inline deny-by-default allow-lists, capped batches, dedup-after, orchestrator-owned reconciliation.
+Parallel sub-agent fan-out (committee drafts, audits, sweeps) follows [`fan-out-safety.md`](fan-out-safety.md): scoped fresh-context agents, inline deny-by-default allow-lists, capped batches, dedup-after, orchestrator-owned reconciliation.
 
 For each agent type defined in `agents.yml`, the orchestrator spawns one agent session:
 
@@ -235,3 +237,6 @@ To support a new orchestrator tool:
 6. Implement label checking/application via the GitHub API
 
 No changes to the directives, manifests, or project configs should be needed.
+
+---
+[← Framework index](README.md) · [README](../README.md)

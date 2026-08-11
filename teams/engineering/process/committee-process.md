@@ -2,6 +2,8 @@
 
 > **How to read this:** This document defines the protocol for multi-persona reviews of GitHub issues and PRs. The [committee](../../../docs/glossary.md) is your team's full roster of [personas](../../../docs/glossary.md) reviewing work in sequence. Start with Core Principles, then read Process for the step-by-step flow.
 
+**Contents:** [Principles](#core-principles) · [Members](#committee-members) · [Protocol](#review-protocol) · [Process](#process) · [Mockups](#ux-mockup-generation-uiux-changes-only) · [Consensus](#overwrite-to-final-consensus) · [Fresh eyes](#fresh-eyes-validation) · [Authorization](#authorization-moment) · [Test spec](#test-specification-format)
+
 ## Core Principles
 
 1. **Sequential review** — Members post in strict order. Each reads all prior comments first. This builds cumulative insight — later reviewers can build on, challenge, or extend earlier observations rather than duplicating them.
@@ -37,7 +39,7 @@ Two roster rules:
 
 ## Review Protocol
 
-- Members post in strict order, each reading all prior comments first. (A committee may instead draft in parallel batches for speed — if so, the fan-out follows [fan-out-safety.md](fan-out-safety.md): plan posted before the batch, set-based reconciliation before synthesis.)
+- Members post in strict order, each reading all prior comments first. (A committee may instead draft in parallel batches for speed — if so, the fan-out follows [fan-out-safety.md](../../../framework/fan-out-safety.md): plan posted before the batch, set-based reconciliation before synthesis.)
 - A member may reference, agree with, challenge, or build on any prior point.
 - **Member convergence is zero evidence of correctness** — every seat is reasoning from the same issue text, not from the system. Independent confirmation requires an independent instrument (reproduction, the codebase, production data).
 - **Before coining any user-facing term, action name, or status label, check how the product already says it** for the nearest analogous object, and cite the precedent.
@@ -192,3 +194,6 @@ Escalate to the committee when:
 - Cache behavior causes data inconsistency
 
 Committee analysis covers: SRE (observability, rollback), Architecture (config management), Security (audit trail), Data (analytics impact).
+
+---
+[← Process index](README.md) · [README](../../../README.md)

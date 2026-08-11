@@ -58,7 +58,7 @@ A chain of exploratory file reads to trace a call path costs more tokens than on
 
 Each provider reads its own root context file (example: Claude Code reads `CLAUDE.md`; Gemini CLI reads `GEMINI.md`). If a project contains a counterpart provider's context file at its root, treat it as equivalent context authority to your own — it defines identity, pipeline commands, session isolation rules, and role scope for that agent. When configuring a counterpart session, include this equivalence instruction in the session primer or in that provider's context file itself.
 
-See [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) for a worked template (Gemini example).
+See [`providers/antigravity/GEMINI-template.md`](../providers/antigravity/GEMINI-template.md) for a worked template.
 
 ### Model Selection
 
@@ -121,3 +121,6 @@ The committee lead synthesizes feedback into a final plan that balances quality 
 1. If a coordination log exists, update it with what you did and next steps
 2. Verify all review checklist items passed
 3. Report completion status to the user
+
+---
+[← Framework index](README.md) · [README](../README.md)

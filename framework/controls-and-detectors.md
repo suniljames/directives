@@ -52,3 +52,6 @@ Recurring shapes, each found in production (all read green while checking nothin
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [verification.md](verification.md).*
+
+---
+[← Framework index](README.md) · [README](../README.md)

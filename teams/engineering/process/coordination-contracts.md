@@ -45,4 +45,7 @@ A verdict, walkthrough, or report that "someone will check" is unfinished. Name 
 - **Verify prior steps landed from version-control history, not prose.** A later change claiming an earlier one shipped is not evidence. A step that is a pure data operation leaves no commit and still needs an auditable record.
 
 ---
-*Distilled from a production multi-agent codebase, 2026-08. See also: [acceptance-and-close.md](acceptance-and-close.md), [fan-out-safety.md](fan-out-safety.md).*
+*Distilled from a production multi-agent codebase, 2026-08. See also: [acceptance-and-close.md](acceptance-and-close.md), [fan-out-safety.md](../../../framework/fan-out-safety.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

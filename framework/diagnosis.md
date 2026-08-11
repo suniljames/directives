@@ -38,3 +38,6 @@ Remove tagged probes; leave the regression test. Then answer: **which verificati
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08 (structure adapted from the mattpocock/skills bug-diagnosis discipline). See also: [reasoning-framework.md](reasoning-framework.md) → Diagnose mode.*
+
+---
+[← Framework index](README.md) · [README](../README.md)

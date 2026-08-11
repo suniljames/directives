@@ -44,3 +44,6 @@ Proving a test can fail is part of writing it.
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [controls-and-detectors.md](controls-and-detectors.md), [diagnosis.md](diagnosis.md).*
+
+---
+[← Framework index](README.md) · [README](../README.md)

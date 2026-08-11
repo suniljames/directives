@@ -1,6 +1,6 @@
 # CLAUDE.md Authoring Guide
 
-How to write `CLAUDE.md` files that stay lean, load the right context, and don't accumulate clutter over time.
+For whoever maintains your project's AI config files — skip this if you're evaluating the system. A `CLAUDE.md` is the config file Claude Code reads at the start of every session (other providers read their own equivalent); this guide keeps those files lean, loading the right context without accumulating clutter.
 
 ---
 
@@ -17,7 +17,7 @@ The root `CLAUDE.md` has one job: behavioral rules and an index. Nothing else.
 **What does not belong in the root:**
 - Inline implementation detail ("when doing migrations, always run `make migrate-pg`")
 - Environment setup instructions longer than one line
-- Rule lists that exceed ~10 bullets
+- Rule lists that exceed 8 bullets (the checklist limit below)
 - Anything that only applies to one workflow or one file type
 
 If you find yourself writing a paragraph of inline rules, that content belongs in a sub-document. Link to it from the index table.
@@ -75,20 +75,9 @@ Use this to audit an existing `CLAUDE.md` or review a new one before merging.
 
 ---
 
-## Security Note: Third-Party Hooks and Permission Settings
+## Security Note: Third-Party Hooks
 
-Before enabling third-party tools as Claude Code hooks, consider the interaction with your settings:
-
-**The compound risk:** `skipDangerousModePermissionPrompt: true` removes the confirmation gate for destructive operations. Adding a third-party hook (such as an output interceptor) on top of an already-permissive configuration means both layers trust each other without independent verification.
-
-**When wiring a new hook:**
-1. Read the hook source before installing — especially for tools that intercept all shell output
-2. Verify provenance: pinned version + checksum, ideally with a published release on a known-good registry
-3. Make hooks fail-open (`exec hook-binary || exit 0`) so a crashed hook binary doesn't block agent execution
-4. Understand the scope: a `PostToolUse` hook on Bash receives output from **every** shell command in the session — not just the specific tool that triggered it. This includes commands that surface environment variables, API responses, file contents, or data query results. Scope your hook's processing accordingly.
-5. Document the tradeoff in your project's `SAFETY.md` or equivalent: what you gave up and why it was worth it
-
-See [`framework/safety.md`](../framework/safety.md) for the framework-level safety rules this doc extends.
+Hook security rules moved to [`framework/safety.md` → Third-Party Hooks](../framework/safety.md#third-party-hooks-and-permission-settings) — they are safety policy, not authoring style.
 
 ---
 
@@ -96,4 +85,7 @@ See [`framework/safety.md`](../framework/safety.md) for the framework-level safe
 
 - [`framework/safety.md`](../framework/safety.md) — framework safety rules
 - [`framework/reasoning-framework.md`](../framework/reasoning-framework.md) — how agents navigate code and switch providers
-- [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md) — a validator provider's equivalent of this config (Gemini example)
+- [`providers/antigravity/GEMINI-template.md`](../providers/antigravity/GEMINI-template.md) — a validator provider's equivalent of this config
+
+---
+[← Docs index](README.md) · [README](../README.md)

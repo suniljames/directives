@@ -32,3 +32,6 @@ Strictly detect-and-file — **never delete or edit code in a pruning pass**.
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [`framework/prompt-quality.md`](../../../framework/prompt-quality.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

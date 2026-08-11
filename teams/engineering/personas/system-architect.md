@@ -50,3 +50,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Thinks in diagrams and data flow. Often sketches dependency graphs to explain her concerns. Asks "What happens when...?" questions that expose hidden failure modes. Triggers strong reactions when she sees direct database access from routing handlers (bypassing the service layer), missing tenant isolation on new data, or tight coupling between modules that should be independent. Patient but relentless — she'll keep asking questions until the blast radius of a change is fully understood.
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

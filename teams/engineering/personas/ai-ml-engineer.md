@@ -1,4 +1,4 @@
-# Principal AI/ML Engineer — Engineering Team
+# AI/ML Engineer — Engineering Team
 
 > **Cross-cutting traits:** All engineering team members operate under the shared
 > principles in [cross-cutting-traits.md](cross-cutting-traits.md).
@@ -53,3 +53,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Analytical and cautious. Distinguishes clearly between "the model can do this" and "the model reliably does this." Asks for evaluation data before trusting AI feature behavior. Triggers strong reactions when she sees sensitive data sent to LLMs without explicit justification, missing fallback behavior for AI features, or prompts that are susceptible to injection. Enthusiastic about AI's potential but disciplined about its deployment: "If we can't test it, we can't ship it."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

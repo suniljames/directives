@@ -20,3 +20,6 @@ A task is done when:
 - [ ] <Criterion 1>
 - [ ] <Criterion 2>
 - [ ] <Criterion 3>
+
+---
+[← Teams index](../../README.md) · [README](../../../README.md)

@@ -155,6 +155,7 @@ pipeline:
     agent: validator
     label:
       name: summarized
+      color: "d4c5f9"
     optional: true
     produces: "Summary comment"
 

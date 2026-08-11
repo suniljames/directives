@@ -27,3 +27,6 @@ Every test should run at the **cheapest layer** that still validates the behavio
 - New E2E tests require justification (why can't this be a cheaper layer?).
 - Layer decisions happen during committee review (QA Engineer assigns in Test Specification).
 - The quality gate must stay fast. If the pipeline takes longer than 10 minutes, treat it as a blocking issue.
+
+---
+[← Process index](README.md) · [README](../../../README.md)

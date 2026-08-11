@@ -33,4 +33,7 @@ Parallel sessions share more than you think:
 - **Re-check whether a parallel session already fixed your issue** — at start, and again before shipping. Land only the non-redundant delta.
 
 ---
-*Distilled from a production multi-agent codebase, 2026-08. See also: [committee-process.md](committee-process.md), [`framework/orchestration.md`](../../../framework/orchestration.md).*
+*Distilled from a production multi-agent codebase, 2026-08. See also: [orchestration.md](orchestration.md), [committee-process.md](../teams/engineering/process/committee-process.md).*
+
+---
+[← Framework index](README.md) · [README](../README.md)

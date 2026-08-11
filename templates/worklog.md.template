@@ -1,3 +1,7 @@
+<!-- Copy this file to your project root as WORKLOG.md when multiple agents hand
+     work off across sessions. Both agents and humans update it; it holds the "now"
+     state, never history. -->
+
 # WORKLOG: Multi-Agent Coordination
 
 **Workflow**: All agents follow the [reasoning framework](https://github.com/suniljames/directives/blob/main/framework/reasoning-framework.md).
@@ -7,10 +11,10 @@
 ---
 
 ## Current Context: <Task Name> (<Issue #>) (<Date>)
-**Status:** In Progress | Complete | Blocked
+**Status:** <pick one: In Progress | Complete | Blocked>
 **Goal:** <One-line description>
 **Active Agent:** <Agent name>
-**Mode:** Implementation | Design | Investigation
+**Pipeline stage:** <the current stage from your team's manifest, e.g. Design, Implement>
 
 ### Recent Changes (<Agent Name>)
 - <What was just completed>
@@ -32,10 +36,8 @@
 5. If unclear or mismatch with user request, ask for clarification
 
 **AFTER completing work:**
-1. CLEAR the "Recent Changes" section
-2. WRITE a concise summary of what YOU just did
-3. UPDATE "Immediate Next Steps" with remaining work
-4. KEEP IT CONCISE — delete old completed items
+1. Clear the "Recent Changes" section and write a concise summary of what you just did
+2. Update "Immediate Next Steps" with remaining work, deleting completed items
 
 ### For Human Developers
 

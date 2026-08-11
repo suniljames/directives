@@ -1,3 +1,7 @@
+<!-- Copy this file to your project as docs/developer/pm-context.md and fill every
+     <slot>. It gives the PM persona your product's domain knowledge at /define time.
+     A founder can fill this in personally — no technical sections are required. -->
+
 # PM Persona Context — <Project Name>
 
 ## Domain
@@ -18,24 +22,24 @@
 | Primary User | Description | Needs |
 | Secondary User | Description | Needs |
 
-## Privacy / Data Model
+## Privacy / Who Sees What
 
-<Describe the data visibility model — who can see what, default access levels, special rules.>
+<Who can see which data, default access levels, special rules.>
 
 ## Compliance
 
-<List applicable regulatory frameworks: HIPAA, FERPA, COPPA, SOC 2, GDPR, etc.>
+<List applicable regulatory frameworks — e.g. healthcare privacy (HIPAA), education records (FERPA), children's data (COPPA), security attestation (SOC 2), EU data protection (GDPR).>
 
 **Hard rules:**
 - <Non-negotiable constraint 1>
 - <Non-negotiable constraint 2>
 
-## Decision Heuristics
+## Rules of Thumb
 
-<Rules of thumb for product decisions — what to default to when uncertain.>
+<What to default to when a product decision is uncertain.>
 
-- <Heuristic 1>
-- <Heuristic 2>
+- <Rule of thumb 1>
+- <Rule of thumb 2>
 
 ## Anti-Patterns
 
@@ -46,7 +50,7 @@
 
 ## Product Phase
 
-<Current phase — early prototype, beta, GA, mature. Calibrate scope expectations.>
+<Current phase — early prototype, beta, generally available, mature — so scope expectations stay calibrated.>
 
 ## Communication Channels
 

@@ -28,4 +28,7 @@ Print the classification verdict **before any money or review time is spent**: m
 The lightweight path still produces its artifacts (test-spec stub, acceptance criteria, audit comment) — it skips deliberation, not evidence. If the issue body supports no falsifiable acceptance criterion, that is itself the signal it is not trivial: reclassify rather than invent filler.
 
 ---
-*Distilled from a production multi-agent codebase, 2026-08. See also: [committee-process.md](committee-process.md), [fan-out-safety.md](fan-out-safety.md).*
+*Distilled from a production multi-agent codebase, 2026-08. See also: [committee-process.md](committee-process.md), [fan-out-safety.md](../../../framework/fan-out-safety.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

@@ -1,3 +1,7 @@
+<!-- Copy this file to your project root as CONTRIBUTING.md and fill every <slot>
+     and TODO. The HTML comments below are CONFIGURATION, not decoration — AI agents
+     and orchestrators read them to resolve your team, pipeline mode, and providers. -->
+
 # <Project Name> — Developer Guide
 
 <One-line description of the project.>
@@ -7,6 +11,11 @@ This project follows the [engineering directives](https://github.com/suniljames/
 <!-- team: engineering -->
 <!-- pipeline-mode: autonomous -->
 <!-- Options: autonomous (default) | gated (human authorization gates) -->
+<!-- provider-overrides: none -->
+<!-- Optional: override agents.yml's provider mapping for this project,
+     e.g. provider-overrides: {validator: claude-code} -->
+<!-- overlays: none -->
+<!-- Optional: domain overlays this project applies, e.g. overlays: healthcare -->
 
 ## Tech Stack
 

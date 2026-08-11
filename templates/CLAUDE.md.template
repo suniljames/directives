@@ -1,8 +1,13 @@
-# <Project Name> — Claude Code Agent Config
+<!-- Copy this file to your project root as CLAUDE.md (the config Claude Code reads
+     every session) and fill every <slot>. Create the five docs/developer files it
+     lists, or delete the rows you don't need. Authoring rules:
+     https://github.com/suniljames/directives/blob/main/docs/claude-md-authoring.md -->
 
-By default you are the **builder** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
+# <Project Name> — Claude Code Config
 
-> **Role is not fixed.** Builder is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If the default validator provider (named in `agents.yml`) is unavailable — rate-limited or out of credits — assume the **validator** role per the `fallback_order` in `agents.yml`: run an independent review in an isolated session ("You did NOT create this work"), e.g. via `/code-review --comment`. See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
+By default you are the **builder** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first, then the [engineering directives](https://github.com/suniljames/directives).
+
+> **Role is not fixed.** Builder is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If the default validator provider is unavailable (rate-limited or out of credits), assume the **validator** role per the `fallback_order` in `agents.yml`. That means running `/review` in a fresh, isolated session, primed with "You did NOT create this work." See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns

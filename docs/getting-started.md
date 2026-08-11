@@ -2,13 +2,19 @@
 
 Set up this system in your project. You can adopt the full [pipeline](glossary.md) or start with just the pieces that help most — each level builds on the last, so you're never locked into a decision.
 
+**Contents:** [Prerequisites](#prerequisites) · [Quick Start (15 min)](#quick-start-persona-driven-reviews-15-minutes) · [Standard (30 min)](#standard-pipeline--personas-30-minutes) · [Full System (1 hr)](#full-system-multi-agent-setup-1-hour) · [Customizing](#customizing-personas) · [Other teams](#beyond-engineering) · [Overlays](#adding-domain-overlays) · [Troubleshooting](#troubleshooting)
+
 ---
 
 ## Prerequisites
 
-- A GitHub repository
+- A GitHub repository, and an account that can create labels on it
 - At least one AI tool (Claude Code, Antigravity CLI, Cursor, ChatGPT, etc.)
+- The [`gh` command-line tool](https://cli.github.com) (for label setup, and the pipeline commands use it for GitHub operations)
+- A local copy of this repo to copy templates from: `git clone https://github.com/suniljames/directives`
 - Familiarity with the [key concepts](concepts.md)
+
+**Link or fork?** Decide once, up front. **Link** (the default): your project references persona and process files in this repo by URL, so improvements flow to you automatically. **Fork**: copy the repo into your org when you want to customize personas, teams, or process — your fork becomes your source of truth. Everything below works identically either way.
 
 ---
 
@@ -30,7 +36,7 @@ Use [persona](glossary.md) definitions to improve AI reviews. No config files, n
 
 ### Pick your personas
 
-Browse [`teams/engineering/personas/`](../teams/engineering/personas/). You don't need all 11. Match your biggest gaps:
+Browse the [persona index](../teams/engineering/personas/README.md). You don't need all 11 — the nine below are the review lenses; the other two (Engineering Manager, PM) run the pipeline rather than review work. Match your biggest gaps:
 
 | Worried about... | Use |
 |---|---|
@@ -46,26 +52,28 @@ Browse [`teams/engineering/personas/`](../teams/engineering/personas/). You don'
 
 ### Use them in your prompts
 
-Copy-paste this into your AI tool:
+Paste the **full text of the persona file** into your AI tool along with the request (if your tool can fetch URLs, the link alone works too):
 
 ```
-Review this PR as the Security Engineer described in:
-https://github.com/suniljames/directives/blob/main/teams/engineering/personas/security-engineer.md
-
+Review this PR as the Security Engineer described below.
 Categorize findings as MUST-FIX, SHOULD-FIX, or NIT.
+
+[paste the contents of teams/engineering/personas/security-engineer.md here]
 ```
 
 **Expected output:** Instead of *"Looks good, maybe add some tests"*, you'll get targeted findings like *"MUST-FIX: This endpoint accepts user input at line 47 without sanitization. SQL injection via the `name` parameter."*
 
-That's it — you're already getting deeper reviews. The persona file gives the AI a professional identity to reason from, which changes the quality of its feedback dramatically.
+That's it — you're already getting deeper reviews.
 
 ---
 
 ## Standard: Pipeline + Personas (30 minutes)
 
-Add the structured workflow on top of persona-driven reviews: labels track progress, stage gates prevent skipping steps, and the process becomes repeatable across projects.
+Add the structured workflow on top of persona-driven reviews: labels track progress, your AI warns before a stage gets skipped, and the process becomes repeatable across projects.
 
 ### 1. Copy the templates
+
+Run from your clone of this repo (`your-project` = the path to your own project):
 
 ```bash
 cp templates/CONTRIBUTING.md.template  your-project/CONTRIBUTING.md
@@ -74,7 +82,7 @@ cp templates/CLAUDE.md.template        your-project/CLAUDE.md
 
 ### 2. Set your pipeline mode
 
-Edit `CONTRIBUTING.md` to declare which team this project belongs to and how much human involvement the pipeline requires:
+The copied `CONTRIBUTING.md` already contains these two config markers — set their values to declare which team this project belongs to and how much human involvement the pipeline requires:
 
 ```markdown
 <!-- team: engineering -->
@@ -90,24 +98,20 @@ Edit `CONTRIBUTING.md` to declare which team this project belongs to and how muc
 
 Templates have `TODO` markers for your tech stack, dev environment, and project docs. Fill these in so the AI has the context it needs to work effectively in your project.
 
-### 4. Create slash commands
+### 4. Install the slash commands
 
-Each pipeline stage maps to a slash command. Create these files in your project:
+Each pipeline stage maps to a slash command — a saved prompt file your AI tool loads. **Ready-made starters ship in this repo**; copy all five, again from your clone of this repo (example path shown for Claude Code, adjust for your tool):
 
-```
-.claude/commands/
-  define.md     # /define — Define requirements (PRD)
-  design.md     # /design — Committee design review
-  implement.md  # /implement — Quality-first implementation
-  review.md     # /review — Committee review & integrate
-  summarize.md  # /summarize — Stakeholder summary
+```bash
+mkdir -p your-project/.claude/commands
+cp templates/commands/{define,design,implement,review,summarize}.md  your-project/.claude/commands/
 ```
 
-See [pipeline docs](../teams/engineering/process/pipeline.md) for what each stage produces and the artifacts that flow between them.
+Then open your copy of `implement.md` and fill in the one marked slot: your project's quality-gate command. What each command does and how to customize: [Commands](commands.md). What each stage produces: [pipeline docs](../teams/engineering/process/pipeline.md).
 
 ### 5. Set up labels
 
-The pipeline uses GitHub labels to track which stages are complete. Create them once per repository:
+The pipeline uses GitHub labels to track which stages are complete. Names and colors come from the [manifest](../teams/engineering/manifest.yml); create them once per repository:
 
 ```bash
 gh label create "define-reviewed" --color "6f42c1" --repo your-org/your-repo
@@ -115,7 +119,6 @@ gh label create "design-complete" --color "0e8a16" --repo your-org/your-repo
 gh label create "implementing"    --color "fbca04" --repo your-org/your-repo
 gh label create "merged"          --color "6e5494" --repo your-org/your-repo
 gh label create "summarized"      --color "d4c5f9" --repo your-org/your-repo
-gh label create "ai:autonomous"   --color "1d76db" --repo your-org/your-repo
 ```
 
 ### What the flow looks like
@@ -134,10 +137,10 @@ sequenceDiagram
     AI->>GH: Add design-complete label
     You->>AI: /implement 42
     AI->>AI: Write failing tests, implement until green
-    AI->>GH: Push feature branch
+    AI->>GH: Push branch, open PR
     You->>AI: /review
-    AI->>GH: Create PR, run committee review, integrate
-    AI->>GH: Close issue
+    AI->>GH: Committee review, merge, walk acceptance criteria
+    AI->>GH: Confirm the linked issue closed
 ```
 
 ---
@@ -161,7 +164,7 @@ assignments:
 
 Create the validator provider's context file in your project (each provider reads its own root config — example: `GEMINI.md` for Gemini CLI). This file primes the validator so it knows its role, pipeline commands, and session isolation rules.
 
-For the full 5-section reference template (Gemini example): [`providers/gemini/GEMINI-template.md`](../providers/gemini/GEMINI-template.md)
+For the full 5-section reference template (Antigravity example): [`providers/antigravity/GEMINI-template.md`](../providers/antigravity/GEMINI-template.md)
 For a minimal starter: [`templates/GEMINI.md.template`](../templates/GEMINI.md.template)
 
 The full template covers:
@@ -180,7 +183,9 @@ roles:
   - id: security-engineer
     agent: validator        # Runs on the validator (Antigravity)
   - id: software-engineer
-    agent: builder          # Runs on the builder (Claude)
+    agent: builder          # Runs on the builder (Claude)...
+    stages:
+      review-merge: validator   # ...but reviews as validator at the Review stage
 ```
 
 ### 4. Single-provider fallback
@@ -202,11 +207,11 @@ The key: **never share conversation history** between sessions. The validator's 
 
 ## Customizing Personas
 
-**Add a persona:** Create `teams/engineering/personas/your-role.md` following the [template](../teams/TEMPLATE/personas/example-role.md), then add the role to `manifest.yml`. The template includes all the fields the system expects: backstory, expertise, review lens, and interaction style.
+**Add a persona:** In your fork, create `teams/engineering/personas/your-role.md` following the [template](../teams/new-team-template/personas/example-role.md), then add the role to `manifest.yml`. (Customizing personas requires the fork path — see Prerequisites. Improvements that are generic are welcome upstream too.) The template includes all the fields the system expects: backstory, expertise, review lens, and interaction style.
 
 **Change review order:** Edit `review_order` in the manifest. The order matters because each persona reads all prior feedback — later reviewers build on earlier observations. Engineering Manager is always last (`review_order: last`) because they synthesize everything.
 
-**Create a new team:** Copy `teams/TEMPLATE/` → `teams/your-team/`. See the [template manifest](../teams/TEMPLATE/manifest.yml) for field docs.
+**Create a new team:** Copy `teams/new-team-template/` → `teams/your-team/`. See the [template manifest](../teams/new-team-template/manifest.yml) for field docs.
 
 ---
 
@@ -214,7 +219,7 @@ The key: **never share conversation history** between sessions. The validator's 
 
 The system is team-agnostic — engineering is the first fully-built team, but the same structure works for any team that benefits from structured review. To create a non-engineering team:
 
-1. **Copy the template:** `cp -r teams/TEMPLATE teams/sales`
+1. **Copy the template:** `cp -r teams/new-team-template teams/sales`
 2. **Define personas:** What roles review work on your team?
 
    | Role | Focus |
@@ -237,7 +242,7 @@ Domain-specific requirements (healthcare, fintech) can be layered on top of the 
 
 ```
 overlays/
-  healthcare/        # HIPAA, PHI handling, patient safety
+  healthcare/        # HIPAA, PHI handling
   your-domain/       # Your domain-specific rules
 ```
 
@@ -261,11 +266,11 @@ your-project/
       summarize.md          # /summarize command
   docs/
     developer/
-      review-lenses.md      # Domain-specific review checklists
+      code-review-lenses.md # Domain-specific review checklists
       project-context.md    # Project-specific persona knowledge
 ```
 
-Link to directives, don't copy. Your project references the persona files and process docs in this repo — that way updates flow automatically.
+On the link path (see Prerequisites), your project references the persona files and process docs in this repo by URL — updates flow automatically. On the fork path, the references point at your fork instead.
 
 ---
 
@@ -273,7 +278,7 @@ Link to directives, don't copy. Your project references the persona files and pr
 
 **"My AI doesn't follow the persona well"** — Provide the full persona file, not just the role name. The backstory and interaction style are what anchor the AI's decisions — without them, you're just asking for a generic review.
 
-**"The pipeline feels heavy for small changes"** — Use the ad-hoc work gate. The pipeline warns when you skip stages but doesn't block you. For quick fixes, skip straight to implementation — you'll be asked to confirm, and a note is added to the PR.
+**"The pipeline feels heavy for small changes"** — Skip stages deliberately. For quick fixes, go straight to implementation: the [ad-hoc work gate](../teams/engineering/process/pipeline.md#ad-hoc-work-gate) will warn that earlier stages didn't run, you answer "proceed anyway", and your AI records the skipped stages in the PR description.
 
 **"I only have one AI tool"** — See [single-provider fallback](#4-single-provider-fallback) above. Quick start persona reviews work with any single tool, and even the Standard level works fine with one provider.
 
@@ -281,12 +286,17 @@ Link to directives, don't copy. Your project references the persona files and pr
 
 ## Next Steps
 
+- [Commands](commands.md) — What the slash commands are and how to customize them
+- [Cost & Requirements](cost-and-requirements.md) — What running the pipeline costs
 - [Key Concepts](concepts.md) — Reference for all terminology
-- [Why This Architecture?](why.md) — Philosophy behind these decisions
+- [Why This Architecture?](why.md) — The business case behind these decisions
 - [Glossary](glossary.md) — Definitions for every term
 - [Pipeline details](../teams/engineering/process/pipeline.md) — Deep dive into each stage
 - [Committee process](../teams/engineering/process/committee-process.md) — How the review protocol works
 - [Acceptance & the close gate](../teams/engineering/process/acceptance-and-close.md) — How "done" is decided and verified
-- [Fan-out safety](../teams/engineering/process/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
+- [Fan-out safety](../framework/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
 - [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
-- [Provider config example (Gemini)](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup
+- [Provider config example (Antigravity)](../providers/antigravity/GEMINI-template.md) — Full reference template for validator agent setup
+
+---
+[← Docs index](README.md) · [README](../README.md)
