@@ -73,7 +73,7 @@ If either label is missing, warn:
 If confirmed, add a note to the PR description:
 > **Note:** This PR skipped the following lifecycle stages: ...
 
-This gate is advisory — it warns and asks for confirmation, but does not hard-block.
+This gate is advisory — it warns and asks for confirmation, but does not hard-block. In autonomous mode there is nobody to answer the prompt: record the warning in the PR description and proceed.
 
 ## Who Does What
 
@@ -136,7 +136,7 @@ command implements it. Full contract: [`acceptance-and-close.md`](acceptance-and
 ### 2. Scaffold Tests (RED)
 0. **Acceptance-criteria drain hook:** if the issue body lacks an acceptance-criteria section, author one now, before any work exists ([`acceptance-and-close.md`](acceptance-and-close.md)). Keying the hook on missing state makes it self-extinguishing; running it before the work means the criteria describe intent, not the diff. If the body supports no falsifiable outcome, say so and stop — that is a design gap, not something to paper over with filler. (Self-written *test assertions* never satisfy acceptance criteria.)
 1. Read the **Test Specification** from the GitHub issue
-2. If no Test Specification: write 2-3 criteria from the issue description
+2. If no Test Specification: derive minimal Given/When/Then assertions from the issue description — a test-spec stopgap, distinct from acceptance criteria ([`acceptance-and-close.md`](acceptance-and-close.md) separates the two altitudes)
 3. Write failing tests at appropriate layers (see [`test-budget.md`](test-budget.md))
 4. **Commit the failing tests before any feature code:** `test(#<issue>): scaffold failing tests`
 5. Run tests to confirm they fail correctly — **for bug fixes, the failing test must reproduce the user's exact symptom** and must not compute the value under test ([`framework/verification.md`](../../../framework/verification.md))
@@ -152,7 +152,7 @@ command implements it. Full contract: [`acceptance-and-close.md`](acceptance-and
 ### 4. Verify (pre-PR)
 - All tests GREEN — judged by the completed full run's machine verdict, not by re-running the tests you just fixed
 - Full quality gate passes (lint + typecheck + test + build)
-- **Irreversible-value check, answered in the PR body either way:** can this change alter, mis-date, mis-attribute, or silently drop a value that a critical downstream computation (pay, billing, retention) reads? Deliberately not scoped to files that look financial — the worst instances originate elsewhere in the input chain. If no: say so and name why there is no path. Silence is not the same claim.
+- **Irreversible-value check, answered in the PR body either way:** can this change alter, mis-date, mis-attribute, or silently drop a value that a critical downstream computation (pay, billing, data-retention obligations) reads? Deliberately not scoped to files that look financial — the worst instances originate elsewhere in the input chain. If no: say so and name why there is no path. Silence is not the same claim.
 - **UI changes: visual-verify against the design before merge.** Structural tests, linters, and accessibility CI do not render pixels; classify every divergence explicitly rather than declaring any "close enough".
 - **Automated Validator Bridge.** Invoke the validator provider's review command (the provider named in [`agents.yml`](../../../agents.yml)), read-only, in an isolated session. Extract the verdict in the harness from a machine sentinel — never trust the agent's own summary; missing/ambiguous sentinel or non-zero exit reads BLOCK.
 - **Only proceed to Review if the Validator returns ALL CLEAR.**

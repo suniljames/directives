@@ -12,7 +12,7 @@ Rules for spawning parallel subagents (committee reviews, audits, sweeps). Two t
 
 ## Concurrency & idempotency
 
-- **Cap concurrent spawns per batch (≈3).** Large simultaneous fan-outs trip provider/server rate limits; retry failures sequentially.
+- **Cap concurrent spawns per batch.** Large simultaneous fan-outs trip provider/server rate limits; retry failures sequentially. The cap is a provider-observed constant, not a universal — measure yours and record the value with its provenance (example: ~3 for Claude Code subagent spawning, observed 2026; 7–9 at once tripped server-side limits).
 - **Two-layer idempotency:** each subagent checks-then-skips before posting, AND the orchestrator runs a post-hoc dedup sweep — check-then-skip cannot close the race window when agents run concurrently (a rate-limited agent sometimes posts before erroring). **Do not serialize posting to avoid the race** (that forfeits the parallelism); dedup after, and record what was removed.
 - **Partial failure:** do not proceed to synthesis; re-run only the named failed roles; escalate if a role fails repeatedly.
 

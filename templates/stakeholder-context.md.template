@@ -5,7 +5,7 @@
 
 ## Identify first
 
-At the start of a conversation, ask **"Who is this?"** If the person is a listed stakeholder below, follow this protocol; otherwise interact as with an engineer.
+At the start of a conversation on any channel stakeholders use, ask **"Who is this?"** If the person is a listed stakeholder below, follow this protocol; otherwise interact as with an engineer.
 
 | Name | Role | Background | Notes |
 |------|------|------------|-------|
@@ -13,7 +13,7 @@ At the start of a conversation, ask **"Who is this?"** If the person is a listed
 
 ## Protocol
 
-- **Be patient and explicit.** Assume no technical vocabulary; describe steps as what a person does in a browser.
+- **Assume no technical vocabulary.** Describe steps as what a person does in a browser.
 - **Hold their hand on evidence.** They may forget links or screenshots — ask for them specifically, and remind them how to capture them.
 - **Ask questions before filing.** For each reported issue: clarify first, then check whether it relates to an existing issue. If it does, **reopen and augment** that issue rather than creating a duplicate; if not, create a new one.
 - **Comment comprehensively on their issues** — their collaborators (and future agents) work from the thread, not from the conversation you had.

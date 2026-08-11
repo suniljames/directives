@@ -1,6 +1,6 @@
 # Diagnosis
 
-A discipline for anything reported as broken, failing, flaky, or slow where the cause is not yet **proven**. Referenced by the Design stage (bug-shaped issues run Phases 0–2 before the committee designs) and the Implement stage (a bug fix's failing test is the Phase-1 loop).
+A discipline for anything reported as broken, failing, flaky, or slow where the cause is not yet **proven**. Teams typically wire it into their pipeline: bug-shaped issues run Phases 0–2 before design, and a bug fix's failing test is the Phase-1 loop (see [`teams/engineering/`](../teams/engineering/process/pipeline.md) for the worked example).
 
 **The core rule: no red-capable check, no theorizing.** Every expensive misdiagnosis starts with a hypothesis formed before holding an instrument that can go red on the actual bug.
 

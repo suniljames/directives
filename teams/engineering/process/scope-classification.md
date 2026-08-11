@@ -13,11 +13,11 @@ Deriving the operator-facing risk tier from the broad list makes nearly every is
 
 ## Rule 0: never-trivial overrides
 
-Certain labels/marks force the full path regardless of size, each with its stated reason (a reason-less rule gets deleted by the next confused editor). Examples:
+Certain labels/marks force the full path regardless of size, each with its stated reason (a reason-less rule gets deleted by the next confused editor). Record the project's canonical never-trivial list in the same classifier file as the two lists above — one authority, not per-command copies. Examples:
 
 - Freshly-discovered/auto-filed issues — brevity of an auto-drafted body must not skip security review.
 - Deletion/dead-code issues — a deletion is never trivial.
-- Anything touching an irreversible-value domain (pay, billing, retention) — belt-and-braces with the always-on review seat; this rule governs whether the *whole committee* convenes, which is a different question.
+- Anything touching an irreversible-value domain (pay, billing, data-retention obligations) — belt-and-braces with the always-on review seat; this rule governs whether the *whole committee* convenes, which is a different question.
 
 ## Announce before spending
 

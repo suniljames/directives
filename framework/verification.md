@@ -35,11 +35,11 @@ Proving a test can fail is part of writing it.
 - **Run the environment, don't reason about it.** Any plan whose correctness depends on an external system's behavior (database privileges, CI runner provisioning, cloud IAM, container bootstrap) is a hypothesis. Reproduce it on a throwaway instance before writing code. Review catches wrong reasoning; it never catches a wrong shared fact.
 - **Verify at the layer the user touches.** Tests validate the layer they target and can exercise a path production never uses. Trace the real runtime path and hit the real endpoint before declaring done.
 - **A structural claim about rendered output is verified by rendering** — not by reading the source. (Markdown tables, templates, emails: the renderer catches what N readers miss.)
-- **Prove a pre-existing failure in place.** Check out the base revision in the same working tree; a copied snapshot changes the environment and proves nothing. Reproducible is not attributable.
+- **Prove a pre-existing failure in place.** Check out the base revision in the same working tree (the feature branch's worktree — never the main checkout); a copied snapshot changes the environment and proves nothing. Reproducible is not attributable.
 
 ## Independent eyes
 
-- **Specialist review catches what your own tests cannot** — because the specialist does not share your mental model. Brief reviewers adversarially ("try to defeat this"), not confirmationally ("review this"). Expect a finding; a clean pass is the surprising outcome.
+- **Specialist review catches what your own tests cannot** — because the specialist does not share your mental model. Brief reviewers adversarially ("try to defeat this"), not confirmationally ("review this"). On guard/control changes, expect a finding — a clean pass is the surprising outcome there. (Elsewhere, absence of findings is normal; do not manufacture them.)
 - Reviewer *convergence* is not independent confirmation when all reviewers read the same brief — they are reasoning from the same text, not from the system.
 
 ---

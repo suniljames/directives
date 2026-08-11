@@ -16,10 +16,10 @@ Discipline for pruning the stores every future session boots from (context files
 | Tier | Definition | Action |
 |---|---|---|
 | T1 | Provably dead (the thing it describes no longer exists; proven by execution) | Delete |
-| T2 | Self-healing move | Apply — but every T2 action either ADDs a pointer or RELOCATEs a line; **nothing is lost** |
-| T3 | Everything else | Escalate as an issue; never auto-apply |
+| T2 | The action itself proves no information is lost — adding a pointer, or relocating a line verbatim | Apply |
+| T3 | Everything else — anything requiring a judgment about whether content is still *true* | Escalate as an issue; never auto-apply |
 
-Always T3, regardless of confidence: security/auth/audit guidance, anything guarding an irreversible-value domain, and (in agent-memory stores) recorded operator feedback.
+Always T3, regardless of confidence: security/auth/audit guidance, anything guarding an irreversible-value domain, and recorded operator feedback (wherever the project stores it).
 
 ## Dead-code mode
 

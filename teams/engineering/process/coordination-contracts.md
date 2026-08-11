@@ -6,7 +6,7 @@ Mechanics that let multiple agents (and humans) coordinate through the repo and 
 
 Automated comments need a guard against double-posting — and the guard's design is where controls quietly die.
 
-- **A heading-only guard is spoofable in both directions.** Any account can post a comment starting with the expected heading. The guard then either accepts the counterfeit as the real artifact (fatal when the comment is evidence a gate consumes) or is suppressed by it (silently skipping a post that should have happened). **Filter by author** (the pipeline account of record) plus an anchored prefix match.
+- **A heading-only guard is spoofable in both directions.** Any account can post a comment starting with the expected heading. The guard then either accepts the counterfeit as the real artifact (fatal when the comment is evidence a gate consumes) or is suppressed by it (silently skipping a post that should have happened). **Filter by author** (the pipeline account of record — designate it once per project, e.g. in the project's contributing/config file, and cite it rather than restating it) plus an anchored prefix match.
 - **Include a discriminator in the match string** (the PR number, the round number) so a stale artifact does not suppress the current one.
 - **The calling contract must name which of three semantics applies:**
   - `skip` — post once, never again. For one-time reports only.

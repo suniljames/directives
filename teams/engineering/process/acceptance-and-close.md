@@ -24,7 +24,7 @@ Rules for each criterion:
 
 Placement rules (these make the criteria machine-findable at close):
 
-- Criteria live in the **issue/ticket body**, never a comment, under one exact anchored heading.
+- The **issue-body** section is the criteria's home when no PRD governs (the common case; a governing PRD comment is the exception — see the close gate's resolution order below). Body criteria live under one exact anchored heading, never in a comment.
 - Match the heading as an **anchored full line plus an absence check on deeper forms** — a `##` heading is a substring of `###`, so the absence half is what discriminates.
 - **Exactly one such section.** Zero → the close gate reads RED. More than one → RED, never first-match. A re-run replaces in place.
 - The heading IS the token — no parallel marker/ID. A second identity for one section, with nothing asserting the two agree, is a drift class.
@@ -36,7 +36,7 @@ Placement rules (these make the criteria machine-findable at close):
 
 Runs at merge/close, after review. Deliberately no committee — the code was already reviewed; this gate checks *outcomes*.
 
-1. **Resolve the criteria source by fixed order, first hit wins:** PRD success criteria (matched by heading name) → issue-body acceptance criteria (via the executable anchored matcher) → else **RED: no auditable criteria**. An empty or prose-only section is not a hit — "all rows ✅" over zero rows is vacuously true. This matcher is deliberately a spec-to-**produced-artifact** check, not spec-to-spec ([verification.md](../../../framework/verification.md)).
+1. **Resolve the criteria source by fixed order, first hit wins:** the PRD's Success Criteria → issue-body acceptance criteria (via the executable anchored matcher) → else **RED: no auditable criteria**. The PRD rung: PRDs are posted as issue comments ([prd-template.md](prd-template.md)), so match the PRD comment's "Success Criteria" heading **by name, tolerating a numeric prefix** (the template numbers its headings; numbering forks across template versions). Whichever rung hits, the same evidence, verdict, and row-count rules below apply to its criteria. An empty or prose-only section is not a hit — "all rows ✅" over zero rows is vacuously true. This matcher is deliberately a spec-to-**produced-artifact** check, not spec-to-spec ([verification.md](../../../framework/verification.md)).
 2. **One row per criterion. Evidence = a permalink at the merge SHA plus one sentence stating how the evidence would go red.** A bare test *name* is not evidence (tests can be named and inert). "The code implements it" is not evidence. A criterion with no evidence is a ❌ row, never omitted.
 3. **Verdict precedence is fixed:** any ❌ → FAIL; else any WAIVED → WAIVED; else PASS. **WAIVED never rounds to PASS anywhere.** Zero passes with some waived → escalate, do not close (an unexercised gate wearing a verdict).
 4. **WAIVED is the only exit for an unfulfillable criterion**: operator-attributed, reason in the row, link to the operator's own words, linked follow-up. If operator and pipeline share one identity, the row says so — that is self-attestation, not separation of duties.
@@ -45,7 +45,7 @@ Runs at merge/close, after review. Deliberately no committee — the code was al
 7. **Bypass flags are tiered.** A force flag may skip advisory gates (CI-state checks, label ordering). It never skips: repo-integrity checks, the close-keyword scan, or the walkthrough itself. Every bypass use emits an audit line.
 8. Any ❌ → the issue ends OPEN (reopen if a close keyword already fired at merge).
 
-## Close-keyword hazards
+## Close-keyword hazards (GitHub examples)
 
 - The platform's issue-closing parser has no grammar: **"does NOT close #N" still closes #N**, and possessive forms ("closes #N's last criterion") still fire. Never let a close keyword precede an issue reference, even to deny it.
 - **A squash merge promotes commit-message bodies onto the main branch**, where the parser reads them exactly as it reads a PR body. To ship code while keeping an issue open, purge close keywords from the PR body AND every commit body; use "Refs #N".

@@ -47,7 +47,7 @@ Two roster rules:
   Implementation Plan is where PR count is really decided, so apply
   [PR Slicing — fewest, not smallest](pipeline.md#pr-slicing--fewest-not-smallest) here:
   default to one PR, and name a forcing constraint for any boundary you keep.
-- No parallel posting — sequential so each persona genuinely absorbs prior feedback.
+- In the sequential regime, no parallel posting — each persona genuinely absorbs prior feedback. In the parallel-batch regime, that absorption moves to the reconciliation and synthesis steps instead; pick one regime per review and say which.
 
 ## Process
 
@@ -90,12 +90,12 @@ GitHub's Content Security Policy blocks inline rendering of SVGs from `raw.githu
 
 **Do:** Use markdown text links pointing to the blob URL:
 ```markdown
-[Portal Chooser — Mobile](https://github.com/OWNER/REPO/blob/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+[Settings Panel — Mobile](https://github.com/OWNER/REPO/blob/BRANCH/docs/mockups/42/settings-panel-mobile.svg)
 ```
 
 **Do not:** Use image embed syntax:
 ```markdown
-![Portal Chooser](https://raw.githubusercontent.com/OWNER/REPO/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+![Settings Panel](https://raw.githubusercontent.com/OWNER/REPO/BRANCH/docs/mockups/42/settings-panel-mobile.svg)
 ```
 
 ### Auditing mockups (if a mockup-quality gate exists)
@@ -149,7 +149,7 @@ Render, in one place:
 2. **Cost** — the delivery estimate: PR count with a named forcing constraint per boundary ([PR Slicing](pipeline.md#pr-slicing--fewest-not-smallest)), size, risk tier citing the named input that triggered it, and ongoing operational cost. Ship confidence labels in pairs (stamped vs unstamped must be distinguishable), and attach an action to low confidence ("if two issues are close on cost, decide on value").
 3. **Conflict flag** — the product-view cost (PRD) and build-view cost (estimate) are deliberately distinct figures, but must use the **same canonical null spelling**; otherwise the flag fires on every zero-vs-zero pair and trains the operator to ignore the one signal meant to stop them. When the two genuinely disagree, show both.
 
-Then ask: **authorize / defer / discuss** — and wait. An estimate is cited from named inputs, never bare judgment; "a bare tier word is an unconditional literal wearing prose."
+Then, in **gated mode** (or whenever an operator is present): ask **authorize / defer / discuss** — and wait. In **autonomous mode** the rendered block is still mandatory as the audit record, and the pipeline proceeds — except when the value section is absent or the conflict flag fires, which escalate to a human even in autonomous mode. An estimate is cited from named inputs, never bare judgment; "a bare tier word is an unconditional literal wearing prose."
 
 ## Test Specification Format
 
