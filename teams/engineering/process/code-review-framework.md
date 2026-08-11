@@ -1,6 +1,6 @@
 # Code Review Framework
 
-Each engineering committee member reviews the PR diff through a role-specific lens.
+The rules for the **Review stage**: how committee members review a PR diff, what severities mean, and what blocks a merge. (Its design-stage counterpart — how the committee reviews a *plan* — is [committee-process.md](committee-process.md).)
 
 ## Severity Levels
 
@@ -16,74 +16,33 @@ Scope note: **a review verdict covers only the diff the reviewer saw.** Lines el
 
 ## Review Lenses by Role
 
-Each project provides its own technology-specific review checklists. Below is the generic focus area for each role.
+**Each role's lens lives in its persona file** (`## Code Review Lens` section) — the single home for per-role checklists, so they cannot drift across documents:
 
-**Skip predicates must be able to be true — and able to be false.** State each skip condition explicitly per lens, and check it against reality: a lens whose skip condition is *always* true in this codebase is a dead seat that reads as active ([controls-and-detectors.md](../../../framework/controls-and-detectors.md) — the unfireable-control class). The irreversible-value lens (see [committee-process.md](committee-process.md) → roster rules) has **no** skip condition and must state its conclusion either way.
+| Role | Lens | Skip condition |
+|------|------|----------------|
+| [UX Designer](../personas/ux-designer.md) | Accessibility, responsive behavior, design-system compliance | No frontend files in the diff |
+| [Software Engineer](../personas/software-engineer.md) | Code quality, API patterns, edge cases | — |
+| [System Architect](../personas/system-architect.md) | Layer separation, coupling, tenant isolation | — |
+| [Data Engineer](../personas/data-engineer.md) | Migration safety, query performance, data isolation | — |
+| [AI/ML Engineer](../personas/ai-ml-engineer.md) | LLM integration, prompt-injection risk, cost | No AI/LLM code in the diff |
+| [Security Engineer](../personas/security-engineer.md) | Injection, auth bypass, data exposure | — |
+| [QA Engineer](../personas/qa-engineer.md) | Coverage, assertion quality, test layers | — |
+| [SRE](../personas/sre.md) | Degradation, logging, resource handling | — |
+| [Writer](../personas/writer.md) | User-facing copy, comments, commit messages | — |
+
+Projects add technology-specific checklists in their own `docs/developer/code-review-lenses.md`.
+
+**Skip predicates must be able to be true — and able to be false.** Check each against reality: a lens whose skip condition is *always* true in this codebase is a dead seat that reads as active ([controls-and-detectors.md](../../../framework/controls-and-detectors.md) — the unfireable-control class). The irreversible-value lens (see [committee-process.md](committee-process.md) → roster rules) has **no** skip condition and must state its conclusion either way.
 
 **Jurisdiction tie-break** when two lenses claim one finding: the test-infrastructure lens owns the harness, QA owns the assertion, SRE owns the listener, Data owns the predicate.
 
 **Cite helpers for the question they answer, not the domain they live in** — check what a helper takes and what question it answers, not what its module is called. A correctly-named helper answering the wrong question is the hardest bug to re-review.
 
-### UX Designer
-**Skip if:** No frontend files in the diff.
-- Accessibility compliance (contrast, alt text, ARIA, focus management)
-- Semantic HTML, form UX, tab order, keyboard navigation
-- Responsive behavior (mobile-first, touch targets)
-- Design system compliance (component library tokens, no hardcoded values)
-- Visual hierarchy, motion with reduced-motion respect
+## Harness Honesty
 
-### Software Engineer
-- Code quality: DRY, dead code, complexity
-- Naming clarity, readability (functions under 30 lines)
-- API framework patterns: schema validation, dependency injection, proper status codes
-- Frontend patterns: server vs client rendering, proper data fetching
-- Edge cases: empty inputs, null handling, error states
+Cross-cutting checks applied to any change touching CI, tests, or gating scripts — MUST-FIX: any masker that lets a real failure report green, or a change that makes the suite unable to fail:
 
-### System Architect
-- Service layer separation (routing -> business logic -> data access)
-- Multi-tenancy enforcement, tenant context propagation
-- Coupling and cohesion, circular dependencies
-- Frontend routing patterns: layouts, error boundaries
-
-### Data Engineer
-- Migration safety: reversible, separate data from schema migrations
-- Query performance: N+1, missing indexes, eager loading
-- ORM patterns: relationships, async sessions, transaction boundaries
-- Data isolation policy correctness
-
-### AI/ML Engineer
-**Skip if:** No AI/LLM code in the diff.
-- API integration: retry logic, timeout handling, cost tracking
-- Prompt injection risks, sensitive data in prompts
-- Fallback behavior when AI service unavailable
-- Token/cost management
-
-### Security Engineer
-- Injection vectors (SQL, XSS, template injection)
-- Auth bypass: missing middleware, role checks
-- Sensitive data exposure in logs, errors, URLs, API responses
-- CSRF, secret handling, input validation
-- Multi-tenant data leakage
-
-### QA Engineer
-- Test coverage for changed/added code
-- Edge cases, assertion quality, fixture adequacy
-- Test isolation, mock boundaries
-- Correct test layer per test budget (cheapest layer that gives confidence)
-- Harness honesty (MUST-FIX: any masker that lets a real failure report green, or a change that makes the suite unable to fail):
-  - `2>&1 | tee` (or any pipe) on a gating command without `pipefail`
-  - a gating step ending in a bare `true` (or equivalent exit-code discard)
-  - a results checker that cannot assert an expected artifact **count** — zero results must read RED, not pass
-  - a quarantine/skip entry with no exit condition
-
-### SRE
-- Error handling: graceful degradation for external services
-- Structured logging with context
-- Health checks, container resource usage
-- Connection handling: timeouts, pool awareness
-
-### Writer
-- User-facing copy: helpful errors, clear labels
-- API response messages: clear, no sensitive data
-- Code comments: explain *why*, not *what*
-- Commit message conventions
+- `2>&1 | tee` (or any pipe) on a gating command without `pipefail`
+- a gating step ending in a bare `true` (or equivalent exit-code discard)
+- a results checker that cannot assert an expected artifact **count** — zero results must read RED, not pass
+- a quarantine/skip entry with no exit condition

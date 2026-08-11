@@ -5,6 +5,8 @@
 
 One AI model acting as both [builder and validator](../docs/glossary.md) creates correlated failures — shared blind spots and no independent verification. The model that builds should not validate.
 
+**Contents:** [Principle](#principle) · [Agent types](#agent-types) · [Provider assignment](#provider-assignment) · [Create-then-review](#create-then-review-flow) · [Coordination](#coordination-protocol) · [Session specialists](#native-session-specialists-claudeagents) · [Cross-agent protocols](#cross-agent-protocol-documents)
+
 ## Principle
 
 Split roles across abstract **agent types** — a **builder** and a **validator** — backed by different LLM providers when available. Different models with different training and biases catch different things; the overlap in what they miss shrinks significantly. Types and assignments: [`agents.yml`](../agents.yml). Role mappings: [`manifest.yml`](../teams/engineering/manifest.yml).

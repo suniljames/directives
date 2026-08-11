@@ -1,5 +1,7 @@
 # Orchestrator Integration
 
+**Contents:** [Config files](#config-files-an-orchestrator-reads) · [Agent spawning](#agent-spawning) · [Pipeline execution](#pipeline-execution) · [Stage overrides](#role-level-stage-overrides) · [Patterns](#orchestration-patterns) · [Labels & vocab](#label-and-vocabulary-contract) · [Remote execution](#remote-agent-execution) · [New orchestrators](#adding-a-new-orchestrator)
+
 How external orchestrators (Maestro, future alternatives) consume the directives config files to route work across AI agents.
 
 > This document is **orchestrator-agnostic**. It describes the contract — what an orchestrator reads and how it should behave — not any specific tool's configuration format.

@@ -4,6 +4,8 @@ End-to-end development lifecycle. Each stage produces artifacts the next stage c
 
 > **Canonical stage definitions:** [`manifest.yml`](../manifest.yml) — stages, labels, agent assignments.
 
+**Contents:** [Modes](#pipeline-modes) · [Stages](#stages) · [Labels](#label-lifecycle) · [Ad-hoc gate](#ad-hoc-work-gate) · [Who does what](#who-does-what) · [Handoffs](#handoff-protocol) · [Implement workflow](#implement-workflow-stage-3) · [PR slicing](#pr-slicing--fewest-not-smallest) · [Session isolation](#session-isolation)
+
 ## Pipeline Modes
 
 Projects choose one of two modes in their `CONTRIBUTING.md`:

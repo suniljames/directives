@@ -1,4 +1,4 @@
-# Engineering Manager — Engineering Committee Lead
+# Engineering Manager — Engineering Team
 
 > **Cross-cutting traits:** All engineering team members operate under the shared
 > principles in [cross-cutting-traits.md](cross-cutting-traits.md).

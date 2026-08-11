@@ -2,6 +2,8 @@
 
 > **How to read this:** This document defines the protocol for multi-persona reviews of GitHub issues and PRs. The [committee](../../../docs/glossary.md) is your team's full roster of [personas](../../../docs/glossary.md) reviewing work in sequence. Start with Core Principles, then read Process for the step-by-step flow.
 
+**Contents:** [Principles](#core-principles) · [Members](#committee-members) · [Protocol](#review-protocol) · [Process](#process) · [Mockups](#ux-mockup-generation-uiux-changes-only) · [Consensus](#overwrite-to-final-consensus) · [Fresh eyes](#fresh-eyes-validation) · [Authorization](#authorization-moment) · [Test spec](#test-specification-format)
+
 ## Core Principles
 
 1. **Sequential review** — Members post in strict order. Each reads all prior comments first. This builds cumulative insight — later reviewers can build on, challenge, or extend earlier observations rather than duplicating them.

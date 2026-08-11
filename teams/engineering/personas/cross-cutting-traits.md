@@ -1,4 +1,4 @@
-# Engineering Team: Cross-Cutting Traits
+# Cross-Cutting Traits — Engineering Team
 
 Shared values and practices that all engineering [committee](../../../docs/glossary.md) members follow, regardless of their individual [persona](../../../docs/glossary.md). These define the team's culture and "how we work" standards.
 

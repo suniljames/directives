@@ -1,6 +1,6 @@
 # Healthcare Safety Addendum
 
-These rules extend [`framework/safety.md`](../../framework/safety.md) for HIPAA-regulated projects.
+These rules extend [`framework/safety.md`](../../framework/safety.md) for HIPAA-regulated projects. (Not legal advice — see the [overlay README](README.md).)
 
 ## PHI Handling
 
@@ -17,13 +17,15 @@ These rules extend [`framework/safety.md`](../../framework/safety.md) for HIPAA-
 
 ## Multi-Tenancy (Healthcare)
 
-- All queries must go through tenant-isolation-enforced sessions (e.g., RLS).
-- Never bypass tenant isolation except for super-admin operations with explicit audit logging.
+- All queries must run under enforced tenant isolation — e.g., database row-level security (RLS) — so one organization's data can never reach another's session.
+- Never bypass tenant isolation except for platform-admin operations with explicit audit logging.
 - Test tenant isolation in every data-access service test.
 - Log all cross-tenant access attempts.
 
-## Docker / Deployment Safety (Healthcare)
+## Deployment Safety (Healthcare)
 
-- Never `docker compose down -v` without confirmation (destroys data volumes).
-- Back up database volumes before destructive operations.
 - Ensure encrypted connections for all services handling PHI.
+- Back up data stores before any destructive operation, and require confirmation for commands that destroy data volumes — generic data-destruction rules live in [`framework/safety.md`](../../framework/safety.md) and [`framework/data-safety.md`](../../framework/data-safety.md); PHI raises their stakes from "lost work" to "breach notification".
+
+---
+[← Overlay index](README.md) · [README](../../README.md)
