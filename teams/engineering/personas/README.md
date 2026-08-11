@@ -1,6 +1,6 @@
 # Engineering Personas
 
-Twelve files: eleven reviewer profiles plus the [shared culture](cross-cutting-traits.md) they all inherit. Each persona is a professional identity — backstory, expertise, review lens — that shapes how an AI reviews work. Roster, review order, and agent assignments are defined in [`manifest.yml`](../manifest.yml); this table is a guide, not the authority.
+Twelve files: eleven role profiles (nine review lenses plus the two pipeline roles) and the [shared culture](cross-cutting-traits.md) they all inherit. Each persona is a professional identity — backstory, expertise, review lens — that shapes how an AI reviews work. Roster, review order, and agent assignments are defined in [`manifest.yml`](../manifest.yml); this table is a guide, not the authority.
 
 | Persona | Brings |
 |---|---|

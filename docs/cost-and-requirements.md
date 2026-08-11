@@ -22,6 +22,7 @@ The system's costs are AI usage costs. Honest guidance, since exact numbers depe
 - **Persona reviews (Quick Start):** one model call with a bigger prompt. Marginal cost over plain prompting is small.
 - **A full committee review (`/design` or `/review`):** 11 personas each reading the issue plus all prior comments, then a synthesis — many long model calls per round, up to 3 rounds. This is the expensive step, and it is deliberate: you are buying independent scrutiny. Budget it for work that warrants it.
 - **The whole pipeline per task:** several times the cost of "just ask the AI to build it." The trade is cost and elapsed time for caught defects, auditable decisions, and work a stakeholder can follow.
+- **A wide anchor, so you can budget-screen the idea** (from production use at 2026 frontier-model API prices — your numbers will differ): a single persona review adds well under a dollar; a full committee design review on a mid-sized issue lands in the single dollars to low tens of dollars; a complete pipeline run on a real feature, tens of dollars. Wrong for your stack in either direction — which is why the pilot below is the real answer.
 
 Two levers keep spend proportionate:
 

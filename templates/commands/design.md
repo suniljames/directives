@@ -17,7 +17,8 @@ Convene the engineering committee on the given GitHub issue: every persona revie
 4. The Engineering Manager posts last, **merging** the members' asks into one plan — not concatenating them. Default the plan to ONE pull request; every additional PR must name a forcing constraint (https://github.com/suniljames/directives/blob/main/teams/engineering/process/pipeline.md — "PR Slicing").
 5. Update the issue description with the sections the process defines, including a Test Specification and 4–7 acceptance criteria, each with a `*Goes red if …*` line (https://github.com/suniljames/directives/blob/main/teams/engineering/process/acceptance-and-close.md).
 6. Fresh-eyes validation: a new session with zero context reads only the updated description and must produce a coherent implementation plan without questions. Gaps found → fix the description and re-check.
-7. Add the `design-complete` label.
+7. Authorization moment: render the value (from the PRD) and the cost (PR count with named constraints, size, risk) together. In gated mode, ask authorize/defer/discuss and wait; in autonomous mode, post the block as the audit record and proceed — unless value is absent or the cost figures conflict, which escalate to a human either way.
+8. Add the `design-complete` label.
 
 ## Done when
 

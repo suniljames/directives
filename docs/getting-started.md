@@ -10,7 +10,7 @@ Set up this system in your project. You can adopt the full [pipeline](glossary.m
 
 - A GitHub repository, and an account that can create labels on it
 - At least one AI tool (Claude Code, Antigravity CLI, Cursor, ChatGPT, etc.)
-- The [`gh` command-line tool](https://cli.github.com) (used once, for label setup in the Standard path)
+- The [`gh` command-line tool](https://cli.github.com) (for label setup, and the pipeline commands use it for GitHub operations)
 - A local copy of this repo to copy templates from: `git clone https://github.com/suniljames/directives`
 - Familiarity with the [key concepts](concepts.md)
 
@@ -73,6 +73,8 @@ Add the structured workflow on top of persona-driven reviews: labels track progr
 
 ### 1. Copy the templates
 
+Run from your clone of this repo (`your-project` = the path to your own project):
+
 ```bash
 cp templates/CONTRIBUTING.md.template  your-project/CONTRIBUTING.md
 cp templates/CLAUDE.md.template        your-project/CLAUDE.md
@@ -80,7 +82,7 @@ cp templates/CLAUDE.md.template        your-project/CLAUDE.md
 
 ### 2. Set your pipeline mode
 
-Edit `CONTRIBUTING.md` to declare which team this project belongs to and how much human involvement the pipeline requires:
+The copied `CONTRIBUTING.md` already contains these two config markers — set their values to declare which team this project belongs to and how much human involvement the pipeline requires:
 
 ```markdown
 <!-- team: engineering -->
@@ -98,9 +100,10 @@ Templates have `TODO` markers for your tech stack, dev environment, and project 
 
 ### 4. Install the slash commands
 
-Each pipeline stage maps to a slash command — a saved prompt file your AI tool loads. **Ready-made starters ship in this repo**; copy all five (example path shown for Claude Code, adjust for your tool):
+Each pipeline stage maps to a slash command — a saved prompt file your AI tool loads. **Ready-made starters ship in this repo**; copy all five, again from your clone of this repo (example path shown for Claude Code, adjust for your tool):
 
 ```bash
+mkdir -p your-project/.claude/commands
 cp templates/commands/{define,design,implement,review,summarize}.md  your-project/.claude/commands/
 ```
 
@@ -134,10 +137,10 @@ sequenceDiagram
     AI->>GH: Add design-complete label
     You->>AI: /implement 42
     AI->>AI: Write failing tests, implement until green
-    AI->>GH: Push feature branch
+    AI->>GH: Push branch, open PR
     You->>AI: /review
-    AI->>GH: Create PR, run committee review, integrate
-    AI->>GH: Close issue
+    AI->>GH: Committee review, merge, walk acceptance criteria
+    AI->>GH: Confirm the linked issue closed
 ```
 
 ---
@@ -275,7 +278,7 @@ On the link path (see Prerequisites), your project references the persona files 
 
 **"My AI doesn't follow the persona well"** — Provide the full persona file, not just the role name. The backstory and interaction style are what anchor the AI's decisions — without them, you're just asking for a generic review.
 
-**"The pipeline feels heavy for small changes"** — Skip stages deliberately. The [ad-hoc work gate](../teams/engineering/process/pipeline.md#ad-hoc-work-gate) warns when lifecycle labels are missing but doesn't block: for quick fixes, go straight to implementation, confirm the warning, and a note lands in the PR description.
+**"The pipeline feels heavy for small changes"** — Skip stages deliberately. For quick fixes, go straight to implementation: the [ad-hoc work gate](../teams/engineering/process/pipeline.md#ad-hoc-work-gate) will warn that earlier stages didn't run, you answer "proceed anyway", and your AI records the skipped stages in the PR description.
 
 **"I only have one AI tool"** — See [single-provider fallback](#4-single-provider-fallback) above. Quick start persona reviews work with any single tool, and even the Standard level works fine with one provider.
 

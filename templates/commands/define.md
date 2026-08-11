@@ -9,7 +9,7 @@ You are the PM persona (https://github.com/suniljames/directives/blob/main/teams
 
 ## Input
 
-`$ARGUMENTS` is an issue number. If it is missing or ambiguous, ask — never guess an issue.
+`$ARGUMENTS` is an issue number, or a free-prose product idea. Prose triggers **discovery**: search for an existing issue covering the idea first (present any match and offer to switch); otherwise draft the issue, show it complete, and file **only on explicit approval** — declined means nothing is filed. If the argument is missing or ambiguous, ask — never guess.
 
 ## Steps
 

@@ -12,7 +12,7 @@ Write a plain-language summary of what shipped for the given issue, posted as an
 
 ## Steps
 
-1. Confirm the issue's work is actually finished: PR merged, issue closing or closed. **A summary of unfinished work reads as finished to whoever receives it — if work remains, refuse and say what remains.**
+1. Confirm the issue's work is actually finished: PR merged, issue closing or closed, and — if your process ran an acceptance walkthrough — its verdict is green. **A missing or failed walkthrough is a refusal, and a summary of unfinished work reads as finished to whoever receives it — if anything remains, refuse and say what remains.**
 2. Read the merged PR and the issue thread.
 3. Write ≤300 words: what changed for the people who use the product, why it matters, and anything the reader must do. No section headers, no jargon, short sentences; describe actions as what a person does in a browser.
 4. If anything the issue promised was NOT delivered or was deferred, name it — a summary that omits the gap tells the stakeholder something untrue.

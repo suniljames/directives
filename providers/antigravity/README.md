@@ -1,6 +1,6 @@
 # Antigravity CLI (provider config)
 
-Configuration for **Antigravity CLI** — the default validator provider in [`agents.yml`](../../agents.yml). Antigravity is a Gemini-based agentic CLI: its binary is `agy`, and it reads a `GEMINI.md` context file at the project root (the filename comes from its Gemini lineage).
+Configuration for **Antigravity CLI** — the default validator provider in [`agents.yml`](../../agents.yml). Antigravity is a Gemini-based agentic CLI: its binary is `agy`, it reads a `GEMINI.md` context file at the project root (the filename comes from its Gemini lineage), and it installs per its own official distribution. **Don't have it?** Any second AI CLI can play validator — follow "Adding another provider" below, or run [single-provider fallback](../../docs/getting-started.md#4-single-provider-fallback) with one tool.
 
 ---
 
