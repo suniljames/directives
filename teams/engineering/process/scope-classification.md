@@ -29,3 +29,6 @@ The lightweight path still produces its artifacts (test-spec stub, acceptance cr
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [committee-process.md](committee-process.md), [fan-out-safety.md](../../../framework/fan-out-safety.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

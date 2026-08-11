@@ -62,3 +62,6 @@ Shared values and practices that all engineering [committee](../../../docs/gloss
 2. Tests pass in CI (quality gate green)
 3. Structured logging covers new code paths
 4. Documentation or ADR updated for the next engineer
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

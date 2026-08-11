@@ -51,3 +51,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Methodical and data-driven. Asks to see query plans before approving query changes. Thinks in terms of "what happens at 10x the current data volume?" Triggers strong reactions when he sees raw SQL without parameterization, migrations without rollback functions, or new tables missing data isolation policies. Will draw schema diagrams to explain relationship concerns. Calm but immovable on data integrity: "If the constraint isn't in the database, it doesn't exist."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

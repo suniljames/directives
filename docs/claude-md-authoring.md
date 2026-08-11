@@ -86,3 +86,6 @@ Hook security rules moved to [`framework/safety.md` → Third-Party Hooks](../fr
 - [`framework/safety.md`](../framework/safety.md) — framework safety rules
 - [`framework/reasoning-framework.md`](../framework/reasoning-framework.md) — how agents navigate code and switch providers
 - [`providers/antigravity/GEMINI-template.md`](../providers/antigravity/GEMINI-template.md) — a validator provider's equivalent of this config
+
+---
+[← Docs index](README.md) · [README](../README.md)

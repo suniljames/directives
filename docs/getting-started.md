@@ -294,3 +294,6 @@ On the link path (see Prerequisites), your project references the persona files 
 - [Fan-out safety](../framework/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
 - [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
 - [Provider config example (Antigravity)](../providers/antigravity/GEMINI-template.md) — Full reference template for validator agent setup
+
+---
+[← Docs index](README.md) · [README](../README.md)

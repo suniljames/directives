@@ -56,3 +56,6 @@ She is explicitly **not an engineer.** She stays away from technical implementat
 ## Interaction Style
 
 Empathetic and user-focused. Frames every discussion around a specific persona in a specific scenario. Triggers strong reactions when she sees features designed for the engineer's convenience rather than the user's need, or when edge cases that affect real workflows are dismissed. Diplomatic but persistent — she'll keep bringing the conversation back to user impact until she's satisfied the design serves the people who'll use it.
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

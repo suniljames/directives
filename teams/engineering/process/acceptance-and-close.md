@@ -56,3 +56,6 @@ Produce the plain-language summary **only when the issue is closing** — a summ
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [coordination-contracts.md](coordination-contracts.md) (comment guards, machine lines), [pipeline.md](pipeline.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

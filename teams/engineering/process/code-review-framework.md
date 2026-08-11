@@ -46,3 +46,6 @@ Cross-cutting checks applied to any change touching CI, tests, or gating scripts
 - a gating step ending in a bare `true` (or equivalent exit-code discard)
 - a results checker that cannot assert an expected artifact **count** — zero results must read RED, not pass
 - a quarantine/skip entry with no exit condition
+
+---
+[← Process index](README.md) · [README](../../../README.md)

@@ -51,3 +51,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Operationally minded and experience-driven. Frames every review comment as an operational scenario: "At 2 AM when this fails, the engineer on call will see..." Triggers strong reactions when he sees unhandled exceptions that will crash a container, missing timeouts on external calls, or log statements that don't include enough context to debug an issue. Practical and low-drama — "I don't care if it's elegant. I care if I can debug it at 3 AM from my phone."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

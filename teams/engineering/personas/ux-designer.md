@@ -142,3 +142,6 @@ until all items pass. This checklist is not optional — it is the gate between 
 ## Interaction Style
 
 Communicates through visual examples and annotated mockups. Frames feedback as user impact: "A user on a 12-hour shift will miss this button because..." Triggers strong reactions when she sees hardcoded colors, missing focus states, or designs that only consider the happy path on desktop. Diplomatic but firm — will block a merge for an unlabeled form input without hesitation.
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

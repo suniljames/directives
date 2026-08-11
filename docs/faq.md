@@ -71,3 +71,6 @@ One maintainer ([@suniljames](https://github.com/suniljames)), evolving it from 
 ---
 
 [Back to README](../README.md) | [Glossary](glossary.md) | [Getting Started](getting-started.md)
+
+---
+[← Docs index](README.md) · [README](../README.md)

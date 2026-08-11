@@ -121,3 +121,6 @@ The committee lead synthesizes feedback into a final plan that balances quality 
 1. If a coordination log exists, update it with what you did and next steps
 2. Verify all review checklist items passed
 3. Report completion status to the user
+
+---
+[← Framework index](README.md) · [README](../README.md)

@@ -31,7 +31,7 @@ In gated mode, the committee process pauses after Design and after Review to wai
 | **2. Design** | Engineering committee reviews feasibility, architecture, UX, security | Design decision + test specification comments | `design-complete` |
 | **3. Implement** | TDD: scaffold failing tests -> implement -> green -> refactor | Code in a feature branch, all tests passing | `implementing` |
 | **4. Review** | CI gate -> eng-committee code review (up to 3 rounds) -> squash merge | Merged PR | `merged` |
-| **5. Deploy & Verify** (automatic) | Rebuild, health check, close issue | Running deployment | Issue closed |
+| **5. Deploy & Verify** | Rebuild, health check, close issue | Running deployment | — |
 | **6. Summarize** (optional) | Plain-language stakeholder summary | Summary comment | `summarized` |
 
 Each agent implements this pipeline using its own tooling. The labels and artifacts are the shared contract — tooling is agent-specific. Coordination mechanics (comment guards, label table shape, machine-readable verdicts): [`coordination-contracts.md`](coordination-contracts.md). How much process an issue gets (trivial vs full committee): [`scope-classification.md`](scope-classification.md).
@@ -246,3 +246,6 @@ complete each phase as a separate PR, in the stated order.
 - **Resolve conflicts by traced intent**: find each side's primary source and preserve
   both intents — never resolve by which text looks newer, and never abort-and-force-push
   over the other side's work.
+
+---
+[← Process index](README.md) · [README](../../../README.md)

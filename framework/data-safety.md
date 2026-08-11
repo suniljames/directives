@@ -33,3 +33,6 @@ For pay, billing, refunds — any number with a legal or trust obligation attach
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [controls-and-detectors.md](controls-and-detectors.md) → Designing guards.*
+
+---
+[← Framework index](README.md) · [README](../README.md)

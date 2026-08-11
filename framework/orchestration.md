@@ -237,3 +237,6 @@ To support a new orchestrator tool:
 6. Implement label checking/application via the GitHub API
 
 No changes to the directives, manifests, or project configs should be needed.
+
+---
+[← Framework index](README.md) · [README](../README.md)

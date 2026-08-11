@@ -23,3 +23,6 @@ Root config (`CLAUDE.md` or counterpart) has one job: behavioral rules and an in
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08 (checklist core adapted from the mattpocock/skills skill-quality discipline).*
+
+---
+[← Framework index](README.md) · [README](../README.md)

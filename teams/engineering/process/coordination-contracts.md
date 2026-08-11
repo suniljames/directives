@@ -46,3 +46,6 @@ A verdict, walkthrough, or report that "someone will check" is unfinished. Name 
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [acceptance-and-close.md](acceptance-and-close.md), [fan-out-safety.md](../../../framework/fan-out-safety.md).*
+
+---
+[← Process index](README.md) · [README](../../../README.md)

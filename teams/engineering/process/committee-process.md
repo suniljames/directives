@@ -194,3 +194,6 @@ Escalate to the committee when:
 - Cache behavior causes data inconsistency
 
 Committee analysis covers: SRE (observability, rollback), Architecture (config management), Security (audit trail), Data (analytics impact).
+
+---
+[← Process index](README.md) · [README](../../../README.md)

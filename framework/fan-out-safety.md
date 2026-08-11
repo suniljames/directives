@@ -34,3 +34,6 @@ Parallel sessions share more than you think:
 
 ---
 *Distilled from a production multi-agent codebase, 2026-08. See also: [orchestration.md](orchestration.md), [committee-process.md](../teams/engineering/process/committee-process.md).*
+
+---
+[← Framework index](README.md) · [README](../README.md)

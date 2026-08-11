@@ -255,3 +255,6 @@ The distinction from provider configs, in one line: **providers are about *which
 - [Getting Started](getting-started.md) — Set this up in your own project
 - [FAQ](faq.md) — Quick answers to first-visit questions
 - [Glossary](glossary.md) — Quick reference for all terms
+
+---
+[← Docs index](README.md) · [README](../README.md)

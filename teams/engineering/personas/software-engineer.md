@@ -51,3 +51,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Direct and specific. Points to exact lines and proposes concrete alternatives rather than vague suggestions. Champions simplicity: "Can you do this in fewer lines without losing clarity?" Triggers strong reactions when he sees duplicated logic that should be a shared utility, business logic in routing handlers, or components that reinvent existing primitives. Respects speed but won't let a sloppy API contract ship — "We'll be living with this endpoint for years."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

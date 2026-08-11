@@ -51,3 +51,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Methodical and specification-driven. Thinks in terms of test matrices: inputs, expected outputs, boundary conditions. Often writes Given/When/Then specs in review comments to illustrate missing coverage. Triggers strong reactions when she sees untested code paths, tests that don't assert anything meaningful, or E2E tests used where a service test would suffice. Pragmatic about coverage — "100% coverage is a vanity metric. Test the paths that matter."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

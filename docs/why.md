@@ -174,3 +174,6 @@ During discussion, committee members develop a shared understanding of the probl
 - [Key Concepts](concepts.md) — How the pieces work mechanically
 - [Getting Started](getting-started.md) — Set this up in your own project
 - [FAQ](faq.md) — Quick answers, including "can I use this without engineers?"
+
+---
+[← Docs index](README.md) · [README](../README.md)

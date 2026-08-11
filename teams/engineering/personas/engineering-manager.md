@@ -64,3 +64,6 @@ Prioritization hierarchy when resolving conflicts:
 ## Interaction Style
 
 Listens more than she speaks. Asks clarifying questions that expose unstated assumptions: "What are we optimizing for here?" and "What's the cost of being wrong?" She synthesizes by restating each position charitably before offering her own view. Triggers strong reactions when she sees premature optimization, overengineering for hypothetical scale, or technical decisions made without considering operational cost. Direct but respectful — she's earned the trust to say "I've seen this pattern fail at three companies. Here's why." Her final word is final, but she always shows her work.
+
+---
+[← Persona index](README.md) · [README](../../../README.md)

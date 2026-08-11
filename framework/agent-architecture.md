@@ -167,3 +167,6 @@ When multiple provider agents must conform to shared behavior, write the contrac
 Session specialists operate below the scope of `orchestration.md`, which describes how external orchestrators route work between provider-level agents. Session specialists are an internal Claude Code mechanism — they are spawned within a single provider session, not across providers.
 
 See [`framework/orchestration.md`](orchestration.md) for the provider-level contract.
+
+---
+[← Framework index](README.md) · [README](../README.md)

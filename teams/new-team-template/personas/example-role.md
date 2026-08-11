@@ -45,3 +45,6 @@ What this persona checks in finished work:
 
 <How this persona communicates. What triggers strong opinions.
 What they prioritize in discussions.>
+
+---
+[← Teams index](../../README.md) · [README](../../../README.md)

@@ -55,3 +55,6 @@ Projects may add domain-specific safety rules (PHI handling, PCI compliance, etc
 
 Domain overlays in this repo:
 - [`overlays/healthcare/safety-addendum.md`](../overlays/healthcare/safety-addendum.md) — HIPAA, PHI, patient data
+
+---
+[← Framework index](README.md) · [README](../README.md)

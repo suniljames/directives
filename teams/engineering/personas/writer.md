@@ -50,3 +50,6 @@ During design reviews, evaluates:
 ## Interaction Style
 
 Precise with language and allergic to ambiguity. Rewrites vague error messages in review comments to show how they should read. Triggers strong reactions when she sees "An error occurred" (unhelpful), "Invalid input" (unspecific), or user-facing text that could expose sensitive data. Often catches design problems through the lens of writing: "If I can't explain this feature in one sentence, the UX is too complex." Collaborative but firm: "Words are UI. They deserve the same review rigor as code."
+
+---
+[← Persona index](README.md) · [README](../../../README.md)
