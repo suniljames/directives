@@ -1,6 +1,8 @@
 # Key Concepts
 
-Plain-language guide to every idea in this system. Read this first if you're new.
+How the pieces work, mechanically. Read [Why This Architecture?](why.md) first if you're still deciding whether to adopt — this page is for when you're ready to understand the machinery.
+
+**Contents:** [Core idea](#the-core-idea) · [Agent types](#agent-types) · [Personas](#personas) · [Pipeline](#the-pipeline) · [Pipeline modes](#pipeline-modes) · [Committee](#the-committee) · [Manifests](#manifests) · [Severity](#severity-levels) · [Three tiers](#the-three-tier-model) · [Overlays](#domain-overlays)
 
 ---
 
@@ -8,7 +10,7 @@ Plain-language guide to every idea in this system. Read this first if you're new
 
 *Define how work gets done. Make it repeatable. Let the structure scale with you.*
 
-Most AI setups are ad-hoc: you prompt a model, get output, and hope for the best. This system replaces that with a defined process — **[agent types](glossary.md)** that separate creation from review, **[personas](glossary.md)** that shape how each agent thinks, and a **[pipeline](glossary.md)** that prevents skipping steps. Everything is configured through **[manifests](glossary.md)** (YAML files), so changes happen in one place and cascade everywhere.
+Most AI setups are ad-hoc: you prompt a model, get output, and hope for the best. This system replaces that with a defined process — **[agent types](glossary.md)** that separate creation from review, **[personas](glossary.md)** that shape how each agent thinks, and a **[pipeline](glossary.md)** that warns before a step gets skipped. Everything is configured through **[manifests](glossary.md)** — structured config files — so a change lands in one place and every doc and agent reads the same truth.
 
 The pattern works for any team — engineering, sales, marketing, operations — not just software. You define the roles, the stages, and the vocabulary. The system provides the scaffolding.
 
@@ -57,7 +59,7 @@ assignments:
     validator: antigravity-cli
 ```
 
-If a provider isn't available, the system falls back — even running both types on the same provider in **isolated sessions** so they can't share context. Not as good as two different models, but significantly better than one session doing both.
+If a provider isn't available, the system falls back — even running both types on the same provider in **isolated sessions** (separate conversations that share no history) so the reviewer can't inherit the builder's assumptions. Why that matters: [Why This Architecture? → single-provider fallback](why.md).
 
 ---
 
@@ -65,7 +67,7 @@ If a provider isn't available, the system falls back — even running both types
 
 *A panel of specialists, each with their own lens.*
 
-A **[persona](glossary.md)** is a character profile that shapes how an AI agent approaches work. Each persona has a title, backstory, expertise, and review focus. The backstory isn't decoration — it anchors the agent's decision-making by giving it a professional context to reason from.
+A **[persona](glossary.md)** is a character profile that shapes how an AI agent approaches work. Each persona has a title, backstory, expertise, and review focus — a professional identity the agent reasons from.
 
 The engineering team has 11 personas. Each sees problems differently:
 
@@ -81,15 +83,13 @@ The engineering team has 11 personas. Each sees problems differently:
 | **SRE** | Reliability, logging, health checks |
 | **Writer** | User-facing copy, error messages, docs |
 | **Engineering Manager** | Synthesizes all feedback, makes final calls |
-| **PM** | Requirements, acceptance criteria, user value |
+| **PM** | Requirements, acceptance criteria, user value (pipeline only — not a code reviewer) |
 
 ### Why personas matter
 
 Without a persona, AI feedback is generic: *"Consider adding error handling."*
 
 With the **Security Engineer** persona: *"MUST-FIX: This endpoint accepts user input without validation — an attacker could inject SQL via the `name` parameter."*
-
-The difference is depth. A persona doesn't just tell the agent *what* to look for — it gives the agent a professional identity that shapes *how* it thinks about the problem.
 
 **Beyond engineering:** A sales team might use Deal Strategist, Pricing Analyst, Legal Reviewer, and VP of Sales. A marketing team might use Brand Strategist, SEO Specialist, and Copy Editor. The structure is identical — only the expertise changes.
 
@@ -110,7 +110,7 @@ graph LR
     A["Define<br/><code>/define</code>"] --> B["Design<br/><code>/design</code>"]
     B --> C["Implement<br/><code>/implement</code>"]
     C --> D["Review<br/><code>/review</code>"]
-    D --> E["Deploy & Verify<br/><em>(automatic)</em>"]
+    D --> E["Deploy & Verify"]
     E --> F["Summarize<br/><code>/summarize</code>"]
 
     style A fill:#6f42c1,color:#fff
@@ -127,10 +127,10 @@ The engineering team's pipeline has six stages (other teams define their own):
 |---|---|---|---|
 | Define | PM writes a PRD with acceptance criteria | Validator | `define-reviewed` |
 | Design | Committee reviews feasibility, architecture, UX, security | Both | `design-complete` |
-| Implement | TDD: failing tests → implement → green → refactor | Builder | `implementing` |
-| Review | Up to 3 rounds of committee review, then integrate | Both | `merged` |
-| Deploy & Verify | Verify, deliver, close issue (automatic) | Builder | Issue closed |
-| Summarize | Stakeholder summary of what was delivered and why | Validator | `summarized` |
+| Implement | Tests written first (failing), then code until they pass | Builder | `implementing` |
+| Review | Up to 3 rounds of committee review, then merge | Both | `merged` |
+| Deploy & Verify | Deploy, health-check, close the issue | Builder | — |
+| Summarize *(optional)* | Stakeholder summary of what was delivered and why | Validator | `summarized` |
 
 The pipeline is advisory, not a hard block. If you skip a stage, the system warns you and asks for confirmation — but it won't prevent you. Hotfixes happen, and the process should support them rather than getting in the way.
 
@@ -149,16 +149,16 @@ Projects declare a mode in their `CONTRIBUTING.md` to control how much human inv
 
 *Each reviewer reads all prior feedback first.*
 
-A **[committee](glossary.md)** is the full team of personas reviewing work in sequence. It's not a meeting — it's a structured protocol designed to build cumulative insight. Each persona reads everything that came before, so later reviewers can build on (or challenge) earlier observations rather than duplicating them.
+A **[committee](glossary.md)** is the full team of personas reviewing work in sequence. Each persona reads everything that came before, so later reviewers build on (or challenge) earlier observations rather than duplicating them.
 
 ```mermaid
 graph TD
     A["Task arrives"] --> B["UX Designer reviews"]
     B --> C["Software Engineer reviews<br/><em>reads prior comments</em>"]
-    C --> D["... each persona in order ..."]
+    C --> D["...remaining personas,<br/>in manifest order..."]
     D --> E["Engineering Manager<br/>synthesizes all feedback"]
-    E --> F["Overwrite-to-consensus"]
-    F --> G["Fresh-eyes validation"]
+    E --> F["Members update comments<br/>to final positions"]
+    F --> G["Zero-context agent checks<br/>the spec stands alone"]
 
     style A fill:#333,color:#fff
     style B fill:#0075ca,color:#fff
@@ -179,9 +179,9 @@ graph TD
 
 ## Manifests
 
-*One file to rule them all.*
+*One file, one truth.*
 
-A **[manifest](glossary.md)** is a YAML file that serves as the single source of truth for a team's configuration: who's on the team, what the pipeline looks like, and what vocabulary they use. When the manifest changes, the change cascades everywhere — no drift between docs and config.
+A **[manifest](glossary.md)** is the single source of truth for a team's configuration: who's on the team, what the pipeline looks like, and what vocabulary they use. When the manifest changes, the change is immediately authoritative — no drift between docs and config.
 
 ```yaml
 # teams/engineering/manifest.yml (simplified)
@@ -190,7 +190,9 @@ team: engineering
 roles:
   - id: ux-designer
     name: UX Designer
-    agent: builder           # which agent type
+    agent: builder           # which agent type runs this role...
+    stages:
+      review-merge: validator  # ...with per-stage overrides (here: reviews as validator)
     persona: personas/ux-designer.md
     review_order: 1          # position in committee sequence
 
@@ -207,7 +209,7 @@ vocabularies:
       blocks: merge
 ```
 
-Add a persona → one manifest entry. Change review order → edit one number. Swap LLM provider → update one line. Add a team → copy `teams/new-team-template/` and fill in roles.
+One config edit changes the system's behavior everywhere ([the full list of what one-line changes buy you](why.md#solution-4-manifests-make-it-configurable)).
 
 Every team gets its own manifest. A sales team would define different roles, stages, and vocabularies — but the structure is the same.
 
@@ -241,12 +243,15 @@ The directives repo provides the *what* and *why*. The project repo provides the
 
 ## Domain Overlays
 
-An **[overlay](glossary.md)** adds domain-specific rules (HIPAA, PCI, etc.) on top of the base process. Overlays are additive — they extend the base, never replace it. This keeps domain compliance cleanly separated from team fundamentals.
+An **[overlay](glossary.md)** adds domain-specific rules (healthcare privacy law, payment-card compliance, etc.) on top of the base process. Overlays are additive — they extend the base, never replace it.
+
+The distinction from provider configs, in one line: **providers are about *which AI* and *how to configure it*; overlays are about *what industry* and *what additional rules apply*.** A healthcare app using Antigravity as validator uses both — one provider config, one domain overlay.
 
 ---
 
 ## Next Steps
 
-- [Why This Architecture?](why.md) — The philosophy behind these decisions
+- [Why This Architecture?](why.md) — The business case behind these decisions
 - [Getting Started](getting-started.md) — Set this up in your own project
+- [FAQ](faq.md) — Quick answers to first-visit questions
 - [Glossary](glossary.md) — Quick reference for all terms
