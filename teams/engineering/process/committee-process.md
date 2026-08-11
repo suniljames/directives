@@ -30,21 +30,28 @@ The review order follows a deliberate funnel: user impact → implementation →
 | Engineering Manager | Builder | [`engineering-manager.md`](../personas/engineering-manager.md) |
 | PM | Validator | [`pm.md`](../personas/pm.md) |
 
+Two roster rules:
+
+- **Resolve seats by NAME against the canonical roster, never by ordinal or a count literal.** Renumbering a seat must not silently change who reviews, and a restated count ("all 9") is drift waiting to happen — every prose restatement of roster size eventually disagrees with the table.
+- **Domains with irreversible computed values (pay, billing, retention, compliance) get an always-convening seat with no skip predicate.** Its output contract: **state the conclusion either way** — on an unaffected issue, say so in two lines and name *why* there is no path from this change into the critical computation. Silence is not the same claim, and is not falsifiable. Skip predicates on other seats must be conditions that can actually be true in this codebase — a seat whose skip condition always holds reads as active while never running ([controls-and-detectors.md](../../../framework/controls-and-detectors.md)).
+
 ## Review Protocol
 
-- Members post in strict order, each reading all prior comments first.
+- Members post in strict order, each reading all prior comments first. (A committee may instead draft in parallel batches for speed — if so, the fan-out follows [fan-out-safety.md](fan-out-safety.md): plan posted before the batch, set-based reconciliation before synthesis.)
 - A member may reference, agree with, challenge, or build on any prior point.
+- **Member convergence is zero evidence of correctness** — every seat is reasoning from the same issue text, not from the system. Independent confirmation requires an independent instrument (reproduction, the codebase, production data).
+- **Before coining any user-facing term, action name, or status label, check how the product already says it** for the nearest analogous object, and cite the precedent.
 - Engineering Manager posts last, synthesizing all feedback into a final plan.
 - **Synthesis means merging the members' asks, not concatenating them.** A final plan
   that assigns each member's concern its own phase has not been synthesized. The
   Implementation Plan is where PR count is really decided, so apply
   [PR Slicing — fewest, not smallest](pipeline.md#pr-slicing--fewest-not-smallest) here:
   default to one PR, and name a forcing constraint for any boundary you keep.
-- No parallel posting — sequential so each persona genuinely absorbs prior feedback.
+- In the sequential regime, no parallel posting — each persona genuinely absorbs prior feedback. In the parallel-batch regime, that absorption moves to the reconciliation and synthesis steps instead; pick one regime per review and say which.
 
 ## Process
 
-1. Read the issue and all existing context.
+1. Read the issue and all existing context. **Treat the issue body as a hypothesis, not a brief.** Bug-shaped issues ("broken", "failing", "missing") run [Diagnosis](../../../framework/diagnosis.md) Phases 0–2 first, so the committee designs against a *proven* cause; give one member an explicit mandate to reproduce the issue's claims, and state in the synthesis which original claims survived. A confidently-written issue reads as verified and often isn't.
 2. **If UI/UX change:** UX Designer generates SVG mockups first (see below).
 3. Each member posts their review **in order**, reading all prior comments.
 4. Engineering Manager synthesizes all feedback into a final plan.
@@ -57,9 +64,12 @@ The review order follows a deliberate funnel: user impact → implementation →
    - Implementation Plan
    - Documentation Updates
    - Test Specification
+   - Acceptance criteria — 4–7 operator-decidable outcomes, each with a falsifier line; see [acceptance-and-close.md](acceptance-and-close.md)
+   Consumers cite these sections **by heading name, never by number** — posted artifacts are immutable at rest, so numbering forks across template versions.
 7. **Fresh-Eyes Validation** (see below).
-8. Apply labels/tags.
-9. Proceed per the project's [pipeline mode](pipeline.md#pipeline-modes).
+8. **Authorization moment** (see below).
+9. Apply labels/tags.
+10. Proceed per the project's [pipeline mode](pipeline.md#pipeline-modes).
 
 ## UX Mockup Generation (UI/UX Changes Only)
 
@@ -80,13 +90,20 @@ GitHub's Content Security Policy blocks inline rendering of SVGs from `raw.githu
 
 **Do:** Use markdown text links pointing to the blob URL:
 ```markdown
-[Portal Chooser — Mobile](https://github.com/OWNER/REPO/blob/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+[Settings Panel — Mobile](https://github.com/OWNER/REPO/blob/BRANCH/docs/mockups/42/settings-panel-mobile.svg)
 ```
 
 **Do not:** Use image embed syntax:
 ```markdown
-![Portal Chooser](https://raw.githubusercontent.com/OWNER/REPO/BRANCH/docs/mockups/42/portal-chooser-mobile.svg)
+![Settings Panel](https://raw.githubusercontent.com/OWNER/REPO/BRANCH/docs/mockups/42/settings-panel-mobile.svg)
 ```
+
+### Auditing mockups (if a mockup-quality gate exists)
+
+- **Rasterize, then audit the rendered image — never the SVG source as text.** Feeding markup to a reviewer produces findings about the markup, not the design.
+- If a vision model does the audit, stamp a **sentinel token into each image that the model must echo back**; a mismatch means it never saw the image → the verdict is COULD_NOT_EVALUATE, not a pass.
+- **An empty audit can never APPROVE** — fold per-image verdicts fail-closed.
+- **Keep severity deliberately coarse** (per-image PASS/FAIL on critical defects). A fine-grained rubric produces hundreds of findings, and noise trains rubber-stamping.
 
 ## Overwrite-to-Final-Consensus
 
@@ -96,12 +113,14 @@ GitHub's Content Security Policy blocks inline rendering of SVGs from `raw.githu
 - **UX Designer:** If mockups need revision, delete old SVGs, generate revised ones, commit, overwrite comment.
 - **Footer:** `*Updated to final position after committee deliberation.*`
 - **Engineering Manager's comment** is always last and authoritative by default.
+- **If the synthesis changed the mechanism, re-run this pass for every member whose recommendation assumed the old mechanism** — and re-check the Test Specification for criteria phrased in the old terms.
+- **Items marked "optional" or "defer to the synthesizer" must be explicitly decided.** Undecided options vanish silently.
 
 ## Fresh-Eyes Validation
 
 Catches assumptions the committee forgot to write down. Inspired by the [Anthropic doc-coauthoring skill](https://github.com/anthropics/skills/tree/main/skills/doc-coauthoring)'s "Reader Testing" pattern.
 
-**When:** After step 6 (issue updated), before step 8 (labels). Mandatory.
+**When:** After step 6 (issue updated), before step 8 (authorization) and step 9 (labels). Mandatory.
 
 **How:**
 1. Spawn a fresh sub-agent with zero prior context.
@@ -112,9 +131,25 @@ Catches assumptions the committee forgot to write down. Inspired by the [Anthrop
    first names a forcing constraint** from
    [PR Slicing](pipeline.md#pr-slicing--fewest-not-smallest). An unjustified boundary —
    or one resting on a reason that section rules out — is a FAIL.
-6. If the sub-agent produces a coherent plan with no questions, validation passes.
+6. Check the required description sections are present, **enumerated by name — never by
+   count** (a count literal stays green while the wrong section is missing). Check the
+   acceptance criteria parse as issue-specific, falsifiable outcomes
+   ([acceptance-and-close.md](acceptance-and-close.md)); boilerplate that cannot go red is a FAIL.
+7. If the sub-agent produces a coherent plan with no questions, validation passes.
 
 **Why it works:** Committee members build shared context cumulatively. A zero-context agent simulates the experience of whoever actually implements the work.
+
+## Authorization Moment
+
+Design ends at an explicit operator decision, with value and cost visible together — never a silent slide into implementation.
+
+Render, in one place:
+
+1. **Value** — the PRD's Business Case, matched **by heading name**. If absent, say so with a fixed literal ("No recorded business case") — never invent one.
+2. **Cost** — the delivery estimate: PR count with a named forcing constraint per boundary ([PR Slicing](pipeline.md#pr-slicing--fewest-not-smallest)), size, risk tier citing the named input that triggered it, and ongoing operational cost. Ship confidence labels in pairs (stamped vs unstamped must be distinguishable), and attach an action to low confidence ("if two issues are close on cost, decide on value").
+3. **Conflict flag** — the product-view cost (PRD) and build-view cost (estimate) are deliberately distinct figures, but must use the **same canonical null spelling**; otherwise the flag fires on every zero-vs-zero pair and trains the operator to ignore the one signal meant to stop them. When the two genuinely disagree, show both.
+
+Then, in **gated mode** (or whenever an operator is present): ask **authorize / defer / discuss** — and wait. In **autonomous mode** the rendered block is still mandatory as the audit record, and the pipeline proceeds — except when the value section is absent or the conflict flag fires, which escalate to a human even in autonomous mode. An estimate is cited from named inputs, never bare judgment; "a bare tier word is an unconditional literal wearing prose."
 
 ## Test Specification Format
 

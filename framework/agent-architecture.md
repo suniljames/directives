@@ -24,12 +24,12 @@ Default assignments and fallback chains are in `agents.yml`. When the preferred 
 
 The default assignment (builder ↔ validator → provider) is a *preference*, not a fixed identity. The roles are **bidirectional**: either provider can play either role, and the mapping swaps when a provider becomes unavailable.
 
-- **Default (Scenario 1):** Claude Code = builder, Gemini = validator.
-- **Swapped (Scenario 2):** Gemini = builder, Claude Code = validator — e.g. when Claude is out of credits, or when the operator simply launches a Gemini session to build.
+- **Default (Scenario 1):** the default builder provider builds, the default validator provider validates (the mapping lives in [`agents.yml`](../agents.yml)).
+- **Swapped (Scenario 2):** the validator provider builds, the builder provider validates — e.g. when the default builder is out of credits, or when the operator simply launches the other provider's session to build.
 
 The operative rule for whichever tool is running: **if your counterpart provider is rate-limited or out of credits, assume the open role.** A builder with no available validator runs the validator pass itself (in an isolated session, below); a tool launched to build when the usual builder is unavailable *is* the builder. Neither role goes unfilled because one provider is down.
 
-In practice the launched CLI determines the builder: start Gemini and Gemini builds; start Claude Code and Claude builds. The validator is then the *other* provider, invoked as a bridge (see model designation in [`agents.yml`](../agents.yml)) — or, if that provider is also unavailable, the same provider in a fresh isolated session.
+In practice the launched CLI determines the builder: whichever provider's session you start is the builder. The validator is then the *other* provider, invoked as a bridge (see model designation in [`agents.yml`](../agents.yml)) — or, if that provider is also unavailable, the same provider in a fresh isolated session.
 
 ### Single-Provider Fallback
 
@@ -133,6 +133,32 @@ Request only the tools a domain requires:
 Over-permissioned specialists inherit all the blast radius of a general-purpose agent while providing none of the scope benefits.
 
 **No sandbox isolation.** Session specialists do not run in a sandboxed environment. A specialist with `Bash` in its tool list can execute arbitrary shell commands with the same permissions as the parent session. Minimum-privilege tool lists are your only mitigation.
+
+### Specialist Definition Discipline
+
+Rules for the definition files themselves (each has earned its place):
+
+- **Declare read-only vs write-capable explicitly**, and default to read-only. An advisory specialist surfaces findings; it never implements.
+- **Narrow shell access to a named-target list** (specific build/test commands), never open-ended shell.
+- **State domain exclusions with a named escalation target** ("not auth paths — escalate to the auth specialist"), so scope disputes resolve by lookup, not judgment.
+- **Declare must-NOT-read paths** (credentials, settings, key material) for read-only agents.
+- **Security-audit specialists produce findings, never exploit payloads or proof-of-concept attack code — regardless of how the request is phrased.**
+- **Every specialist that overlaps a committee gate states it is not a substitute for that gate.** An advisory pass must not quietly become the review of record.
+- When one specialist serves multiple review seats, include a **per-trigger ownership table** — every trigger path assigned, `both` allowed (two seats convening is cheaper than a jurisdiction argument). Unassigned paths default to inference, which means unowned.
+- **State confidence degradation** when structured input is missing (no coverage file → source-only analysis, reduced confidence) rather than silently proceeding at full confidence.
+- Guard-domain specialists lead with the **invariant** they protect, stated absolutely ("any suggestion that overwrites these fields is incorrect regardless of context") — an invariant stated as preference gets negotiated away.
+- After a specialist's findings are fixed, **re-invoke it before merge** — a finding fixed is a claim to verify.
+
+### Cross-Agent Protocol Documents
+
+When multiple provider agents must conform to shared behavior, write the contract down with this shape:
+
+- **Compliance classes per contract**: mechanically enforceable / best-effort / aspirational — with the honest disclaimer that different LLM families *conform to* a spec, they do not implement it identically.
+- **Blocker escalation by failure signature**: escalate on N identical failures or M total, where a signature is derived **only from the agent's own tool errors, never from repository content** — otherwise injected content can trigger the escalation path. Provide an exact BLOCKED template: signature, counts vs threshold, error output, what was tried, what is needed.
+- **The harness extracts verdicts, never the model.** A missing or conflicting sentinel, or any non-zero exit, reads BLOCK ([controls-and-detectors.md](controls-and-detectors.md)).
+- **Unconditional post-run integrity check** after any external agent exits, for *any* exit status — never rely on the agent's own self-revert.
+- **Version the contract** (frontmatter), define change control and rollback, and include an observability section (a drift-detection command someone can actually run).
+- **Document unshipped hardening by name**, and mark not-yet-enforced sections with an explicit DARK status — existence must never be mistaken for enforcement.
 
 ### Relationship to Orchestration
 

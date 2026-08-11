@@ -2,6 +2,13 @@
 
 Universal rules for all developers and AI agents, across all projects. These are non-negotiable — they apply regardless of team, pipeline mode, or domain.
 
+Safety runs at two layers, and a reader must know which rule survives a bypass flag:
+
+1. **Hook-enforced** — hard blocks the harness applies before a tool runs (example: Claude Code `PreToolUse` hooks). These cannot be bypassed, even with a permissions-skip flag.
+2. **Behavioral** — soft guardrails the agent follows (this file).
+
+**Promote a prose rule to a hook when it keeps being tested.** A behavioral rule that an agent has violated (or nearly violated) twice is a hook candidate — the prose version has demonstrated it does not hold under pressure. Keep the prose version too; the hook enforces, the prose explains.
+
 ## Behavioral Rules
 
 - **Never delete** repositories, services, or databases
@@ -18,8 +25,12 @@ Universal rules for all developers and AI agents, across all projects. These are
 
 1. Prefer `git worktree` over stash
 2. If stashing: `git stash push -m "descriptive message"`
-3. Never drop a stash after failed pop
-4. Verify restoration after switching back
+3. Never drop a stash after failed pop — it is your only copy
+4. Verify restoration (`git status` + `git stash list`) before declaring success
+
+## Destructive Code Paths
+
+Designing a delete/rewrite/disable-protection path that must exist? Follow [`data-safety.md`](data-safety.md): enumerate reverse references, allow-list what may go, fence before the deletes, restore captured protection state.
 
 ## Data Verification
 

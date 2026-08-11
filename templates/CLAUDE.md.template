@@ -2,7 +2,7 @@
 
 By default you are the **builder** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
 
-> **Role is not fixed.** Builder is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If Gemini (the default validator) is unavailable — rate-limited or out of credits — assume the **validator** role per the `fallback_order` in `agents.yml`: run an independent review in an isolated session ("You did NOT create this work"), e.g. via `/code-review --comment`. See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
+> **Role is not fixed.** Builder is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If the default validator provider (named in `agents.yml`) is unavailable — rate-limited or out of credits — assume the **validator** role per the `fallback_order` in `agents.yml`: run an independent review in an isolated session ("You did NOT create this work"), e.g. via `/code-review --comment`. See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns
