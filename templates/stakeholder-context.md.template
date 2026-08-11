@@ -1,7 +1,9 @@
 # <Project Name> — Non-Technical Stakeholder Protocol
 
-<!-- Fill in and keep in the project repo. How agents interact with named
-     non-engineer stakeholders (founder, operator, domain expert). -->
+<!-- Copy this file to your project as docs/developer/stakeholder-context.md and
+     fill every <slot>. It tells agents how to interact with named non-engineer
+     stakeholders (founder, operator, domain expert). A founder can fill this in
+     personally. -->
 
 ## Identify first
 

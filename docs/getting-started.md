@@ -293,4 +293,4 @@ On the link path (see Prerequisites), your project references the persona files 
 - [Acceptance & the close gate](../teams/engineering/process/acceptance-and-close.md) — How "done" is decided and verified
 - [Fan-out safety](../framework/fan-out-safety.md) — Spawning parallel sub-agents without injection or authority leaks
 - [CLAUDE.md Authoring Guide](claude-md-authoring.md) — How to write thin root configs with progressive disclosure
-- [Provider config example (Gemini)](../providers/gemini/GEMINI-template.md) — Full reference template for validator agent setup
+- [Provider config example (Antigravity)](../providers/antigravity/GEMINI-template.md) — Full reference template for validator agent setup

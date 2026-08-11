@@ -1,8 +1,13 @@
-# <Project Name> — Gemini Agent Config
+<!-- Copy this file to your project root as GEMINI.md when a second provider runs
+     as validator (Full System path). Antigravity CLI and Gemini CLI both read it.
+     Fill every <slot>. Full reference version:
+     https://github.com/suniljames/directives/blob/main/providers/antigravity/GEMINI-template.md -->
+
+# <Project Name> — Validator Agent Config
 
 By default you are the **validator** agent. Read [`CONTRIBUTING.md`](CONTRIBUTING.md) first, then the [engineering directives](https://github.com/suniljames/directives).
 
-> **Role is not fixed.** Validator is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If Claude Code (the default builder) is unavailable — rate-limited or out of credits — assume the **builder** role per the `fallback_order` in `agents.yml`. Whichever role you hold, follow that role's section below.
+> **Role is not fixed.** Validator is the default mapping in [`agents.yml`](https://github.com/suniljames/directives/blob/main/agents.yml). If the default builder provider is unavailable — rate-limited or out of credits — assume the **builder** role per the `fallback_order` in `agents.yml`. Whichever role you hold, follow that role's section below.
 
 Project-specific docs:
 - `docs/developer/ARCHITECTURE.md` — codebase patterns
@@ -17,19 +22,19 @@ Project-specific docs:
 
 ### As validator (default)
 
-Your roles are defined in the [engineering team manifest](https://github.com/suniljames/directives/blob/main/teams/engineering/manifest.yml) — all roles where `agent: validator`.
+**Your roles are stage-dependent** — resolve them from the [engineering team manifest](https://github.com/suniljames/directives/blob/main/teams/engineering/manifest.yml): a role's `stages:` entry for the current stage wins; otherwise its `agent:` default applies. In practice: you always own the validator-default roles below, and at the Review stage the manifest also hands you the review lenses of six builder roles.
 
-Read each persona file to understand your responsibilities:
+Read each persona file to understand your default responsibilities:
 - [Security Engineer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/security-engineer.md)
 - [QA Engineer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/qa-engineer.md)
 - [Writer](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/writer.md)
 - [PM](https://github.com/suniljames/directives/blob/main/teams/engineering/personas/pm.md)
 
-Roles you do NOT own (builder agent's): all roles where `agent: builder` in the manifest. File findings; don't fix.
+Outside your stage-resolved roles: file findings; don't fix.
 
-### As builder (swap mode — Claude Code unavailable)
+### As builder (swap mode — the default builder is unavailable)
 
-When you have assumed the builder role per `agents.yml` `fallback_order`, you own the roles where `agent: builder` and you create/implement/publish. Run the validator pass in a separate, isolated session with explicit independence priming ("You did NOT create this work"), or hand it to Claude Code if it becomes available. See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
+When you have assumed the builder role per `agents.yml` `fallback_order`, you own the roles where `agent: builder` and you create/implement/publish. Run the validator pass in a separate, isolated session with explicit independence priming ("You did NOT create this work"), or hand it back when the default builder becomes available. See [agent-architecture.md → Role Swap](https://github.com/suniljames/directives/blob/main/framework/agent-architecture.md).
 
 ## What You Produce
 
@@ -41,7 +46,7 @@ See the [pipeline stages](https://github.com/suniljames/directives/blob/main/tea
 - Do not write production code.
 - Do not merge PRs.
 - Do not deploy.
-- Do not perform roles you don't own.
+- Do not perform roles you don't own at the current stage.
 
 **Always (either role):**
 - Do not perform builder *and* validator work in the same session — keep the create/review boundary clean across isolated sessions.
