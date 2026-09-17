@@ -1,0 +1,40 @@
+#!/bin/bash
+# pre-commit: block a commit that would leave the personal directives inconsistent.
+#
+# Version-controlled, so a fresh clone gets it. Activate it once per clone:
+#
+#     git config core.hooksPath hooks
+#
+# Checks the INDEX, not the working tree, so what gets validated is exactly
+# what is being committed. Skips itself entirely unless the commit touches
+# AI.md, people/, or the checker.
+#
+# Bypass with `git commit --no-verify` when you genuinely mean to.
+
+set -euo pipefail
+
+REPO="$(git rev-parse --show-toplevel)"
+CHECKER="$REPO/scripts/check-personal-directives.py"
+
+if ! git diff --cached --name-only --diff-filter=ACMR \
+     | grep -qE '^(AI\.md|people/|scripts/check-personal-directives\.py)'; then
+  exit 0
+fi
+
+if [ ! -x "$CHECKER" ] && [ ! -f "$CHECKER" ]; then
+  echo "pre-commit: $CHECKER is missing; cannot verify the personal directives." >&2
+  exit 1
+fi
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+# Export the staged tree, then check that.
+git checkout-index --prefix="$TMP/" -a
+
+if ! python3 "$CHECKER" --root "$TMP"; then
+  echo "" >&2
+  echo "pre-commit: the personal directives are inconsistent. Checklist: people/README.md" >&2
+  echo "            Fix the failures above, or commit with --no-verify if you mean it." >&2
+  exit 1
+fi

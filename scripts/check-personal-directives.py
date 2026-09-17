@@ -5,6 +5,10 @@ Dependency-free and fast, so an agent can run it before every commit that
 touches these files. Exits non-zero on any failure and says what to fix.
 
     python3 scripts/check-personal-directives.py
+    python3 scripts/check-personal-directives.py --root <dir>   # check a tree elsewhere
+
+The pre-commit hook uses --root against an export of the index, so what gets
+validated is exactly what is being committed, not the working tree.
 
 Checks:
   1. AI.md's `Revision:` date matches the receipt token assistants echo back.
@@ -21,19 +25,23 @@ Checks:
 
 from __future__ import annotations
 
+import argparse
 import re
 import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-AI = ROOT / "AI.md"
-PROFILE = ROOT / "people" / "sunil-james"
-PASTE = PROFILE / "paste-block.md"
+REPO = Path(__file__).resolve().parent.parent  # always a real checkout, for git queries
 
 # Files an assistant reads as directives. Their own README is operator
 # documentation and may name platforms, so it is not in this list.
-INSTRUCTION_FILES = [AI, PASTE, PROFILE / "working-agreement.md", PROFILE / "writing-style.md"]
+INSTRUCTION_NAMES = [
+    "AI.md",
+    "people/sunil-james/paste-block.md",
+    "people/sunil-james/working-agreement.md",
+    "people/sunil-james/writing-style.md",
+]
+README_NAMES = ["people/README.md", "people/sunil-james/README.md"]
 
 VENDORS = r"\b(claude|anthropic|chatgpt|openai|gpt-[0-9]|gemini|bard|copilot|llama|mistral|grok|perplexity)\b"
 
@@ -57,6 +65,20 @@ def never_use_words(text: str) -> set[str]:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser(description="Consistency checks for the personal directives.")
+    ap.add_argument("--root", type=Path, default=REPO,
+                    help="tree to check (default: this repo). The hook points it at an export of the index.")
+    args = ap.parse_args()
+    root: Path = args.root.resolve()
+
+    missing = [n for n in INSTRUCTION_NAMES if not (root / n).exists()]
+    if missing:
+        print("FAIL:  layout: missing " + ", ".join(missing))
+        return 1
+
+    AI = root / "AI.md"
+    PASTE = root / "people" / "sunil-james" / "paste-block.md"
+    instruction_files = [root / n for n in INSTRUCTION_NAMES]
     ai = AI.read_text()
 
     # 1. revision date vs receipt token
@@ -75,27 +97,28 @@ def main() -> int:
         fail("never-use", f"paste-block.md bans words AI.md allows: {sorted(extra)}")
 
     # 3. no em dashes
-    for f in INSTRUCTION_FILES + [PROFILE / "README.md", ROOT / "people" / "README.md"]:
+    for f in instruction_files + [root / n for n in README_NAMES]:
         for i, line in enumerate(f.read_text().splitlines(), 1):
             if "—" in line:
-                fail("em-dash", f"{f.relative_to(ROOT)}:{i} contains an em dash")
+                fail("em-dash", f"{f.relative_to(root)}:{i} contains an em dash")
 
     # 4. vendor-neutral instruction files
-    for f in INSTRUCTION_FILES:
+    for f in instruction_files:
         for i, line in enumerate(f.read_text().splitlines(), 1):
             hit = re.search(VENDORS, line, re.I)
             if hit:
-                fail("vendor", f"{f.relative_to(ROOT)}:{i} names '{hit.group(0)}'")
+                fail("vendor", f"{f.relative_to(root)}:{i} names '{hit.group(0)}'")
 
     # 5. paste block not left behind
     try:
-        def last_commit(p: Path) -> str:
+        def last_commit(rel: str) -> str:
             out = subprocess.run(
-                ["git", "-C", str(ROOT), "log", "-1", "--format=%ct", "--", str(p)],
+                ["git", "-C", str(REPO), "log", "-1", "--format=%ct", "--", rel],
                 capture_output=True, text=True, check=True,
             ).stdout.strip()
             return out
-        ai_t, paste_t = last_commit(AI), last_commit(PASTE)
+        ai_t = last_commit("AI.md")
+        paste_t = last_commit("people/sunil-james/paste-block.md")
         if ai_t and paste_t and int(ai_t) > int(paste_t):
             notes.append(
                 "paste-block.md was last committed before AI.md. If you changed a rule, "
@@ -111,7 +134,7 @@ def main() -> int:
     if failures:
         print(f"\n{len(failures)} check(s) failed.")
         return 1
-    print(f"ok:    personal directives consistent ({len(INSTRUCTION_FILES)} instruction files checked)")
+    print(f"ok:    personal directives consistent ({len(instruction_files)} instruction files checked)")
     return 0
 
 
