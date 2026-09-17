@@ -11,6 +11,7 @@ This is a documentation repo. There is no application code, no tests, no build s
 
 ## Rules
 
+- **Editing [`AI.md`](AI.md) or anything under [`people/`](people/README.md)?** Follow the checklist in [`people/README.md`](people/README.md) and run `python3 scripts/check-personal-directives.py` before committing. Those files are live instructions that assistant accounts read daily; a silent inconsistency ships straight to them.
 - Follow the GitHub identity rules in any project that references these directives.
 - Do not add project-specific content. This repo is generic by design. The one exception is [`people/`](people/README.md), which is person-specific on purpose and is the only place personal preferences belong.
 - Instruction files under `people/` (anything an assistant reads as directives) name no model, vendor, or tool. Write "you" or "the assistant" so any provider can read them. A profile's own `README.md` is operator documentation, not an instruction file, and may name platforms where setup requires it.

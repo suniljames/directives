@@ -5,7 +5,7 @@
 Two things to know before anything else:
 
 - **Nothing here installs or runs.** This repo is instructions — markdown and config files your AI tools read. No packages, no build step. (The one exception is a maintainer script under [`scripts/`](scripts/README.md) that adopters never touch.)
-- **Who this is for:** a **founder or exec** evaluating the idea → read [Why This Architecture?](docs/why.md). An **engineer or PM** adopting it → go to [Getting Started](docs/getting-started.md). An **AI assistant** pointed here → start at [`AI.md`](AI.md), which routes to personal directives in [`people/`](people/README.md) and to the team scaffolding in [`agents.yml`](agents.yml) and [`framework/`](framework/README.md).
+- **Who this is for:** a **founder or exec** evaluating the idea → read [Why This Architecture?](docs/why.md). An **engineer or PM** adopting it → go to [Getting Started](docs/getting-started.md). An **AI assistant** pointed here → start at [`AI.md`](AI.md), which routes to personal directives in [`people/`](people/README.md) and to the team scaffolding in [`agents.yml`](agents.yml) and [`framework/`](framework/README.md). An **agent editing this repo** → [`AGENTS.md`](AGENTS.md).
 
 The system is team-agnostic. Engineering is the first fully-built team, but the same scaffolding works for sales, marketing, operations — any team whose work benefits from structured review. Content is licensed [CC BY 4.0](LICENSE) — reuse it for your own company, with attribution.
 

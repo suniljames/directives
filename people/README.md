@@ -8,6 +8,17 @@ This is the tier above the team scaffolding, and it is orthogonal to it. A perso
 |---|---|
 | [`sunil-james/`](sunil-james/README.md) | Sunil James. The worked example: a working agreement plus a writing style guide. |
 
+## Changing these files
+
+`AI.md` at the repo root and everything under `people/` is a live instruction set that assistant accounts read every day. Before committing any change to them:
+
+1. **Run the checker.** `python3 scripts/check-personal-directives.py`. It is dependency-free and takes a second. It has to pass.
+2. **Bump the revision date when a rule changes.** `AI.md` carries that date twice: the `**Revision:**` line and the `[directives YYYY-MM-DD]` receipt token that assistants echo back. Change both, or the receipt stops distinguishing a fresh fetch from a cached one. Cosmetic edits don't need a bump; rule changes do.
+3. **Change a rule everywhere it lives.** `sunil-james/paste-block.md` duplicates a subset of `AI.md` by hand, because it has to work in instruction fields that cannot fetch a URL. The checker warns when `AI.md` moves without it.
+4. **Keep instruction files vendor-neutral.** Write "you" or "the assistant." A profile's own `README.md` is operator documentation and may name platforms where setup requires it.
+5. **Don't quietly assert a rule the person didn't state.** If a change adds a rule inferred from context rather than one they gave you, mark it in place with the `***SKJ***` marker and a note on where it came from, then ask. Only they can rule on it.
+6. **No em dashes.** The hardest rule in the style guide and the easiest to reintroduce while editing. The checker catches it.
+
 To add a profile, copy the shape of `sunil-james/`: a `README.md` index, a working agreement (how to engage), and a style guide (how to write). Keep both files free of vendor names so any assistant can read them.
 
 ---
