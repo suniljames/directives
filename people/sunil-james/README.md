@@ -32,6 +32,18 @@ The fetch instructions, longest first. Longer is more reliable.
 
 Three notes on why they read that way. They are phrased as instructions rather than citations, because a URL sitting in a preferences field is only read if the assistant decides to go get it. They say "including short ones" because a model will otherwise rationalize skipping the fetch on a trivial question. They point at the raw file rather than the repo homepage (https://github.com/suniljames/directives) because that lands on the instructions in one hop, with no page furniture to parse.
 
+## When the instruction field can't fetch
+
+Some assistants refuse a URL that arrives from an instruction field while fetching the same URL happily when it arrives in a message. That is a prompt-injection defence, not a broken link, and confirmed behaviour in at least one account as of 2026-09-16.
+
+Diagnose it in thirty (30) seconds: paste `fetch https://raw.githubusercontent.com/suniljames/directives/main/AI.md and tell me the revision date` as an ordinary message. If that works while the instruction field doesn't, this is what you are looking at.
+
+The workaround is a first-message nudge. Keep [`paste-block.md`](paste-block.md) in the instruction field as the baseline, and open conversations that matter with:
+
+> Load `https://raw.githubusercontent.com/suniljames/directives/main/AI.md`
+
+That pulls the full directives, including the deeper files, into a conversation whose instruction field could not.
+
 ## Checking that it worked
 
 `AI.md` tells the assistant to open its first reply with `[directives <revision date>]`. That receipt is the whole test:
