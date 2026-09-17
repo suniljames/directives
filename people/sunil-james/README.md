@@ -6,12 +6,17 @@ Personal directives: how Sunil James ("SJ") expects an AI assistant to engage wi
 |---|---|
 | [`working-agreement.md`](working-agreement.md) | How to work with him: clarifying questions, cadence, delivery, review, pushback, standing preferences. |
 | [`writing-style.md`](writing-style.md) | How to write for him or as him: epistemics, reader and register, voice modes, structure, sentences, word-level tics, posture, disclosure, exemplars. |
+| [`paste-block.md`](paste-block.md) | A 1,300-character version for instruction fields that can't fetch a URL or are too small for `AI.md`. |
 
 These are inherited by every project unchanged. Project-specific vocabulary, fixed phrases, format skeletons, glossaries, and running correction lists live in each project's own instructions.
 
 ## Pointing an assistant here
 
-Paste one of these into the assistant's custom-instructions, personal-preferences, or system-prompt field. Longer is more reliable.
+Paste into the assistant's custom-instructions, personal-preferences, or system-prompt field.
+
+**Start with [`paste-block.md`](paste-block.md).** Some assistants refuse to fetch a URL that arrived from an instruction field, which is a defence against prompt injection and not something a different URL gets around. The paste block needs no fetch, fits every major instruction box, and carries the rules that change least. Add the fetch instruction below it when the account can browse, so the deeper files stay one hop away.
+
+The fetch instructions, longest first. Longer is more reliable.
 
 **Recommended.** Survives a failed fetch, because the last line still carries something:
 
@@ -43,7 +48,7 @@ A fetched file depends on the assistant choosing to fetch. A file already in con
 
 The trade is manual re-sync, so run both: the URL for ambient one-off conversations, an uploaded copy where the stakes are higher. This repo stays canonical either way, and re-uploading is a thirty-second job when a revision lands.
 
-**Where the assistant can't browse at all,** paste the contents of [`../../AI.md`](../../AI.md). It is written to stand alone.
+**Where the assistant can't browse at all,** paste [`paste-block.md`](paste-block.md), or the contents of [`../../AI.md`](../../AI.md) where the field is large enough to hold it. Both are written to stand alone.
 
 ## Maintaining these files
 
