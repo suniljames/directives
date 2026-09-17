@@ -5,7 +5,7 @@
 Two things to know before anything else:
 
 - **Nothing here installs or runs.** This repo is instructions — markdown and config files your AI tools read. No packages, no build step. (The one exception is a maintainer script under [`scripts/`](scripts/README.md) that adopters never touch.)
-- **Who this is for:** a **founder or exec** evaluating the idea → read [Why This Architecture?](docs/why.md). An **engineer or PM** adopting it → go to [Getting Started](docs/getting-started.md). An **AI agent** told to follow the directives → start at [`agents.yml`](agents.yml) and [`framework/`](framework/README.md).
+- **Who this is for:** a **founder or exec** evaluating the idea → read [Why This Architecture?](docs/why.md). An **engineer or PM** adopting it → go to [Getting Started](docs/getting-started.md). An **AI assistant** pointed here → start at [`AI.md`](AI.md), which routes to personal directives in [`people/`](people/README.md) and to the team scaffolding in [`agents.yml`](agents.yml) and [`framework/`](framework/README.md).
 
 The system is team-agnostic. Engineering is the first fully-built team, but the same scaffolding works for sales, marketing, operations — any team whose work benefits from structured review. Content is licensed [CC BY 4.0](LICENSE) — reuse it for your own company, with attribution.
 
@@ -103,6 +103,10 @@ Three config files drive the system at different scopes:
 
 (A fourth file, [`projects.yml`](projects.yml), configures this repo's own [maintenance automation](scripts/README.md) — adopters can ignore it.)
 
+### Personal directives
+
+How a specific person expects an assistant to engage with them and write for them, separate from any team or project. See the [people index](people/README.md); [Sunil James](people/sunil-james/README.md) is the worked example, split into a [working agreement](people/sunil-james/working-agreement.md) and a [writing style guide](people/sunil-james/writing-style.md). Profiles are vendor-neutral, so the same files serve every assistant.
+
 ### Teams
 
 Each team gets its own [manifest](docs/glossary.md), personas, pipeline, and vocabulary — see the [teams index](teams/README.md). Engineering is the complete worked example: [team overview](teams/engineering/README.md), [personas](teams/engineering/personas/README.md), [process docs](teams/engineering/process/README.md). To create a new team, copy [`teams/new-team-template/`](teams/new-team-template/manifest.yml).
@@ -123,12 +127,15 @@ Which AI providers exist and which backs each agent type is defined in [`agents.
 
 Optional domain-specific rules layered on top of the base process. Currently available: [healthcare](overlays/healthcare/README.md) (HIPAA, PHI handling).
 
-### Three-tier model
+### Tier model
 
-Configuration lives at three levels, each adding specificity without duplicating the tier above:
+Configuration lives at four levels, each adding specificity without duplicating the tier above:
 
 | Tier | Where | What |
 |------|-------|------|
+| **0. Person** (optional) | [`people/`](people/README.md) | How one person wants an assistant to engage and write. Travels with them across every org and project. |
 | **1. Directives** (this repo) | `suniljames/directives` | Team scaffolding, personas, framework, templates |
 | **2. Organization** (optional) | `<org>/.github` or org-level repo | Domain compliance, org-specific workflows, shared CI |
 | **3. Project** | Each project repo | Tech stack, architecture, environment config |
+
+Tier 0 is orthogonal to the rest: it says who the work is for, not how the work is staged.
