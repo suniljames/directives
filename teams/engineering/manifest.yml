@@ -222,5 +222,8 @@ vocabularies:
 # Numeric constants referenced across process docs.
 
 settings:
+  # Default cap. A stage-specific cap set by a project's pipeline overrides it,
+  # e.g. COREcare-access: /design is a single pass, and /review stops at round 2
+  # as a stalemate escalated to the human.
   max_review_rounds: 3
   ci_time_limit_minutes: 10
